@@ -120,6 +120,74 @@ html.lenis body {
   mask: url("../assets/images/mask-lotus.png") center / 100% 100% no-repeat;
 }
 
+/* Intro butterfly: the same artwork split into near and far wing layers that
+   recombine into the original image; each layer hinges at the wing root */
+#intro .intro-butterfly-near {
+  clip-path: polygon(0 0, 60.61% 0, 60.61% 36.36%, 58.79% 42.42%, 57.88% 48.48%, 57.88% 64.24%, 62.42% 70.3%, 67.27% 75.15%, 69.7% 100%, 0 100%);
+  transform-origin: 58% 70%;
+}
+
+#intro .intro-butterfly-far {
+  clip-path: polygon(60.61% 0, 100% 0, 100% 100%, 66.06% 100%, 63.64% 75.15%, 58.79% 70.3%, 57.88% 64.24%, 57.88% 48.48%, 58.79% 42.42%, 60.61% 36.36%);
+  transform-origin: 63% 68%;
+}
+
+/* Elements slider ---------------------------------------------------------- */
+#elements .element-dot {
+  width: 7.83px;
+  height: 7.83px;
+  border: 1.27px solid #c0cfdd;
+  border-radius: 9999px;
+}
+
+#elements .element-dot.is-active {
+  border-color: #fff;
+  background-color: #fff;
+}
+
+/* While pinned, the slider fills the viewport below the fixed header */
+#elements.is-slider {
+  height: calc(100svh - 74px);
+}
+
+@media (min-width: 48rem) {
+  #elements.is-slider {
+    height: calc(100svh - 87px);
+  }
+}
+
+@media (max-width: 63.99rem) {
+  #elements.is-slider .js-element-panel {
+    flex-shrink: 0;
+  }
+
+  #elements.is-slider .js-element-media {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 120px;
+  }
+}
+
+/* Short stacked screens: compact the panel so the image keeps a usable height while pinned */
+@media (max-width: 63.99rem) and (max-height: 700px) {
+  #elements.is-slider .js-element-panel {
+    padding-block: 2rem;
+  }
+
+  #elements.is-slider .js-element-title {
+    scale: 0.8;
+    margin-block: -21px;
+  }
+
+  #elements.is-slider .js-section-content {
+    margin-top: 1.5rem;
+  }
+
+  #elements.is-slider .js-element-dots {
+    margin-top: 1.25rem;
+  }
+}
+
 /* "Earth" element glyph */
 .mask-earth-glyph {
   -webkit-mask: url("../assets/images/mask-earth-glyph.png") center / 100% 100% no-repeat;
@@ -132,6 +200,33 @@ html.lenis body {
 }
 
 /* Horizontally scrollable card track without a visible scrollbar */
+/* Experience slider (enabled by js/home.animation.js; otherwise the track scrolls natively) */
+#experience .js-card-track.is-slider {
+  overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#experience .js-card-track.is-dragging {
+  cursor: grabbing;
+}
+
+#experience .js-card-viewport {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  gap: inherit;
+}
+
+#experience .js-card-rail {
+  display: flex;
+  flex-shrink: 0;
+  gap: inherit;
+  will-change: transform;
+}
+
 .no-scrollbar {
   scrollbar-width: none;
 }

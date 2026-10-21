@@ -1,0 +1,107 @@
+/* Welcome intro + page transition overlay ----------------------------------
+   Shown only when the inline <head> script flags the page (`is-intro` / `is-transitioning`),
+   so the site renders normally without JS. */
+.page-transition {
+  display: none;
+}
+
+.is-intro .page-transition,
+.is-transitioning .page-transition,
+.page-transition.is-active {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+/* If the script never takes over, never leave the overlay up */
+.is-intro .page-transition,
+.is-transitioning .page-transition {
+  animation: page-transition-failsafe 0.6s ease 4s forwards;
+}
+
+.page-transition.is-controlled {
+  animation: none;
+}
+
+@keyframes page-transition-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+html.is-intro,
+html.is-transitioning {
+  scrollbar-color: #060f0d #060f0d;
+}
+
+/* Curtain panels overlap by 1px so no seams show while they cover the page */
+.page-transition__panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc(25% + 1px);
+  background-color: #060f0d;
+  will-change: transform;
+}
+
+.page-transition__panel:nth-child(1) { left: 0; }
+.page-transition__panel:nth-child(2) { left: 25%; }
+.page-transition__panel:nth-child(3) { left: 50%; }
+.page-transition__panel:nth-child(4) { left: 75%; }
+
+/* Gold hairlines just outside the panel edges, visible only while a panel is moving */
+.page-transition__panel::before,
+.page-transition__panel::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(201, 168, 106, 0), rgba(201, 168, 106, 0.55), rgba(201, 168, 106, 0));
+}
+
+.page-transition__panel::before { bottom: 100%; }
+.page-transition__panel::after { top: 100%; }
+
+.page-transition__brand {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(20px, 3vw, 28px);
+}
+
+.page-transition__glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(120vw, 760px);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  background: radial-gradient(closest-side, rgba(201, 168, 106, 0.11), rgba(243, 235, 221, 0.03) 55%, rgba(201, 168, 106, 0));
+  pointer-events: none;
+}
+
+.page-transition__logo {
+  display: block;
+  width: clamp(200px, 56vw, 300px);
+  height: auto;
+}
+
+.page-transition__line {
+  display: block;
+  width: clamp(64px, 12vw, 96px);
+  height: 1px;
+  background: linear-gradient(90deg, rgba(201, 168, 106, 0), #c9a86a, rgba(201, 168, 106, 0));
+}
+
+/* Intro starts with the brand hidden; GSAP reveals it */
+.is-intro .page-transition__logo,
+.is-intro .page-transition__glow,
+.is-intro .page-transition__line {
+  opacity: 0;
+}

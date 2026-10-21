@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Vedvan — Elemental Living | Where Life Returns to Its Elements</title>
+  <title>Vedvan</title>
   <meta name="description" content="Vedvan is a 25-acre integrated wellness community where nature, preventive wellness, luxury residences and hospitality come together.">
 
   <link rel="preload" href="assets/fonts/marcellus.woff2" as="font" type="font/woff2" crossorigin>
@@ -12,14 +12,42 @@
 
   <link rel="stylesheet" href="css/tailwind.css">
   <link rel="stylesheet" href="css/home.style.css">
+  <link rel="stylesheet" href="css/page-transition.css">
+
+  <!-- Welcome intro once per session; a short reveal after an in-site page transition -->
+  <script>
+    (function (root) {
+      try {
+        var leftAt = Number(sessionStorage.getItem("vedvan:transition"));
+        if (leftAt && Date.now() - leftAt < 10000) root.classList.add("is-transitioning");
+        else if (!sessionStorage.getItem("vedvan:intro")) root.classList.add("is-intro");
+      } catch (e) {
+        root.classList.add("is-intro");
+      }
+    })(document.documentElement);
+  </script>
 
   <script src="js/home.nav.js" defer></script>
   <script src="js/vendor/gsap.min.js" defer></script>
   <script src="js/vendor/ScrollTrigger.min.js" defer></script>
   <script src="js/vendor/lenis.min.js" defer></script>
   <script src="js/home.animation.js" defer></script>
+  <script src="js/page-transition.js" defer></script>
 </head>
 <body class="bg-white font-sans text-ink antialiased">
+
+  <!-- Welcome intro / page transition overlay (see css/page-transition.css) -->
+  <div class="page-transition js-page-transition" aria-hidden="true">
+    <span class="page-transition__panel"></span>
+    <span class="page-transition__panel"></span>
+    <span class="page-transition__panel"></span>
+    <span class="page-transition__panel"></span>
+    <div class="page-transition__brand">
+      <span class="page-transition__glow"></span>
+      <img src="assets/logos/vedvan-logo-footer.png" alt="" width="800" height="255" fetchpriority="high" class="page-transition__logo">
+      <span class="page-transition__line"></span>
+    </div>
+  </div>
 
   <!-- Site header -->
   <header id="site-header" class="fixed inset-x-0 top-0 z-30 border-b border-[rgba(183,183,183,0.2)]">
@@ -100,7 +128,10 @@
           <div class="js-intro-emblem relative h-[117px] w-[154px]" aria-hidden="true">
             <span class="mask-lotus absolute left-[14.62px] top-0 h-[116.945px] w-[139.18px] bg-[rgba(201,168,106,0.07)]"></span>
             <img src="assets/icons/lotus-gold.png" alt="" width="106" height="82" class="absolute left-[31.2px] top-[17.94px] h-[82px] w-[106px] object-cover">
-            <img src="assets/images/butterfly.png" alt="" width="73" height="73" class="js-butterfly absolute left-0 top-0 size-[73px] object-cover">
+            <span class="js-butterfly absolute left-0 top-0 size-[73px]">
+              <img src="assets/images/butterfly.png" alt="" width="73" height="73" class="js-butterfly-wing-far intro-butterfly-far absolute inset-0 size-full object-cover">
+              <img src="assets/images/butterfly.png" alt="" width="73" height="73" class="js-butterfly-wing-near intro-butterfly-near absolute inset-0 size-full object-cover">
+            </span>
           </div>
 
           <div class="flex w-full flex-col items-center gap-[26px]">
@@ -118,7 +149,7 @@
 
     <!-- Section 03: Our Vision & Mission -->
     <section id="vision-mission" class="relative isolate overflow-hidden px-5 pb-16 pt-16 md:px-10 lg:pb-[86px] lg:pt-[100px]">
-      <div class="mask-lotus absolute left-1/2 top-[17px] -z-10 aspect-[1104/944] w-full max-w-[1104px] -translate-x-1/2 bg-[rgba(201,168,106,0.04)]" aria-hidden="true"></div>
+      <div class="js-vision-watermark mask-lotus absolute left-1/2 top-[17px] -z-10 aspect-[1104/944] w-full max-w-[1104px] -translate-x-1/2 bg-[rgba(201,168,106,0.04)]" aria-hidden="true"></div>
 
       <div class="mx-auto max-w-[1259px] lg:pl-[7px]">
         <div class="relative inline-block pr-[34px] pt-[46px] md:pr-[43px] md:pt-[57px]">
@@ -138,7 +169,7 @@
           </div>
           <figure class="js-section-image relative aspect-[544/382] w-full max-w-[544px] shrink-0 lg:w-[46%] xl:w-[544px]">
             <img src="assets/images/frame-outline.svg" alt="" width="228" height="383" class="absolute right-0 top-0 h-full w-[41.73%] -scale-x-100">
-            <img src="assets/images/vision-architecture.jpg" alt="Architectural model of a modern home resting on blueprints" width="512" height="300" loading="lazy" class="absolute left-0 top-[10.73%] h-[78.53%] w-[94.12%] object-cover">
+            <img src="assets/images/vision-architecture.jpg" alt="Architectural model of a modern home resting on blueprints" width="512" height="300" loading="lazy" class="js-reveal-image absolute left-0 top-[10.73%] h-[78.53%] w-[94.12%] object-cover">
           </figure>
         </article>
 
@@ -152,32 +183,40 @@
           </div>
           <figure class="js-section-image relative aspect-[548/382] w-full max-w-[548px] shrink-0 lg:w-[46%] xl:w-[548px]">
             <img src="assets/images/frame-outline.svg" alt="" width="228" height="383" class="absolute left-0 top-0 h-full w-[41.42%]">
-            <img src="assets/images/mission-interior-sketch.jpg" alt="Sketch of a light-filled open-plan living space opening onto a garden" width="512" height="300" loading="lazy" class="absolute left-[6.57%] top-[10.73%] h-[78.53%] w-[93.43%] object-cover">
+            <img src="assets/images/mission-interior-sketch.jpg" alt="Sketch of a light-filled open-plan living space opening onto a garden" width="512" height="300" loading="lazy" class="js-reveal-image absolute left-[6.57%] top-[10.73%] h-[78.53%] w-[93.43%] object-cover">
           </figure>
         </article>
       </div>
     </section>
 
-    <!-- Section 04: Elements — Earth -->
-    <section id="elements" class="relative isolate flex flex-col overflow-hidden lg:block lg:h-[620px] xl:h-[750px]">
-      <img src="assets/images/earth-mountains.jpg" alt="Mist rolling over lush green mountain valleys" width="2880" height="1614" loading="lazy" class="js-section-image h-[300px] w-full object-cover sm:h-[420px] lg:absolute lg:inset-0 lg:-z-10 lg:h-full">
+    <!-- Section 04: Elements — Earth, Water, Air (Water and Air slides are added by js/home.animation.js) -->
+    <section id="elements" class="js-elements relative isolate flex flex-col overflow-hidden lg:block lg:h-[620px] xl:h-[750px]" aria-label="The elements of Vedvan">
+      <div class="js-element-media relative h-[300px] shrink-0 overflow-hidden sm:h-[420px] lg:absolute lg:inset-0 lg:-z-10 lg:h-full">
+        <img src="assets/images/earth-mountains.jpg" alt="Mist rolling over lush green mountain valleys" width="2880" height="1614" loading="lazy" class="js-element-image absolute inset-0 size-full object-cover">
+      </div>
 
       <div class="js-element-panel order-first flex flex-col bg-linear-to-b from-[#155c35] to-[#0c1611] px-6 py-14 text-white sm:px-10 lg:absolute lg:inset-y-0 lg:left-0 lg:w-[43.21%] lg:justify-end lg:pb-[96px] lg:pl-[6.94%] lg:pr-[2.08%] lg:pt-0">
         <div class="js-element-title relative mx-auto h-[211px] w-[240.3px] shrink-0">
           <span class="mask-earth-glyph absolute left-[6.3px] top-0 h-[106.23px] w-[110.27px] bg-white" aria-hidden="true"></span>
-          <span class="absolute left-0 top-[144px] font-montserrat text-[54.78px] font-semibold leading-[normal] text-[#8bb39d] opacity-60" aria-hidden="true">01</span>
+          <span class="js-element-number absolute left-0 top-[144px] font-montserrat text-[54.78px] font-semibold leading-[normal] text-[#8bb39d] opacity-60" aria-hidden="true">01</span>
           <span class="absolute left-[61.3px] top-[153px] flex size-[39.35px] items-center justify-center" aria-hidden="true">
             <img src="assets/icons/title-separator.svg" alt="" width="30" height="30" class="size-[29.35px] rotate-[26.45deg]">
           </span>
-          <h2 class="absolute left-[104.3px] top-[126px] whitespace-nowrap text-[56.74px] font-semibold leading-[70.44px]">Earth</h2>
+          <h2 class="js-element-name absolute left-[104.3px] top-[126px] whitespace-nowrap text-[56.74px] font-semibold leading-[70.44px]">Earth</h2>
         </div>
 
-        <div class="js-section-content mt-12 flex w-full max-w-[466px] flex-col gap-[13.78px] lg:mt-20">
-          <p class="text-lg font-bold leading-[normal]">The Art of Being Grounded.</p>
-          <p class="text-base leading-[22px]">A connection to the soil, greenery and natural surroundings that brings us closer to our roots.</p>
+        <div class="js-section-content mt-12 grid w-full max-w-[466px] lg:mt-20">
+          <div class="js-element-text flex flex-col gap-[13.78px] [grid-area:1/1]">
+            <p class="js-element-tagline text-lg font-bold leading-[normal]">The Art of Being Grounded.</p>
+            <p class="js-element-description text-base leading-[22px]">A connection to the soil, greenery and natural surroundings that brings us closer to our roots.</p>
+          </div>
         </div>
 
-        <img src="assets/icons/slide-pagination.svg" alt="" width="47" height="8" class="mt-8 h-[7.83px] w-[46.96px]">
+        <div class="js-element-dots mt-8 flex gap-[11.74px]" aria-hidden="true">
+          <span class="element-dot is-active"></span>
+          <span class="element-dot"></span>
+          <span class="element-dot"></span>
+        </div>
       </div>
     </section>
 
@@ -185,7 +224,7 @@
     <section id="philosophy" class="site-container pb-16 pt-12 lg:pb-[73px] lg:pt-16">
       <h2 class="js-section-heading font-display text-[30px] leading-[1.3] text-black md:text-[38px] md:leading-[50px] lg:pl-[7px]">Philosophy of Living</h2>
 
-      <div class="mt-8 lg:mt-[63px]">
+      <div class="js-philosophy-stage relative mt-8 lg:mt-[63px]">
         <img src="assets/images/philosophy-living-room.jpg" alt="A double-height living room with tall windows opening onto trees" width="1280" height="707" loading="lazy" class="js-section-image aspect-[4/3] w-full object-cover md:aspect-[1280/707]">
 
         <article class="js-philosophy-panel relative mx-4 -mt-16 rounded bg-white px-6 pb-9 pt-10 shadow-[0px_0px_28px_2px_rgba(0,0,0,0.14)] sm:mx-8 md:px-[67px] md:pt-20 lg:mx-0 lg:-mt-[40.16%] lg:ml-auto lg:mr-[2.66%] lg:w-[64%] xl:w-[724px]">
