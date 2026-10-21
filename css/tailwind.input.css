@@ -1,0 +1,44 @@
+/* Tailwind source — compiled to css/tailwind.css via `npm run build` (or `npm run watch`). */
+@import "tailwindcss" source(none);
+
+@source "../index.html";
+
+@theme {
+  --font-sans: "Roboto", system-ui, sans-serif;
+  --font-display: "Marcellus", Georgia, serif;
+  --font-display-sc: "Marcellus SC", Georgia, serif;
+  --font-inter: "Inter", system-ui, sans-serif;
+  --font-manrope: "Manrope", system-ui, sans-serif;
+  --font-montserrat: "Montserrat", system-ui, sans-serif;
+  --font-jakarta: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-arimo: "Arimo", system-ui, sans-serif;
+
+  /* Botanical palette (Figma styles) */
+  --color-forest: #2e4f39;
+  --color-gold: #c9a86a;
+  --color-ink: #203329;
+  --color-muted: #5e6b60;
+  --color-brick: #a23e35;
+  --color-sage: #d9ded5;
+  --color-cream: #f3ebdd;
+  --color-mist: #e8ede5;
+  --color-linen: #f1eee5;
+  --color-night: #081712;
+  --color-pine: #0e221b;
+  --color-pill: #f7f9f6;
+}
+
+@utility site-container {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 20px;
+
+  @variant md {
+    padding-inline: 40px;
+  }
+
+  @variant xl {
+    padding-inline: 80px;
+  }
+}

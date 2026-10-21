@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="46.9565" height="7.82609" viewBox="0 0 46.9565 7.82609" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Slide pagination" clip-path="url(#clip0_0_89)">
+<circle id="Current slide" cx="3.91304" cy="3.91304" r="3.91304" fill="white"/>
+<path id="Other slide" d="M26.7554 3.91304C26.7554 5.72298 25.2882 7.19022 23.4783 7.19022C21.6683 7.19022 20.2011 5.72298 20.2011 3.91304C20.2011 2.10311 21.6683 0.63587 23.4783 0.63587C25.2882 0.63587 26.7554 2.10311 26.7554 3.91304Z" stroke-width="1.27174" stroke="#C0CFDD"/>
+<path id="Other slide_2" d="M46.3206 3.91304C46.3206 5.72298 44.8534 7.19022 43.0435 7.19022C41.2335 7.19022 39.7663 5.72298 39.7663 3.91304C39.7663 2.10311 41.2335 0.63587 43.0435 0.63587C44.8534 0.63587 46.3206 2.10311 46.3206 3.91304Z" stroke-width="1.27174" stroke="#C0CFDD"/>
+</g>
+<defs>
+<clipPath id="clip0_0_89">
+<rect width="46.9565" height="7.82609" fill="white"/>
+</clipPath>
+</defs>
+</svg>

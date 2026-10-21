@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vedvan — Elemental Living | Where Life Returns to Its Elements</title>
+  <meta name="description" content="Vedvan is a 25-acre integrated wellness community where nature, preventive wellness, luxury residences and hospitality come together.">
+
+  <link rel="preload" href="assets/fonts/marcellus.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/roboto-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/images/hero-yoga-pond.jpg" as="image">
+
+  <link rel="stylesheet" href="css/tailwind.css">
+  <link rel="stylesheet" href="css/home.style.css">
+
+  <script src="js/home.nav.js" defer></script>
+  <script src="js/home.animation.js" defer></script>
+</head>
+<body class="bg-white font-sans text-ink antialiased">
+
+  <!-- Site header -->
+  <header id="site-header" class="absolute inset-x-0 top-0 z-30 border-b border-[rgba(183,183,183,0.2)]">
+    <div class="site-container flex items-center justify-between py-[12.5px]">
+      <a href="#hero" class="js-header-logo shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+        <img src="assets/logos/vedvan-logo-header.png" alt="Vedvan — Elemental living" width="191" height="61" class="h-12 w-auto md:h-[61px]">
+      </a>
+
+      <nav aria-label="Primary" class="js-header-nav hidden items-center gap-6 lg:flex xl:gap-[38px]">
+        <ul class="flex items-center gap-6 text-base leading-[normal] text-white xl:gap-[38px]">
+          <li><a href="#experience" class="hover:text-gold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">EXPERIENCE</a></li>
+          <li><a href="#wellness-community" class="hover:text-gold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">WELLNESS</a></li>
+          <li><a href="#community" class="hover:text-gold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">RESIDENCES</a></li>
+          <li><a href="#vision-mission" class="hover:text-gold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">OUR STORY</a></li>
+          <li><a href="#" class="hover:text-gold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">LEADERSHIP</a></li>
+        </ul>
+        <a href="#private-visit" class="js-header-cta bg-gold px-7 py-[10.5px] text-base font-semibold leading-[normal] text-white hover:bg-[#b8975a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">PRIVATE VISIT</a>
+      </nav>
+
+      <button type="button" class="js-nav-toggle flex size-11 flex-col items-center justify-center gap-[5px] lg:hidden focus-visible:outline-2 focus-visible:outline-white" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+        <span class="h-0.5 w-6 bg-white"></span>
+        <span class="h-0.5 w-6 bg-white"></span>
+        <span class="h-0.5 w-6 bg-white"></span>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="bg-[#0c1611]/95 lg:hidden" hidden>
+      <nav aria-label="Mobile" class="site-container flex flex-col gap-1 pb-6 pt-2">
+        <a href="#experience" class="py-3 text-base text-white">EXPERIENCE</a>
+        <a href="#wellness-community" class="py-3 text-base text-white">WELLNESS</a>
+        <a href="#community" class="py-3 text-base text-white">RESIDENCES</a>
+        <a href="#vision-mission" class="py-3 text-base text-white">OUR STORY</a>
+        <a href="#" class="py-3 text-base text-white">LEADERSHIP</a>
+        <a href="#private-visit" class="mt-3 bg-gold px-7 py-3 text-center text-base font-semibold text-white">PRIVATE VISIT</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Section 01: Hero -->
+    <section id="hero" class="relative isolate flex h-svh max-h-[807px] min-h-[600px] items-center justify-center overflow-hidden text-white">
+      <img src="assets/images/hero-yoga-pond.jpg" alt="A woman meditating on a yoga mat beside a still garden pond" width="2880" height="1620" fetchpriority="high" class="js-hero-image absolute inset-0 -z-10 size-full object-cover">
+      <div class="hero-overlay absolute inset-0 -z-10" aria-hidden="true"></div>
+
+      <div class="js-hero-content mb-10 flex w-full max-w-[707px] flex-col items-center gap-12 px-5 pt-16 text-center md:gap-[60px] md:pt-0">
+        <div class="flex flex-col items-center gap-4">
+          <h1 class="js-hero-title max-w-[732px] font-display text-[38px] leading-[normal] text-shadow-[0px_4px_4px_rgba(0,0,0,0.25)] sm:text-5xl md:text-[60px]">
+            Where <span class="font-display-sc uppercase">Life Returns</span> To Its Elements.
+          </h1>
+          <p class="js-hero-subtitle text-base font-semibold leading-[normal] md:text-lg lg:whitespace-nowrap">
+            A thoughtful vision of living where nature, wellness and the essence of life come together.
+          </p>
+        </div>
+
+        <button type="button" class="js-hero-cta group flex flex-col items-center gap-4 focus-visible:outline-none">
+          <span class="text-base font-semibold uppercase leading-[normal] md:text-lg">Watch the film</span>
+          <span class="flex size-[72px] items-center justify-center rounded-full border border-white p-3 group-hover:bg-white/10 group-focus-visible:outline-2 group-focus-visible:outline-offset-4 group-focus-visible:outline-white">
+            <img src="assets/icons/play.svg" alt="" width="48" height="48" class="size-12">
+          </span>
+        </button>
+      </div>
+
+      <a href="#intro" class="js-scroll-indicator absolute inset-x-0 bottom-16 mx-auto hidden w-fit flex-col items-center gap-2 sm:flex focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+        <span class="text-[10px] font-semibold uppercase leading-[15px]">Scroll to explore</span>
+        <span class="flex h-8 w-5 justify-center rounded-full border border-white/80 p-[5px]" aria-hidden="true">
+          <span class="js-scroll-dot h-2 w-1 rounded-full bg-sage"></span>
+        </span>
+      </a>
+    </section>
+
+    <!-- Section 02: Intro — A Life Rooted in Nature -->
+    <section id="intro" class="intro-bg relative px-5 py-16 md:px-[88px] md:py-[97px]">
+      <div class="mx-auto flex max-w-[951px] flex-col items-center gap-9 text-center">
+        <div class="flex w-full flex-col items-center gap-2.5">
+          <div class="js-intro-emblem relative h-[117px] w-[154px]" aria-hidden="true">
+            <span class="mask-lotus absolute left-[14.62px] top-0 h-[116.945px] w-[139.18px] bg-[rgba(201,168,106,0.07)]"></span>
+            <img src="assets/icons/lotus-gold.png" alt="" width="106" height="82" class="absolute left-[31.2px] top-[17.94px] h-[82px] w-[106px] object-cover">
+            <img src="assets/images/butterfly.png" alt="" width="73" height="73" class="js-butterfly absolute left-0 top-0 size-[73px] object-cover">
+          </div>
+
+          <div class="flex w-full flex-col items-center gap-[26px]">
+            <h2 class="js-section-heading font-display text-[32px] capitalize leading-[1.4] text-[#333] md:text-[42px] md:leading-[62px]">A Life Rooted in Nature.</h2>
+            <div class="js-section-content flex flex-col gap-2.5 text-base leading-6 text-black/60">
+              <p>Somewhere along the way, modern living moved us further from the things that naturally make us feel alive.</p>
+              <p>Vedvan is an invitation to rediscover that connection. Inspired by nature and guided by the philosophy of preventive wellness, it envisions a way of life where balance, mindfulness and well-being become second nature.</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="js-section-tagline text-lg font-medium leading-7 text-brick">Not simply a different place to live. A different way to experience life.</p>
+      </div>
+    </section>
+
+    <!-- Section 03: Our Vision & Mission -->
+    <section id="vision-mission" class="relative isolate overflow-hidden px-5 pb-16 pt-16 md:px-10 lg:pb-[86px] lg:pt-[100px]">
+      <div class="mask-lotus absolute left-1/2 top-[17px] -z-10 aspect-[1104/944] w-full max-w-[1104px] -translate-x-1/2 bg-[rgba(201,168,106,0.04)]" aria-hidden="true"></div>
+
+      <div class="mx-auto max-w-[1259px] lg:pl-[7px]">
+        <div class="relative inline-block pr-[34px] pt-[46px] md:pr-[43px] md:pt-[57px]">
+          <img src="assets/images/butterfly.png" alt="" width="73" height="73" class="js-butterfly absolute right-0 top-0 size-14 -scale-x-100 object-cover md:size-[73px]">
+          <h2 class="js-section-heading font-display text-[28px] leading-[1.05] text-[#333] md:text-4xl">OUR VISION &amp; MISSION</h2>
+        </div>
+      </div>
+
+      <div class="mt-10 flex flex-col gap-14 md:mt-14">
+        <article class="js-vision-row mx-auto flex w-full max-w-[1259px] flex-col items-center gap-10 lg:flex-row lg:justify-between lg:gap-12">
+          <div class="js-section-content flex w-full min-w-0 flex-col gap-6 md:gap-8 lg:max-w-[535px] lg:flex-1">
+            <h3 class="text-2xl font-medium leading-[normal] text-forest">Our Vision</h3>
+            <div class="flex flex-col gap-6">
+              <p class="font-display text-2xl leading-[normal] text-ink md:text-[28px]">To Bring Living Back to Its Natural Essence.</p>
+              <p class="text-base leading-[1.6] text-muted md:text-lg">To reimagine modern living through a deeper connection with nature, creating a future where wellness is not an occasional pursuit but an intrinsic part of everyday life.</p>
+            </div>
+          </div>
+          <figure class="js-section-image relative aspect-[544/382] w-full max-w-[544px] shrink-0 lg:w-[46%] xl:w-[544px]">
+            <img src="assets/images/frame-outline.svg" alt="" width="228" height="383" class="absolute right-0 top-0 h-full w-[41.73%] -scale-x-100">
+            <img src="assets/images/vision-architecture.jpg" alt="Architectural model of a modern home resting on blueprints" width="512" height="300" loading="lazy" class="absolute left-0 top-[10.73%] h-[78.53%] w-[94.12%] object-cover">
+          </figure>
+        </article>
+
+        <article class="js-mission-row mx-auto flex w-full max-w-[1167px] flex-col items-center gap-10 lg:flex-row-reverse lg:justify-between lg:gap-12">
+          <div class="js-section-content flex w-full min-w-0 flex-col gap-6 md:gap-8 lg:max-w-[535px] lg:flex-1">
+            <h3 class="text-2xl font-medium leading-[normal] text-forest">Our Mission</h3>
+            <div class="flex flex-col gap-6">
+              <p class="font-display text-2xl leading-[normal] text-ink md:text-[28px]">To Make Well-being a Way of Life.</p>
+              <p class="text-base leading-[1.6] text-muted md:text-lg">To bring together the wisdom of nature, the principles of preventive wellness and thoughtful design, inspiring environments that nurture physical, mental and emotional well-being.</p>
+            </div>
+          </div>
+          <figure class="js-section-image relative aspect-[548/382] w-full max-w-[548px] shrink-0 lg:w-[46%] xl:w-[548px]">
+            <img src="assets/images/frame-outline.svg" alt="" width="228" height="383" class="absolute left-0 top-0 h-full w-[41.42%]">
+            <img src="assets/images/mission-interior-sketch.jpg" alt="Sketch of a light-filled open-plan living space opening onto a garden" width="512" height="300" loading="lazy" class="absolute left-[6.57%] top-[10.73%] h-[78.53%] w-[93.43%] object-cover">
+          </figure>
+        </article>
+      </div>
+    </section>
+
+    <!-- Section 04: Elements — Earth -->
+    <section id="elements" class="relative isolate flex flex-col overflow-hidden lg:block lg:h-[620px] xl:h-[750px]">
+      <img src="assets/images/earth-mountains.jpg" alt="Mist rolling over lush green mountain valleys" width="2880" height="1614" loading="lazy" class="js-section-image h-[300px] w-full object-cover sm:h-[420px] lg:absolute lg:inset-0 lg:-z-10 lg:h-full">
+
+      <div class="js-element-panel order-first flex flex-col bg-linear-to-b from-[#155c35] to-[#0c1611] px-6 py-14 text-white sm:px-10 lg:absolute lg:inset-y-0 lg:left-0 lg:w-[43.21%] lg:justify-end lg:pb-[96px] lg:pl-[6.94%] lg:pr-[2.08%] lg:pt-0">
+        <div class="js-element-title relative mx-auto h-[211px] w-[240.3px] shrink-0">
+          <span class="mask-earth-glyph absolute left-[6.3px] top-0 h-[106.23px] w-[110.27px] bg-white" aria-hidden="true"></span>
+          <span class="absolute left-0 top-[144px] font-montserrat text-[54.78px] font-semibold leading-[normal] text-[#8bb39d] opacity-60" aria-hidden="true">01</span>
+          <span class="absolute left-[61.3px] top-[153px] flex size-[39.35px] items-center justify-center" aria-hidden="true">
+            <img src="assets/icons/title-separator.svg" alt="" width="30" height="30" class="size-[29.35px] rotate-[26.45deg]">
+          </span>
+          <h2 class="absolute left-[104.3px] top-[126px] whitespace-nowrap text-[56.74px] font-semibold leading-[70.44px]">Earth</h2>
+        </div>
+
+        <div class="js-section-content mt-12 flex w-full max-w-[466px] flex-col gap-[13.78px] lg:mt-20">
+          <p class="text-lg font-bold leading-[normal]">The Art of Being Grounded.</p>
+          <p class="text-base leading-[22px]">A connection to the soil, greenery and natural surroundings that brings us closer to our roots.</p>
+        </div>
+
+        <img src="assets/icons/slide-pagination.svg" alt="" width="47" height="8" class="mt-8 h-[7.83px] w-[46.96px]">
+      </div>
+    </section>
+
+    <!-- Section 05: Philosophy of Living -->
+    <section id="philosophy" class="site-container pb-16 pt-12 lg:pb-[73px] lg:pt-16">
+      <h2 class="js-section-heading font-display text-[30px] leading-[1.3] text-black md:text-[38px] md:leading-[50px] lg:pl-[7px]">Philosophy of Living</h2>
+
+      <div class="mt-8 lg:mt-[63px]">
+        <img src="assets/images/philosophy-living-room.jpg" alt="A double-height living room with tall windows opening onto trees" width="1280" height="707" loading="lazy" class="js-section-image aspect-[4/3] w-full object-cover md:aspect-[1280/707]">
+
+        <article class="js-philosophy-panel relative mx-4 -mt-16 rounded bg-white px-6 pb-9 pt-10 shadow-[0px_0px_28px_2px_rgba(0,0,0,0.14)] sm:mx-8 md:px-[67px] md:pt-20 lg:mx-0 lg:-mt-[40.16%] lg:ml-auto lg:mr-[2.66%] lg:w-[64%] xl:w-[724px]">
+          <p class="text-base font-bold leading-5 tracking-[2px] text-[#996726]">PHILOSOPHY OF LIVING</p>
+          <h3 class="pb-[31px] pt-[25px] font-display text-[28px] leading-[1.4] text-ink md:text-4xl md:leading-[58px]">Ancient wisdom, lived beautifully</h3>
+
+          <div class="js-pillars flex flex-wrap items-center gap-[9px] md:flex-col md:items-stretch">
+            <div class="contents md:flex md:flex-wrap md:items-center md:gap-[9px]">
+              <span class="rounded-full border-[1.2px] border-[#b9c3b7] bg-pill px-[15px] py-2 text-lg font-medium leading-[normal]">Vedic Wisdom</span>
+              <span class="w-2 font-arimo text-base" aria-hidden="true">+</span>
+              <span class="rounded-full border-[1.2px] border-[#b9c3b7] bg-pill px-[15px] py-2 text-lg font-medium leading-[normal]">Modern Luxury</span>
+              <span class="w-2 font-arimo text-base" aria-hidden="true">+</span>
+              <span class="rounded-full border-[1.2px] border-[#b9c3b7] bg-pill px-[15px] py-2 text-lg font-medium leading-[normal]">Nature</span>
+              <span class="w-2 font-arimo text-base" aria-hidden="true">+</span>
+            </div>
+            <div class="contents md:flex md:flex-wrap md:items-center md:gap-[9px]">
+              <span class="rounded-full border-[1.2px] border-[#b9c3b7] bg-pill px-[15px] py-2 text-lg font-medium leading-[normal]">Wellness</span>
+              <span class="w-2 font-arimo text-base" aria-hidden="true">+</span>
+              <span class="rounded-full border-[1.2px] border-[#b9c3b7] bg-pill px-[15px] py-2 text-lg font-medium leading-[normal]">Conscious Living</span>
+            </div>
+          </div>
+
+          <p class="pb-[27px] pt-7 text-xl leading-8 text-black/60 md:text-[28px] md:leading-10">A way of life where ancient wisdom meets modern comfort, inspiring peace, balance, and a deeper connection with oneself.</p>
+          <p class="font-display text-[22px] leading-9 text-forest md:text-[24.5px]">Why VEDVAN? Why this way of living?</p>
+
+          <div class="pt-6">
+            <a href="#vision-mission" class="js-cta inline-flex h-10 items-center bg-pill px-3 text-lg font-medium leading-6 text-black hover:bg-mist focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest">READ OUR STORY →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Section 06: Explore the VEDVAN Experience -->
+    <section id="experience" class="mb-16 overflow-hidden bg-[#fafafa] py-16 lg:py-24">
+      <div class="flex flex-col gap-10 lg:gap-[50px]">
+        <div class="px-5 md:px-10 xl:pl-20 xl:pr-0">
+          <header class="js-section-heading mx-auto flex w-full max-w-[1026px] flex-col items-center gap-[26px] pb-[26px]">
+            <div class="flex w-full items-center justify-center gap-4 md:gap-6">
+              <span class="h-px max-w-[260px] flex-1 bg-[#bdbcb8]" aria-hidden="true"></span>
+              <p class="shrink-0 font-inter text-base font-medium leading-[normal] text-[#915313] md:text-xl">Explore the VEDVAN Experience</p>
+              <span class="h-px max-w-[260px] flex-1 bg-[#bdbcb8]" aria-hidden="true"></span>
+            </div>
+            <h2 class="max-w-[786px] text-center font-display text-[28px] capitalize leading-[normal] text-black md:text-4xl">Discover spaces for wellbeing, connection and a life closer to nature.</h2>
+          </header>
+        </div>
+
+        <div class="js-card-track no-scrollbar flex gap-6 overflow-x-auto px-5 md:px-10 xl:pl-[max(82px,calc(50vw-638px))] xl:pr-0 focus-visible:outline-2 focus-visible:outline-gold" role="region" aria-label="VEDVAN experiences" tabindex="0">
+          <article class="js-feature-card relative isolate flex aspect-[358/460] w-[min(358px,78vw)] shrink-0 flex-col justify-end overflow-hidden border border-sage">
+            <img src="assets/images/experience-villas.jpg" alt="A tropical villa with a shaded veranda surrounded by palms" width="358" height="460" loading="lazy" class="absolute inset-0 -z-10 size-full object-cover">
+            <span class="absolute inset-0 -z-10 bg-linear-to-b from-transparent from-55% to-black/60" aria-hidden="true"></span>
+            <h3 class="px-4 pb-5 pt-4 text-center font-inter text-[28px] font-semibold leading-[34px] text-white">Villas</h3>
+          </article>
+          <article class="js-feature-card relative isolate flex aspect-[358/460] w-[min(358px,78vw)] shrink-0 flex-col justify-end overflow-hidden border border-sage">
+            <img src="assets/images/experience-wellness-centers.jpg" alt="An open timber yoga pavilion set in a tropical garden" width="358" height="460" loading="lazy" class="absolute inset-0 -z-10 size-full object-cover">
+            <span class="absolute inset-0 -z-10 bg-linear-to-b from-transparent from-55% to-black/60" aria-hidden="true"></span>
+            <h3 class="px-4 pb-5 pt-4 text-center font-inter text-[28px] font-semibold leading-[34px] text-white">Wellness Centers</h3>
+          </article>
+          <article class="js-feature-card relative isolate flex aspect-[358/460] w-[min(358px,78vw)] shrink-0 flex-col justify-end overflow-hidden border border-sage">
+            <img src="assets/images/experience-club-area.jpg" alt="Residents relaxing in a lounge under a vine-covered pergola" width="358" height="460" loading="lazy" class="absolute inset-0 -z-10 size-full object-cover">
+            <span class="absolute inset-0 -z-10 bg-linear-to-b from-transparent from-55% to-black/60" aria-hidden="true"></span>
+            <h3 class="px-4 pb-5 pt-4 text-center font-inter text-[28px] font-semibold leading-[34px] text-white">Club Area</h3>
+          </article>
+          <article class="js-feature-card relative isolate flex aspect-[358/460] w-[min(358px,78vw)] shrink-0 flex-col justify-end overflow-hidden border border-sage">
+            <img src="assets/images/experience-water-bodies.jpg" alt="A calm river framed by dense forest" width="358" height="460" loading="lazy" class="absolute inset-0 -z-10 size-full object-cover">
+            <span class="absolute inset-0 -z-10 bg-linear-to-b from-transparent from-55% to-black/60" aria-hidden="true"></span>
+            <h3 class="px-4 pb-5 pt-4 text-center font-inter text-[28px] font-semibold leading-[34px] text-white">Water Bodies</h3>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 07: Integrated Wellness Community -->
+    <section id="wellness-community" class="mx-auto w-full max-w-[1440px] px-5 md:px-10 xl:px-[61px]">
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-[11px]">
+        <h2 class="js-section-heading shrink-0 font-display text-[34px] capitalize leading-[1.3] text-black md:text-5xl md:leading-[69px] lg:w-[47%] xl:w-[542px]">Integrated wellness community</h2>
+        <div class="js-section-content flex min-w-0 flex-col gap-4 font-inter text-base leading-7 md:text-lg lg:max-w-[694px]">
+          <p class="text-[rgba(17,17,17,0.6)]">At VEDVAN, wellness, nature, luxury residences, community, and hospitality come together in perfect harmony.</p>
+          <p class="max-w-[677px] text-black/60">A thoughtfully designed 25-acre sanctuary where every space nurtures balance, connection, and holistic living.</p>
+        </div>
+      </div>
+
+      <div class="js-estate-map relative mt-10 lg:mt-[71px]">
+        <figure class="relative isolate aspect-[4/5] overflow-hidden rounded-r-[48px] bg-[#d9d9d9] sm:aspect-[1319/747] lg:rounded-r-[103px]">
+          <img src="assets/images/estate-aerial.jpg" alt="Aerial render of the entire 25-acre Vedvan estate with lakes, residences and forest" width="1536" height="1024" loading="lazy" class="js-section-image absolute inset-x-0 top-0 -z-10 h-full w-full object-cover sm:h-[106.83%]">
+          <span class="absolute inset-0 -z-10 bg-[#111914] opacity-40" aria-hidden="true"></span>
+          <span class="mask-lotus absolute left-[39.73%] top-[26.1%] aspect-[274.34/234.475] w-[20.8%] bg-[rgba(168,133,68,0.57)]" aria-hidden="true"></span>
+          <figcaption class="absolute bottom-4 left-4 right-4 text-[10px] font-semibold uppercase leading-[normal] tracking-[0.756px] text-[#dce3d9] sm:bottom-auto sm:left-[28.81%] sm:right-auto sm:top-[87.15%] sm:text-[11.344px]">Aerial render of the whole 25 acres — not a single villa</figcaption>
+        </figure>
+
+        <ul class="js-estate-markers mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 md:mt-0 md:block" aria-label="Estate zones">
+          <li class="js-estate-marker flex items-center gap-[9px] md:absolute md:left-[11.22%] md:top-[43.64%]">
+            <img src="assets/icons/marker.svg" alt="" width="15" height="15" class="size-[15.125px] shrink-0">
+            <div class="flex w-full items-start gap-2 border border-black/10 bg-white pb-2.5 pl-[13px] pr-[7px] pt-[11px] md:w-[234px] md:border-0">
+              <div class="min-w-0 flex-1 text-[#111]">
+                <p class="text-[12.29px] font-semibold leading-[normal] tracking-[0.756px]">WELLNESS</p>
+                <p class="mt-1 max-w-[165px] text-[11.72px] leading-[normal]">Wellness centre, spa and yoga pavilions | View →</p>
+              </div>
+              <img src="assets/icons/estate-wellness.png" alt="" width="38" height="38" class="size-[38px] shrink-0 drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
+            </div>
+          </li>
+          <li class="js-estate-marker flex items-center gap-[9px] md:absolute md:left-[45.34%] md:top-[14.59%]">
+            <img src="assets/icons/marker.svg" alt="" width="15" height="15" class="size-[15.125px] shrink-0">
+            <div class="flex w-full items-center justify-between gap-2.5 border border-black/10 bg-white px-[13px] py-2 md:w-auto md:border-0">
+              <p class="text-[12.29px] font-semibold leading-[normal] tracking-[0.756px] text-[#111]">NATURE</p>
+              <img src="assets/icons/estate-nature.png" alt="" width="30" height="30" class="size-[30px] shrink-0">
+            </div>
+          </li>
+          <li class="js-estate-marker flex items-center gap-[9px] md:absolute md:left-[67.4%] md:top-[23.03%]">
+            <img src="assets/icons/marker.svg" alt="" width="15" height="15" class="size-[15.125px] shrink-0">
+            <div class="flex w-full items-center justify-between gap-2.5 border border-black/10 bg-white px-[13px] py-2 md:w-auto md:border-0">
+              <p class="text-[12.29px] font-semibold leading-[normal] tracking-[0.756px] text-[#111]">HOSPITALITY</p>
+              <img src="assets/icons/estate-hospitality.png" alt="" width="38" height="38" class="size-[38px] shrink-0 drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
+            </div>
+          </li>
+          <li class="js-estate-marker flex items-center gap-[9px] md:absolute md:left-[75.36%] md:top-[43.37%]">
+            <img src="assets/icons/marker.svg" alt="" width="15" height="15" class="size-[15.125px] shrink-0">
+            <div class="flex w-full items-center justify-between gap-2.5 border border-black/10 bg-white px-[13px] py-2 md:w-auto md:border-0">
+              <p class="text-[12.29px] font-semibold leading-[normal] tracking-[0.756px] text-[#111]">RESIDENCES</p>
+              <img src="assets/icons/estate-residences.png" alt="" width="38" height="38" class="size-[38px] shrink-0 drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
+            </div>
+          </li>
+          <li class="js-estate-marker flex items-center gap-[9px] md:absolute md:left-[53.98%] md:top-[62.12%]">
+            <img src="assets/icons/marker.svg" alt="" width="15" height="15" class="size-[15.125px] shrink-0">
+            <div class="flex w-full items-center justify-between gap-2.5 border border-black/10 bg-white px-[13px] py-2 md:w-auto md:border-0">
+              <p class="text-[12.29px] font-semibold leading-[normal] tracking-[0.756px] text-[#111]">COMMUNITY</p>
+              <img src="assets/icons/estate-community.png" alt="" width="38" height="38" class="size-[38px] shrink-0 drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <dl class="js-estate-stats relative z-10 mt-6 grid grid-cols-2 gap-6 bg-[#fffbf4] px-[30px] py-8 drop-shadow-[0px_8px_12px_rgba(0,0,0,0.08)] md:-mt-[4.85%] md:ml-[5%] md:flex md:w-[90%] md:justify-between lg:ml-[28.81%] lg:w-[61.71%]">
+        <div class="js-stat flex flex-col-reverse">
+          <dt class="text-sm leading-[normal] tracking-[1.134px] text-black/40">ACRES</dt>
+          <dd class="font-display text-4xl leading-[normal] text-[#27342b]">25</dd>
+        </div>
+        <div class="js-stat flex flex-col-reverse">
+          <dt class="text-sm leading-[normal] tracking-[1.134px] text-black/40">RESIDENCES</dt>
+          <dd class="font-display text-4xl leading-[normal] text-[#27342b]">100</dd>
+        </div>
+        <div class="js-stat flex flex-col-reverse">
+          <dt class="text-sm leading-[normal] tracking-[1.134px] text-black/40">OPEN &amp; GREEN LAND</dt>
+          <dd class="font-display text-4xl leading-[normal] text-[#27342b]">40%</dd>
+        </div>
+        <div class="js-stat flex flex-col-reverse">
+          <dt class="text-sm leading-[normal] tracking-[1.134px] text-black/40">WELLNESS CENTRE</dt>
+          <dd class="font-display text-4xl leading-[normal] text-[#27342b]">100</dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- Section 08: Community at Vedvan -->
+    <section id="community" class="relative isolate mx-auto max-w-[1440px] pb-16 pt-14">
+      <div class="community-grid-lines absolute left-[6.94%] top-0 -z-10 hidden h-[849px] w-[87.57%] lg:block" aria-hidden="true"></div>
+
+      <div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-[3.54%]">
+        <figure class="js-section-image aspect-[4/5] w-full shrink-0 overflow-hidden sm:aspect-[16/11] lg:aspect-[476/713] lg:w-[33.06%]">
+          <img src="assets/images/community-interior.jpg" alt="A sunlit living room with tall windows, white sofa and indoor plants" width="476" height="713" loading="lazy" class="size-full object-cover object-[50%_34%]">
+        </figure>
+
+        <div class="min-w-0 px-5 md:px-10 lg:w-[53.13%] lg:px-0 lg:pt-[67px]">
+          <div class="js-section-content">
+            <p class="font-inter text-base font-semibold leading-[normal] text-gold">COMMUNITY AT VEDVAN</p>
+            <h2 class="js-section-heading mt-2.5 max-w-[473px] font-display text-[30px] leading-[normal] text-black md:text-4xl">Come Home to Something More Meaningful.</h2>
+
+            <ul class="mt-[39px] flex flex-col gap-2.5 text-base leading-6 text-ink">
+              <li class="flex items-start gap-3">
+                <span class="flex size-6 shrink-0 items-center justify-center"><img src="assets/icons/arrow-right-gold.svg" alt="" width="20" height="20" class="size-5"></span>
+                <p class="min-w-0 flex-1 font-manrope">A meaningful community is built around more than shared spaces.</p>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="flex size-6 shrink-0 items-center justify-center"><img src="assets/icons/arrow-right-gold.svg" alt="" width="20" height="20" class="size-5"></span>
+                <p class="min-w-0 flex-1">It is created through conversations, celebrations, experiences and everyday moments that bring people together.</p>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="flex size-6 shrink-0 items-center justify-center"><img src="assets/icons/arrow-right-gold.svg" alt="" width="20" height="20" class="size-5"></span>
+                <p class="min-w-0 flex-1">Vedvan thoughtfully creates spaces where residents can connect with nature, with themselves and with one another.</p>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="flex size-6 shrink-0 items-center justify-center"><img src="assets/icons/arrow-right-gold.svg" alt="" width="20" height="20" class="size-5"></span>
+                <p class="min-w-0 flex-1">A place where neighbours become familiar faces and everyday interactions turn into lasting connections.</p>
+              </li>
+            </ul>
+
+            <a href="#vision-mission" class="js-cta mt-[39px] inline-flex items-center gap-3 border-b border-gold pb-[5px] text-sm font-semibold leading-5 text-night hover:text-forest focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
+              DISCOVER THE VEDVAN STORY
+              <img src="assets/icons/arrow-link.svg" alt="" width="16" height="16" class="size-4">
+            </a>
+          </div>
+
+          <div class="mt-8 flex items-start justify-end gap-[6%] sm:gap-[4.7%] lg:-mt-2">
+            <img src="assets/images/community-yoga.jpg" alt="A woman meditating on a yoga mat in a sunlit room" width="264" height="330" loading="lazy" class="js-community-image mt-[8.76%] aspect-[264/330] w-[47%] object-cover sm:w-[34.51%]">
+            <img src="assets/images/community-tower.jpg" alt="A residential tower rising against a blue sky" width="264" height="330" loading="lazy" class="js-community-image aspect-[264/330] w-[47%] object-cover sm:w-[34.51%]">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 09: Thoughtfully Rooted -->
+    <section id="rooted" class="bg-[#f8f8f8] py-14">
+      <div class="site-container">
+        <h2 class="js-section-heading font-display text-[30px] leading-[1.3] text-black md:text-[38px] md:leading-[50px]">Thoughtfully Rooted. Naturally Inspired.</h2>
+      </div>
+
+      <div class="mx-auto mt-9 max-w-[1440px] px-5 md:px-10 xl:px-[87px]">
+        <figure class="relative aspect-[4/3] overflow-hidden md:aspect-[1266/599]">
+          <img src="assets/images/rooted-living-room.jpg" alt="A warm, minimal living room with arched windows, fireplace and sculptural artwork" width="1266" height="599" loading="lazy" class="js-section-image size-full object-cover object-[50%_48%]">
+          <a href="#" aria-label="Explore more" class="js-cta absolute right-3 top-3 flex size-12 items-center justify-center rounded-full bg-white p-1.5 hover:bg-linen focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:right-[17px] md:top-[47px] md:size-[70px]">
+            <img src="assets/icons/arrow-up-right.svg" alt="" width="41" height="41" class="size-7 rotate-45 md:size-[41px]">
+          </a>
+        </figure>
+      </div>
+
+      <div class="js-section-content mt-[46px] flex flex-col items-center gap-[5px] px-5 text-center md:px-[88px]">
+        <p class="text-lg leading-7 text-black/60 md:text-[22px] md:leading-[31px]">We believe the most meaningful form of luxury is the freedom to live in balance.</p>
+        <p class="max-w-[1046px] pb-5 text-lg leading-7 text-black/60 md:text-[22px] md:leading-[31px]">The freedom to reconnect with nature. To find time for yourself. To nurture relationships. To embrace a more conscious and fulfilling way of life.</p>
+        <p class="text-sm font-medium leading-[normal] text-brick">This is the thought behind Vedvan.</p>
+      </div>
+    </section>
+
+    <!-- Section 10: Location & Connectivity -->
+    <section id="location" class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 lg:py-[128px] xl:px-[88px]">
+      <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center lg:gap-x-8 xl:gap-x-12">
+        <div class="js-section-content flex flex-col items-start lg:col-span-5">
+          <p class="pb-3 text-xs font-semibold uppercase leading-4 tracking-[3px] text-gold">Location</p>
+          <h2 class="js-section-heading max-w-[464px] pb-6 font-display text-[30px] leading-[normal] text-night md:text-4xl">Away From the Rush. <span class="text-pine">Connected to What Matters.</span></h2>
+          <p class="max-w-[440px] pb-6 text-base font-light leading-6 text-[rgba(31,41,55,0.8)]">Vedvan brings together the calm of nature and the convenience of connectivity. Thoughtfully located to keep everyday destinations within reach while creating enough distance from the constant pace of city life, it offers a lifestyle where accessibility and tranquillity coexist.</p>
+          <p class="max-w-[464px] pb-8 text-xs font-semibold uppercase leading-4 tracking-[1.2px] text-gold">Stay connected to the city. Without carrying its chaos home.</p>
+          <a href="#" class="js-cta bg-gold px-7 py-4 text-xs font-semibold uppercase leading-4 text-night hover:bg-[#b8975a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-night">Explore location &amp; connectivity →</a>
+        </div>
+
+        <div class="js-connectivity-map flex flex-col gap-8 rounded-3xl bg-white p-6 shadow-[0px_0px_20px_0px_rgba(0,0,0,0.18)] md:p-12 lg:col-span-7">
+          <div class="flex flex-col items-center gap-[6.5px] pt-[5.5px] text-center">
+            <p class="text-xs font-medium uppercase leading-4 tracking-[1.2px] text-[#6b7280]">Seamless regional mobility</p>
+            <h3 class="font-display text-2xl leading-[normal] text-night md:text-[28px]">Effortless Highway Access</h3>
+          </div>
+
+          <div class="relative flex flex-col gap-4 sm:block sm:h-[320px]">
+            <div class="relative flex h-[260px] items-center justify-center sm:absolute sm:inset-0 sm:h-auto">
+              <span class="absolute aspect-square w-[min(288px,100%)] rounded-full border border-dashed border-[#e8e1d3]" aria-hidden="true"></span>
+              <span class="absolute aspect-square w-[min(192px,66.67%)] rounded-full border border-dashed border-[rgba(197,160,89,0.3)]" aria-hidden="true"></span>
+              <div class="js-connectivity-hub relative flex size-24 flex-col items-center justify-center rounded-full border-2 border-[#c5a059] bg-pine p-0.5 shadow-[0px_20px_25px_-5px_rgba(0,0,0,0.1),0px_8px_10px_-6px_rgba(0,0,0,0.1)]">
+                <span class="relative mb-1 size-5" aria-hidden="true">
+                  <img src="assets/icons/hub-vector-1.svg" alt="" width="16" height="9" class="absolute left-[1.875px] top-[9.375px] h-[8.75px] w-[16.25px]">
+                  <img src="assets/icons/hub-vector-2.svg" alt="" width="1" height="16" class="absolute left-[9.375px] top-[1.875px] h-[16.25px] w-[1.25px]">
+                </span>
+                <span class="font-inter text-xs font-bold uppercase leading-4 tracking-[0.6px] text-white">VEDVAN</span>
+              </div>
+            </div>
+
+            <ul class="grid grid-cols-1 gap-2 min-[400px]:grid-cols-2 sm:contents" aria-label="Travel times from Vedvan">
+              <li class="js-destination-badge flex items-center gap-2.5 rounded-xl border border-[rgba(166,127,56,0.3)] bg-[#faf7f0] p-3 shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.1),0px_2px_4px_-2px_rgba(0,0,0,0.1)] sm:absolute sm:left-8 sm:top-4">
+                <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-night font-jakarta text-xs font-bold leading-4 text-[#c5a059]" aria-hidden="true">D</span>
+                <span class="flex min-w-0 flex-col font-inter"><span class="text-xs font-bold leading-4 text-night">Delhi</span><span class="text-[10px] font-semibold leading-[15px] text-[#a67f38]">~30 mins drive</span></span>
+              </li>
+              <li class="js-destination-badge flex items-center gap-2.5 rounded-xl border border-[rgba(166,127,56,0.3)] bg-[#faf7f0] p-3 shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.1),0px_2px_4px_-2px_rgba(0,0,0,0.1)] sm:absolute sm:right-8 sm:top-4">
+                <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-night font-jakarta text-xs font-bold leading-4 text-[#c5a059]" aria-hidden="true">G</span>
+                <span class="flex min-w-0 flex-col font-inter"><span class="text-xs font-bold leading-4 text-night">Ghaziabad</span><span class="text-[10px] font-semibold leading-[15px] text-[#a67f38]">~20 mins drive</span></span>
+              </li>
+              <li class="js-destination-badge flex items-center gap-2.5 rounded-xl border border-[rgba(166,127,56,0.3)] bg-[#faf7f0] p-3 shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.1),0px_2px_4px_-2px_rgba(0,0,0,0.1)] sm:absolute sm:bottom-4 sm:left-8">
+                <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-night font-jakarta text-xs font-bold leading-4 text-[#c5a059]" aria-hidden="true">N</span>
+                <span class="flex min-w-0 flex-col font-inter"><span class="text-xs font-bold leading-4 text-night">Noida</span><span class="text-[10px] font-semibold leading-[15px] text-[#a67f38]">~30 mins drive</span></span>
+              </li>
+              <li class="js-destination-badge flex items-center gap-2.5 rounded-xl border border-[rgba(166,127,56,0.3)] bg-[#faf7f0] p-3 shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.1),0px_2px_4px_-2px_rgba(0,0,0,0.1)] sm:absolute sm:bottom-4 sm:right-8">
+                <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-night font-jakarta text-xs font-bold leading-4 text-[#c5a059]" aria-hidden="true">E</span>
+                <span class="flex min-w-0 flex-col font-inter"><span class="text-xs font-bold leading-4 text-night">Delhi-Meerut Exp.</span><span class="text-[10px] font-semibold leading-[15px] text-[#a67f38]">Direct Corridor</span></span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 11: Request a Private Visit -->
+    <section id="private-visit" class="relative isolate overflow-hidden px-5 py-16 md:px-10 lg:min-h-[758px] lg:pb-[165px] lg:pt-[79px]">
+      <img src="assets/images/visit-foliage-bg.jpg" alt="" width="2880" height="1920" loading="lazy" class="absolute inset-0 -z-10 size-full object-cover">
+      <span class="absolute inset-0 -z-10 bg-[rgba(5,15,13,0.47)]" aria-hidden="true"></span>
+
+      <header class="js-section-heading mx-auto flex max-w-[800px] flex-col items-center gap-2 text-center text-white">
+        <h2 class="font-display text-[30px] leading-[normal] md:text-4xl">Request a Private Visit</h2>
+        <p class="text-base leading-[normal] opacity-70">Select your preferred experience and we'll be in touch.</p>
+      </header>
+
+      <form class="js-visit-form mx-auto mt-12 flex max-w-[800px] flex-col gap-9 lg:mt-[73px]" action="#private-visit" method="get">
+        <div class="flex flex-col gap-10 md:gap-[50px]">
+          <fieldset>
+            <legend class="mb-2 text-sm font-medium leading-[normal] text-white">REQUEST TYPE</legend>
+            <div class="flex flex-col gap-3 sm:flex-row">
+              <label class="flex h-[42px] cursor-pointer sm:flex-1 items-center rounded-full bg-cream px-[21px] text-xs font-semibold leading-[normal] text-forest has-checked:ring-2 has-checked:ring-gold has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-white">
+                <input type="radio" name="request_type" value="private-presentation" class="sr-only">
+                PRIVATE PRESENTATION
+              </label>
+              <label class="flex h-[42px] cursor-pointer sm:flex-1 items-center rounded-full bg-mist px-[21px] text-xs font-semibold leading-[normal] text-forest has-checked:ring-2 has-checked:ring-gold has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-white">
+                <input type="radio" name="request_type" value="site-visit" class="sr-only">
+                SITE VISIT
+              </label>
+              <label class="flex h-[42px] cursor-pointer sm:flex-1 items-center rounded-full bg-linen px-[21px] text-xs font-semibold leading-[normal] text-forest has-checked:ring-2 has-checked:ring-gold has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-white">
+                <input type="radio" name="request_type" value="brochure" class="sr-only">
+                BROCHURE
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div class="flex flex-col gap-2">
+              <label for="visit-name" class="text-sm font-medium leading-[normal] text-white">NAME</label>
+              <input id="visit-name" name="name" type="text" autocomplete="name" placeholder="Enter your full name" class="h-[52px] w-full rounded-lg border border-white/20 bg-white px-4 text-sm text-ink placeholder:text-ink focus:outline-2 focus:outline-offset-2 focus:outline-gold">
+            </div>
+            <div class="flex flex-col gap-2">
+              <label for="visit-phone" class="text-sm font-medium leading-[normal] text-white">Phone</label>
+              <input id="visit-phone" name="phone" type="tel" autocomplete="tel" placeholder="Phone" class="h-[52px] w-full rounded-lg border border-white/20 bg-white px-4 text-sm text-ink placeholder:text-ink focus:outline-2 focus:outline-offset-2 focus:outline-gold">
+            </div>
+            <div class="flex flex-col gap-2">
+              <label for="visit-email" class="text-sm font-medium leading-[normal] text-white">Email</label>
+              <input id="visit-email" name="email" type="email" autocomplete="email" placeholder="EMAIL" class="h-[52px] w-full rounded-lg border border-white/20 bg-white px-4 text-sm text-ink placeholder:text-ink focus:outline-2 focus:outline-offset-2 focus:outline-gold">
+            </div>
+            <div class="flex flex-col gap-2">
+              <label for="visit-date" class="text-sm font-medium leading-[normal] text-white">Preferred Date</label>
+              <input id="visit-date" name="preferred_date" type="text" placeholder="Enter your full name" class="h-[52px] w-full rounded-lg border border-white/20 bg-white px-4 text-sm text-ink placeholder:text-ink focus:outline-2 focus:outline-offset-2 focus:outline-gold">
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="js-cta w-full bg-white px-7 py-[14.5px] text-base font-semibold leading-[normal] text-black hover:bg-linen focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">PRIVATE VISIT</button>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- Site footer -->
+  <footer id="site-footer" class="bg-black px-5 pb-12 pt-16 md:px-12">
+    <div class="mx-auto flex max-w-[1280px] flex-col items-center gap-[30px]">
+      <a href="#hero" class="js-footer-logo focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+        <img src="assets/logos/vedvan-logo-footer.png" alt="Vedvan — Elemental living" width="266" height="85" loading="lazy" class="h-[85px] w-[266px]">
+      </a>
+
+      <nav aria-label="Footer" class="pb-10">
+        <ul class="flex flex-wrap justify-center gap-x-10 gap-y-4 text-xs uppercase leading-4 tracking-[1.2px] text-white/70">
+          <li><a href="#vision-mission" class="hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">The Story</a></li>
+          <li><a href="#wellness-community" class="hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Wellness</a></li>
+          <li><a href="#community" class="hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Residences</a></li>
+          <li><a href="#wellness-community" class="hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Masterplan</a></li>
+          <li><a href="#elements" class="hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Elements</a></li>
+          <li><a href="#location" class="hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Location</a></li>
+          <li><a href="#" class="hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Gallery</a></li>
+          <li><a href="#private-visit" class="hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Contact</a></li>
+        </ul>
+      </nav>
+
+      <ul class="flex items-center gap-6" aria-label="Social media">
+        <li><a href="#" aria-label="Instagram" class="flex size-9 items-center justify-center rounded-full border border-white/20 hover:border-white/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"><img src="assets/icons/instagram.svg" alt="" width="16" height="16" class="size-4"></a></li>
+        <li><a href="#" aria-label="Facebook" class="flex size-9 items-center justify-center rounded-full border border-white/20 hover:border-white/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"><img src="assets/icons/facebook.svg" alt="" width="16" height="16" class="size-4"></a></li>
+        <li><a href="#" aria-label="YouTube" class="flex size-9 items-center justify-center rounded-full border border-white/20 hover:border-white/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"><img src="assets/icons/youtube.svg" alt="" width="16" height="16" class="size-4"></a></li>
+        <li><a href="#" aria-label="LinkedIn" class="flex size-9 items-center justify-center rounded-full border border-white/20 hover:border-white/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"><img src="assets/icons/linkedin.svg" alt="" width="16" height="16" class="size-4"></a></li>
+      </ul>
+
+      <div class="flex w-full flex-col items-center gap-4 border-t border-white/10 pt-[33px] text-center text-[11px] leading-[16.5px] tracking-[0.55px] lg:flex-row lg:justify-between lg:text-left">
+        <p class="font-jakarta text-white/50">© 2026 Vedvan. All Rights Reserved. digital media planned by Ritz Media World</p>
+        <ul class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-inter">
+          <li><a href="#" class="text-white/50 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Privacy Policy</a></li>
+          <li class="font-jakarta text-white/50" aria-hidden="true">•</li>
+          <li><a href="#" class="text-white/50 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Terms &amp; Conditions</a></li>
+          <li class="font-jakarta text-white/50" aria-hidden="true">•</li>
+          <li class="font-medium text-gold">RERA Registered Community</li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
