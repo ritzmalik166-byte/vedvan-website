@@ -14,14 +14,17 @@
   <link rel="stylesheet" href="css/home.style.css">
 
   <script src="js/home.nav.js" defer></script>
+  <script src="js/vendor/gsap.min.js" defer></script>
+  <script src="js/vendor/ScrollTrigger.min.js" defer></script>
+  <script src="js/vendor/lenis.min.js" defer></script>
   <script src="js/home.animation.js" defer></script>
 </head>
 <body class="bg-white font-sans text-ink antialiased">
 
   <!-- Site header -->
-  <header id="site-header" class="absolute inset-x-0 top-0 z-30 border-b border-[rgba(183,183,183,0.2)]">
+  <header id="site-header" class="fixed inset-x-0 top-0 z-30 border-b border-[rgba(183,183,183,0.2)]">
     <div class="site-container flex items-center justify-between py-[12.5px]">
-      <a href="#hero" class="js-header-logo shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+      <a href="#top" class="js-header-logo shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
         <img src="assets/logos/vedvan-logo-header.png" alt="Vedvan — Elemental living" width="191" height="61" class="h-12 w-auto md:h-[61px]">
       </a>
 
@@ -58,34 +61,36 @@
   <main>
 
     <!-- Section 01: Hero -->
-    <section id="hero" class="relative isolate flex h-svh max-h-[807px] min-h-[600px] items-center justify-center overflow-hidden text-white">
-      <img src="assets/images/hero-yoga-pond.jpg" alt="A woman meditating on a yoga mat beside a still garden pond" width="2880" height="1620" fetchpriority="high" class="js-hero-image absolute inset-0 -z-10 size-full object-cover">
-      <div class="hero-overlay absolute inset-0 -z-10" aria-hidden="true"></div>
+    <section id="hero" class="js-hero relative h-svh max-h-[807px] min-h-[600px] overflow-hidden text-white">
+      <div class="js-hero-frame absolute inset-0 isolate flex items-center justify-center overflow-hidden">
+        <img src="assets/images/hero-yoga-pond.jpg" alt="A woman meditating on a yoga mat beside a still garden pond" width="2880" height="1620" fetchpriority="high" class="js-hero-image absolute inset-0 -z-10 size-full object-cover">
+        <div class="hero-overlay absolute inset-0 -z-10" aria-hidden="true"></div>
 
-      <div class="js-hero-content mb-10 flex w-full max-w-[707px] flex-col items-center gap-12 px-5 pt-16 text-center md:gap-[60px] md:pt-0">
-        <div class="flex flex-col items-center gap-4">
-          <h1 class="js-hero-title max-w-[732px] font-display text-[38px] leading-[normal] text-shadow-[0px_4px_4px_rgba(0,0,0,0.25)] sm:text-5xl md:text-[60px]">
-            Where <span class="font-display-sc uppercase">Life Returns</span> To Its Elements.
-          </h1>
-          <p class="js-hero-subtitle text-base font-semibold leading-[normal] md:text-lg lg:whitespace-nowrap">
-            A thoughtful vision of living where nature, wellness and the essence of life come together.
-          </p>
+        <div class="js-hero-content mb-10 flex w-full max-w-[707px] flex-col items-center gap-12 px-5 pt-16 text-center md:gap-[60px] md:pt-0">
+          <div class="flex flex-col items-center gap-4">
+            <h1 class="js-hero-title max-w-[732px] font-display text-[38px] leading-[normal] text-shadow-[0px_4px_4px_rgba(0,0,0,0.25)] sm:text-5xl md:text-[60px]">
+              Where <span class="font-display-sc uppercase">Life Returns</span> To Its Elements.
+            </h1>
+            <p class="js-hero-subtitle text-base font-semibold leading-[normal] md:text-lg lg:whitespace-nowrap">
+              A thoughtful vision of living where nature, wellness and the essence of life come together.
+            </p>
+          </div>
+
+          <button type="button" class="js-hero-cta group flex flex-col items-center gap-4 focus-visible:outline-none">
+            <span class="text-base font-semibold uppercase leading-[normal] md:text-lg">Watch the film</span>
+            <span class="flex size-[72px] items-center justify-center rounded-full border border-white p-3 group-hover:bg-white/10 group-focus-visible:outline-2 group-focus-visible:outline-offset-4 group-focus-visible:outline-white">
+              <img src="assets/icons/play.svg" alt="" width="48" height="48" class="size-12">
+            </span>
+          </button>
         </div>
 
-        <button type="button" class="js-hero-cta group flex flex-col items-center gap-4 focus-visible:outline-none">
-          <span class="text-base font-semibold uppercase leading-[normal] md:text-lg">Watch the film</span>
-          <span class="flex size-[72px] items-center justify-center rounded-full border border-white p-3 group-hover:bg-white/10 group-focus-visible:outline-2 group-focus-visible:outline-offset-4 group-focus-visible:outline-white">
-            <img src="assets/icons/play.svg" alt="" width="48" height="48" class="size-12">
+        <a href="#intro" class="js-scroll-indicator absolute inset-x-0 bottom-16 mx-auto hidden w-fit flex-col items-center gap-2 sm:flex focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+          <span class="text-[10px] font-semibold uppercase leading-[15px]">Scroll to explore</span>
+          <span class="flex h-8 w-5 justify-center rounded-full border border-white/80 p-[5px]" aria-hidden="true">
+            <span class="js-scroll-dot h-2 w-1 rounded-full bg-sage"></span>
           </span>
-        </button>
+        </a>
       </div>
-
-      <a href="#intro" class="js-scroll-indicator absolute inset-x-0 bottom-16 mx-auto hidden w-fit flex-col items-center gap-2 sm:flex focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
-        <span class="text-[10px] font-semibold uppercase leading-[15px]">Scroll to explore</span>
-        <span class="flex h-8 w-5 justify-center rounded-full border border-white/80 p-[5px]" aria-hidden="true">
-          <span class="js-scroll-dot h-2 w-1 rounded-full bg-sage"></span>
-        </span>
-      </a>
     </section>
 
     <!-- Section 02: Intro — A Life Rooted in Nature -->
@@ -513,7 +518,7 @@
   <!-- Site footer -->
   <footer id="site-footer" class="bg-black px-5 pb-12 pt-16 md:px-12">
     <div class="mx-auto flex max-w-[1280px] flex-col items-center gap-[30px]">
-      <a href="#hero" class="js-footer-logo focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+      <a href="#top" class="js-footer-logo focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
         <img src="assets/logos/vedvan-logo-footer.png" alt="Vedvan — Elemental living" width="266" height="85" loading="lazy" class="h-[85px] w-[266px]">
       </a>
 

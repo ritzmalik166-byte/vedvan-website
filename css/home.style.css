@@ -68,6 +68,39 @@
   font-display: swap;
 }
 
+/* Smooth scrolling (Lenis) ------------------------------------------------- */
+html {
+  scroll-padding-top: 74px; /* fixed header height, so anchor targets aren't hidden */
+}
+
+@media (min-width: 48rem) {
+  html {
+    scroll-padding-top: 87px;
+  }
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Fixed header: transparent over the hero, solid once the page scrolls */
+#site-header {
+  transition: background-color 0.35s ease;
+}
+
+#site-header.is-scrolled {
+  background-color: #0e1f12;
+}
+
 /* Hero: darkening gradient, radial mist and top vignette (top layer first) */
 .hero-overlay {
   background:
