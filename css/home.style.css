@@ -114,6 +114,17 @@ html.lenis body {
   background: #f4f4f4 url("../assets/images/intro-silk-bg.jpg") 50% 45.3% / 114.17% 233.82% no-repeat;
 }
 
+/* Slide over the pinned hero. The intro can be shorter than the viewport, so the section after it
+   needs an opaque background too until the hero unpins. */
+#intro,
+#vision-mission {
+  z-index: 1;
+}
+
+#vision-mission {
+  background-color: #fff;
+}
+
 /* Lotus watermark — tinted by the element's background colour */
 .mask-lotus {
   -webkit-mask: url("../assets/images/mask-lotus.png") center / 100% 100% no-repeat;
@@ -145,6 +156,40 @@ html.lenis body {
   background-color: #fff;
 }
 
+/* Slider layers (built by js/home.animation.js): each slide's text card stacks inside the panel, which clips
+   them while they spread in; the shared dots stay on top. Each slide's image is a layer inside the media box. */
+#elements.is-slider .js-element-panel {
+  overflow: hidden;
+}
+
+#elements .element-card {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: inherit;
+  background-image: inherit;
+  will-change: transform, clip-path;
+}
+
+#elements .element-card .js-element-dots {
+  visibility: hidden;
+}
+
+#elements.is-slider .js-element-panel > .js-element-dots {
+  position: relative;
+  z-index: 3;
+}
+
+#elements.is-slider .js-element-media {
+  isolation: isolate;
+}
+
+#elements.is-slider .js-element-media img {
+  will-change: clip-path;
+}
+
 /* While pinned, the slider fills the viewport below the fixed header */
 #elements.is-slider {
   height: calc(100svh - 74px);
@@ -158,6 +203,7 @@ html.lenis body {
 
 @media (max-width: 63.99rem) {
   #elements.is-slider .js-element-panel {
+    position: relative;
     flex-shrink: 0;
   }
 

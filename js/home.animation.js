@@ -14,22 +14,29 @@
       threshold: 12, // px scrolled before the navbar turns solid
     },
     hero: {
-      scrub: 0.8,
-      // Per breakpoint: pin length (fraction of viewport height), side inset (px),
-      // gap below the fixed navbar (px), bottom inset (fraction of hero height), corner radius (px).
+      scrub: 1,
+      // The hero scrolls this share of its height before pinning; the intro then slides over it until it
+      // covers `cover` of the viewport height, and both scroll on together.
+      pinAt: 0.1,
+      minDistance: 0.25, // shortest pin, as a fraction of the viewport height
+      content: { y: -15, blur: 8 }, // end state of the centred hero content
       breakpoints: {
-        "(min-width: 1024px)": { distance: 0.7, x: 48, gapTop: 24, bottom: 0.12, radius: 20 },
-        "(min-width: 768px) and (max-width: 1023.98px)": { distance: 0.6, x: 24, gapTop: 16, bottom: 0.08, radius: 16 },
-        "(max-width: 767.98px)": { distance: 0.45, x: 12, gapTop: 12, bottom: 0.05, radius: 12 },
+        "(min-width: 1024px)": { cover: 0.6 },
+        "(min-width: 768px) and (max-width: 1023.98px)": { cover: 0.55 },
+        "(max-width: 767.98px)": { cover: 0.5 },
       },
     },
-    introText: {
-      start: "top 65%",
-      y: 32,
-      blur: 8,
-      duration: 1.1,
-      stagger: 0.14,
-      ease: "power3.out",
+    intro: {
+      // Scrubbed over the section's height: each element starts as it crosses the `line` viewport position.
+      // `duration` and `gap` (minimum delay after the previous element) are fractions of that scroll distance.
+      line: "85%",
+      scrub: 1.2,
+      duration: 0.4,
+      gap: 0.08,
+      breakpoints: {
+        "(min-width: 768px)": { y: 60, blur: 10 },
+        "(max-width: 767.98px)": { y: 40, blur: 6 },
+      },
     },
     butterfly: {
       start: "top 80%",
@@ -46,21 +53,33 @@
       watermark: { x: 16, y: 12, rotation: 1.5, durationX: 11, durationY: 8 },
     },
     elements: {
-      scrub: 0.8,
-      // Timeline units: hold slide 1 | 1 → 2 | hold slide 2 | 2 → 3 | hold slide 3.
+      // The pin's progress picks the slide: slide i + 1 becomes the target once progress passes thresholds[i].
       // `distance` is the pin length as a multiple of the viewport height.
       breakpoints: {
-        "(min-width: 1024px)": { distance: 3, y: 22, blur: 8 },
-        "(max-width: 1023.98px)": { distance: 2.5, y: 16, blur: 6 },
+        "(min-width: 1024px)": { distance: 2, thresholds: [0.22, 0.58] },
+        "(max-width: 1023.98px)": { distance: 1.6, thresholds: [0.22, 0.58] },
       },
-      imageBlur: 8,
-      imageScale: 1.06,
+      // Seconds, px for `drift`. The text card starts `cardDelay` after the image and both end together; the card's
+      // text then comes into focus from `text.at`. Steps run `catchUp` times faster while more are queued. With
+      // reduced motion the slides crossfade over `reduced`.
+      transition: {
+        image: 2.8, card: 2.6, cardDelay: 0.2, ease: "sine.inOut", drift: 28,
+        text: { at: 0.9, duration: 1.6, stagger: 0.15, y: -16, blur: 6, ease: "power2.out" },
+        dot: 0.5, dotAt: 1.3, catchUp: 2.2, reduced: 0.35,
+      },
+      // Water-spread edge: `reach` is the final radius (box-normalised, past the far corner), `lead` pushes the
+      // diagonal ahead of the sides, `ripple` is the wave height as a share of the box's shorter side.
+      spread: { reach: 1.36, lead: 0.08, ripple: 0.04, points: 72 },
     },
     philosophy: {
       scrub: 0.8,
       blur: 8,
       hold: 0.15, // share of the pin spent fully revealed before unpinning
       minImageVisible: 0.5, // below this share of the image left under the header, reveal without pinning
+      // The image grows from its bottom-left corner, starting clipped by `inset` % on its top and right sides, while
+      // the stage scrolls in; the card then rises during the pin. Unpinned, both share one timeline: the image
+      // takes 1 unit and the card's 1-unit rise starts at `cardAt`.
+      image: { cardAt: 0.8, inset: 40 },
       breakpoints: {
         "(min-width: 1024px)": { distance: 1.1, y: 110 },
         "(max-width: 1023.98px)": { distance: 0.85, y: 80 },
@@ -189,68 +208,83 @@
     }
   }
 
-  function initHeroShrinkAnimation() {
+  // The hero scrolls a little, then pins at full size while the intro section scrolls up over it (no pin
+  // spacing, so the intro keeps its natural position and its own triggers). Meanwhile the centred hero
+  // content blurs, lifts and fades. Once the intro covers its share of the viewport the pin ends and the
+  // hero carries on from where it was held, so both scroll on together.
+  function initHeroStackAnimation() {
     const hero = document.querySelector(".js-hero");
-    const frame = hero?.querySelector(".js-hero-frame");
-    if (!frame || prefersReducedMotion) return;
+    const content = hero?.querySelector(".js-hero-content");
+    const intro = document.getElementById("intro");
+    if (!content || !intro || prefersReducedMotion) return;
 
-    const header = document.getElementById("site-header");
     const indicator = hero.querySelector(".js-scroll-indicator");
+    const { scrub, pinAt, minDistance, content: end } = CONFIG.hero;
     const mm = gsap.matchMedia();
 
     Object.entries(CONFIG.hero.breakpoints).forEach(([query, bp]) => {
       mm.add(query, () => {
-        const headerHeight = () => (header ? header.offsetHeight : 0);
+        // Scroll from the pin until the intro's top (at 1 - pinAt of the hero height) reaches 1 - cover of the viewport
+        const distance = () => {
+          const vh = window.innerHeight;
+          return Math.round(Math.max(vh * minDistance, hero.offsetHeight * (1 - pinAt) - vh * (1 - bp.cover)));
+        };
 
         const tl = gsap.timeline({
           defaults: { ease: "none" },
           scrollTrigger: {
             trigger: hero,
-            start: "top top",
-            end: () => `+=${Math.round(window.innerHeight * bp.distance)}`,
+            start: `${pinAt * 100}% top`,
+            end: () => `+=${distance()}`,
             pin: true,
-            scrub: CONFIG.hero.scrub,
+            pinSpacing: false,
+            scrub,
             invalidateOnRefresh: true,
           },
         });
 
-        tl.to(frame, {
-          top: () => headerHeight() + bp.gapTop,
-          bottom: () => Math.round(hero.offsetHeight * bp.bottom),
-          left: bp.x,
-          right: bp.x,
-          borderRadius: bp.radius,
-          duration: 1,
-        }, 0);
-
+        tl.fromTo(content, { y: 0, opacity: 1, filter: "blur(0px)" }, { y: end.y, opacity: 0, filter: `blur(${end.blur}px)`, duration: 1 }, 0);
         if (indicator) tl.to(indicator, { autoAlpha: 0, duration: 0.35 }, 0);
       });
     });
   }
 
-  function initIntroTextReveal() {
+  // Each text line rises into place out of a blur on one scrubbed timeline, placed at its position within the
+  // section. The lotus emblem stays put: the butterfly flies in and lands on it (see initButterflyAnimation).
+  function initIntroReveal() {
     const section = document.getElementById("intro");
-    if (!section || prefersReducedMotion) return;
+    if (!section || prefersReducedMotion || section.dataset.introReady) return;
 
-    const targets = [
+    const lines = [
       section.querySelector(".js-section-heading"),
       ...section.querySelectorAll(".js-section-content > p"),
       section.querySelector(".js-section-tagline"),
     ].filter(Boolean);
-    if (!targets.length) return;
+    if (!lines.length) return;
+    section.dataset.introReady = "true";
 
-    const { start, y, blur, duration, stagger, ease } = CONFIG.introText;
+    const { line, scrub, duration, gap, breakpoints } = CONFIG.intro;
+    const mm = gsap.matchMedia();
 
-    gsap.timeline({ scrollTrigger: { trigger: section, start, once: true } })
-      .fromTo(targets, { y, opacity: 0, filter: `blur(${blur}px)` }, {
-        y: 0,
-        opacity: 1,
-        filter: "blur(0px)",
-        duration,
-        stagger,
-        ease,
-        clearProps: "transform,opacity,filter",
+    Object.entries(breakpoints).forEach(([query, bp]) => {
+      mm.add(query, () => {
+        const sectionBox = section.getBoundingClientRect();
+        const at = (el) => (el.getBoundingClientRect().top - sectionBox.top) / sectionBox.height;
+
+        const tl = gsap.timeline({
+          defaults: { ease: "power2.out", duration },
+          scrollTrigger: { trigger: section, start: `top ${line}`, end: `bottom ${line}`, scrub },
+        });
+        tl.set({}, {}, 1);
+
+        let previous = -Infinity;
+        lines.forEach((el) => {
+          previous = Math.min(Math.max(at(el), previous + gap), 1 - duration);
+          tl.fromTo(el, { y: bp.y, opacity: 0, filter: `blur(${bp.blur}px)` },
+            { y: 0, opacity: 1, filter: "blur(0px)" }, previous);
+        });
       });
+    });
   }
 
   function initButterflyFlap(near, far) {
@@ -403,7 +437,7 @@
     });
   }
 
-  // Without motion (reduced motion or no GSAP) the Water and Air slides follow Earth as static sections.
+  // Without GSAP the Water and Air slides follow Earth as static sections.
   function renderStaticElementSlides(section) {
     let previous = section;
     ELEMENT_SLIDES.slice(1).forEach((slide, i) => {
@@ -417,100 +451,208 @@
     });
   }
 
-  // Pinned, scrubbed Earth → Water → Air slider. The slide layers are built once; scroll only drives the timeline.
+  // Pinned Earth → Water → Air slider. The pin's progress only picks the target slide; each change then plays as
+  // a timed (not scrubbed) transition to the neighbouring slide, in either scroll direction: the incoming image
+  // spreads over the current one like water from its bottom-left corner, and the incoming text card spreads over
+  // the panel the same way while settling up and to the right. Transitions run one at a time until the target is
+  // reached; a running one always completes.
   function initSection4PinnedSlider() {
     const section = document.getElementById("elements");
     if (!section || section.dataset.sliderReady) return;
     section.dataset.sliderReady = "true";
 
-    if (prefersReducedMotion || typeof window.gsap === "undefined" || typeof window.ScrollTrigger === "undefined") {
+    if (typeof window.gsap === "undefined" || typeof window.ScrollTrigger === "undefined") {
       renderStaticElementSlides(section);
       return;
     }
 
-    const parts = {
-      image: section.querySelector(".js-element-image"),
-      number: section.querySelector(".js-element-number"),
-      name: section.querySelector(".js-element-name"),
-      text: section.querySelector(".js-element-text"),
+    const panel = section.querySelector(".js-element-panel");
+    const image = section.querySelector(".js-element-image");
+    const sharedDots = panel?.querySelector(".js-element-dots");
+    if (!panel || !image || !sharedDots) return;
+
+    // Every slide gets a full-panel card (with a hidden copy of the dots so its layout matches the panel's) and an
+    // image layer. The original panel content stays in place, invisible, to keep the panel's size.
+    const panelContent = [...panel.children];
+    const cards = ELEMENT_SLIDES.map((slide) => {
+      const card = document.createElement("div");
+      card.className = "element-card";
+      card.append(...panelContent.map((el) => el.cloneNode(true)));
+      applyElementSlide(card, slide);
+      panel.appendChild(card);
+      return card;
+    });
+    panelContent.filter((el) => el !== sharedDots).forEach((el) => {
+      el.style.visibility = "hidden";
+      el.setAttribute("aria-hidden", "true");
+    });
+    const images = ELEMENT_SLIDES.map((slide, k) => {
+      if (!k) return image;
+      const layer = image.cloneNode(true);
+      const { src, alt, width, height } = slide.image;
+      Object.assign(layer, { src, alt, width, height });
+      image.parentNode.appendChild(layer);
+      return layer;
+    });
+
+    // Cards sit inside the panel, so its percentage paddings would resolve differently; copy the used values
+    const syncCardPadding = () => {
+      const { paddingTop, paddingRight, paddingBottom, paddingLeft } = getComputedStyle(panel);
+      cards.forEach((card) => Object.assign(card.style, { paddingTop, paddingRight, paddingBottom, paddingLeft }));
     };
-    if (Object.values(parts).some((el) => !el)) return;
+    syncCardPadding();
+    new ResizeObserver(syncCardPadding).observe(panel);
 
-    // One stacked layer per slide for each changing part; later slides sit on top
-    const layers = Object.fromEntries(Object.entries(parts).map(([key, original]) => {
-      const list = [original];
-      ELEMENT_SLIDES.slice(1).forEach((slide) => {
-        const clone = original.cloneNode(true);
-        const holder = document.createElement("div");
-        holder.appendChild(clone);
-        applyElementSlide(holder, slide);
-        list[list.length - 1].after(clone);
-        list.push(clone);
-      });
-      return [key, list];
-    }));
-    const slideText = (i) => [layers.number[i], layers.name[i], layers.text[i]];
-    const dots = [...section.querySelectorAll(".element-dot")];
+    const dots = [...sharedDots.querySelectorAll(".element-dot")];
     const header = document.getElementById("site-header");
-    const { scrub, imageBlur, imageScale } = CONFIG.elements;
+    const { transition, spread, breakpoints } = CONFIG.elements;
+    const { text } = transition;
+    const cardText = cards.flatMap((card) => [...card.querySelectorAll(":scope > .js-element-title, :scope > .js-section-content")]);
     const mm = gsap.matchMedia();
+    const HIDDEN = "polygon(0% 100%, 0% 100%, 0% 100%)";
+    const dotState = (active) => (active
+      ? { backgroundColor: "rgba(255, 255, 255, 1)", borderColor: "rgba(255, 255, 255, 1)" }
+      : { backgroundColor: "rgba(255, 255, 255, 0)", borderColor: "rgba(192, 207, 221, 1)" });
 
-    Object.entries(CONFIG.elements.breakpoints).forEach(([query, bp]) => {
+    // Boundary of a reveal spreading from the bottom-left corner of a w × h box at progress p (0–1): a quarter
+    // ellipse (box-normalised, so it sweeps along the diagonal) that bulges towards the top-right corner, with
+    // two slow waves travelling along its edge. The waves fade out at both ends so it starts and ends cleanly.
+    const spreadClip = (w, h, p, seed) => {
+      if (p <= 0) return HIDDEN;
+      if (p >= 1) return "none";
+      const r = spread.reach * p;
+      const ref = Math.min(w, h);
+      const amp = ref * spread.ripple * Math.sin(Math.PI * p);
+      const points = [`0px ${h}px`];
+      for (let i = 0; i <= spread.points; i++) {
+        const a = (i / spread.points) * (Math.PI / 2);
+        const s = (a * r * (w + h)) / 2; // ≈ distance along the edge, so wave sizes don't depend on the angle
+        const wave = 0.7 * Math.sin(s / (ref * 0.3) + p * 3.5 + seed) + 0.3 * Math.sin(s / (ref * 0.14) - p * 5 + seed * 1.7);
+        const k = r * (1 + spread.lead * Math.sin(2 * a));
+        const d = amp * wave;
+        points.push(`${((k * w + d) * Math.cos(a)).toFixed(1)}px ${(h - (k * h + d) * Math.sin(a)).toFixed(1)}px`);
+      }
+      return `polygon(${points.join(", ")})`;
+    };
+
+    const spreadOver = (el, duration, seed) => {
+      const state = { p: 0 };
+      const w = el.offsetWidth;
+      const h = el.offsetHeight;
+      return gsap.to(state, {
+        p: 1,
+        duration,
+        ease: transition.ease,
+        onUpdate: () => { el.style.clipPath = spreadClip(w, h, state.p, seed); },
+      });
+    };
+
+    let current = 0; // settled slide
+    let target = 0; // slide picked by the scroll position
+    let active = null; // running transition: { tl, to }
+
+    const setHidden = (el, hidden) => (hidden ? el.setAttribute("aria-hidden", "true") : el.removeAttribute("aria-hidden"));
+    const markActive = (index) => {
+      current = index;
+      cards.forEach((card, k) => setHidden(card, k !== index));
+      images.forEach((img, k) => setHidden(img, k !== index));
+    };
+
+    // Shows a slide immediately (layout changes, restored scroll positions)
+    const showSlide = (index) => {
+      gsap.set([...cards, ...images], { zIndex: 1, opacity: 1, clipPath: (k, el) => (el === cards[index] || el === images[index] ? "none" : HIDDEN) });
+      gsap.set(cards, { x: 0, y: 0 });
+      gsap.set(cardText, { clearProps: "opacity,filter,transform" });
+      dots.forEach((dot, k) => gsap.set(dot, dotState(k === index)));
+      markActive(index);
+    };
+
+    // Plays the neighbouring slide `to` over the current one; the outgoing layers stay visible underneath until it ends
+    function transitionToSlide(to) {
+      const from = current;
+      const incoming = [cards[to], images[to]];
+      const outgoing = [cards[from], images[from]];
+      gsap.set(outgoing, { zIndex: 1 });
+      gsap.set(incoming, { zIndex: 2 });
+
+      const tl = gsap.timeline({
+        onComplete: () => {
+          gsap.set(outgoing, { clipPath: HIDDEN });
+          gsap.set(incoming, { zIndex: 1 });
+          active = null;
+          markActive(to);
+          advance();
+        },
+      });
+
+      if (prefersReducedMotion) {
+        tl.fromTo(incoming, { clipPath: "none", opacity: 0 }, { opacity: 1, duration: transition.reduced, ease: "none" }, 0)
+          .to(dots[from], { ...dotState(false), duration: transition.reduced }, 0)
+          .to(dots[to], { ...dotState(true), duration: transition.reduced }, 0);
+      } else {
+        tl.add(spreadOver(images[to], transition.image, to * 2.1), 0)
+          .add(spreadOver(cards[to], transition.card, to * 2.1 + 1), transition.cardDelay)
+          .fromTo(cards[to], { x: -transition.drift, y: transition.drift }, { x: 0, y: 0, duration: transition.card, ease: transition.ease }, transition.cardDelay)
+          .fromTo(
+            cardText.filter((el) => cards[to].contains(el)),
+            { y: text.y, opacity: 0, filter: `blur(${text.blur}px)` },
+            { y: 0, opacity: 1, filter: "blur(0px)", duration: text.duration, stagger: text.stagger, ease: text.ease, clearProps: "filter" },
+            text.at,
+          )
+          .to(dots[from], { ...dotState(false), duration: transition.dot }, transition.dotAt)
+          .to(dots[to], { ...dotState(true), duration: transition.dot }, transition.dotAt);
+      }
+
+      active = { tl, to };
+      pace();
+    }
+
+    // Runs faster while more transitions are queued behind the current one
+    const pace = () => active.tl.timeScale(target === active.to ? 1 : transition.catchUp);
+
+    function advance() {
+      if (active) {
+        pace();
+        return;
+      }
+      if (target !== current) transitionToSlide(current + Math.sign(target - current));
+    }
+
+    showSlide(0);
+
+    Object.entries(breakpoints).forEach(([query, bp]) => {
       mm.add(query, () => {
         section.classList.add("is-slider");
+        const targetFor = (progress) => bp.thresholds.filter((t) => progress >= t).length;
 
-        const hiddenText = { y: bp.y, opacity: 0, filter: `blur(${bp.blur}px)` };
-        const hiddenImage = { opacity: 0, scale: imageScale, filter: `blur(${imageBlur}px)` };
-        const activeDot = { backgroundColor: "rgba(255, 255, 255, 1)", borderColor: "rgba(255, 255, 255, 1)" };
-        const idleDot = { backgroundColor: "rgba(255, 255, 255, 0)", borderColor: "rgba(192, 207, 221, 1)" };
-
-        ELEMENT_SLIDES.forEach((_, i) => {
-          if (i === 0) return;
-          gsap.set(slideText(i), hiddenText);
-          gsap.set(layers.image[i], hiddenImage);
-        });
-        dots.forEach((dot, i) => gsap.set(dot, i === 0 ? activeDot : idleDot));
-
-        const tl = gsap.timeline({
-          defaults: { ease: "none" },
-          scrollTrigger: {
-            trigger: section,
-            start: () => `top ${header ? header.offsetHeight : 0}px`,
-            end: () => `+=${Math.round(window.innerHeight * bp.distance)}`,
-            pin: true,
-            scrub,
-            invalidateOnRefresh: true,
+        ScrollTrigger.create({
+          trigger: section,
+          start: () => `top ${header ? header.offsetHeight : 0}px`,
+          end: () => `+=${Math.round(window.innerHeight * bp.distance)}`,
+          pin: true,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            target = targetFor(self.progress);
+            advance();
+          },
+          onRefresh: (self) => {
+            target = targetFor(self.progress);
+            if (!active) showSlide(target);
           },
         });
 
-        tl.addLabel("slide1", 0);
-        for (let to = 1; to < ELEMENT_SLIDES.length; to++) {
-          const from = to - 1;
-          const at = to * 2 - 1;
-          tl.addLabel(`slide${from + 1}-to-${to + 1}`, at);
-
-          // Text: the outgoing slide leaves completely before the incoming one starts
-          tl.to(slideText(from), { y: -bp.y, opacity: 0, filter: `blur(${bp.blur}px)`, duration: 0.42, stagger: 0.04, ease: "power1.in" }, at)
-            .fromTo(slideText(to), hiddenText, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.42, stagger: 0.04, ease: "power2.out" }, at + 0.5);
-
-          // Image: the outgoing image softens, the incoming one sharpens on top of it, then the old one is hidden
-          tl.to(layers.image[from], { scale: imageScale, filter: `blur(${imageBlur}px)`, duration: 0.5, ease: "power1.in" }, at)
-            .fromTo(layers.image[to], hiddenImage, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.6, ease: "power1.out" }, at + 0.25)
-            .set(layers.image[from], { opacity: 0 }, at + 0.85);
-
-          tl.to(dots[from], { ...idleDot, duration: 0.1 }, at + 0.45)
-            .to(dots[to], { ...activeDot, duration: 0.1 }, at + 0.45);
-
-          tl.addLabel(`slide${to + 1}`, at + 1);
-        }
-        tl.set({}, {}, ELEMENT_SLIDES.length * 2 - 1);
-
-        return () => section.classList.remove("is-slider");
+        return () => {
+          active?.tl.kill();
+          active = null;
+          showSlide(current);
+          section.classList.remove("is-slider");
+        };
       });
     });
   }
 
-  // The image + card wrapper pins while the card rises into its layout position, blurred to sharp.
+  // As the image + card wrapper scrolls into view the image grows from its bottom-left corner to its full shape
+  // (clipped, not scaled); the wrapper then pins while the card rises into its layout position, blurred to sharp.
   // It pins with the image just below the header, or higher when that is needed to show the whole card;
   // when that would hide the card or most of the image, the reveal is scrubbed without a pin.
   function initSection5PhilosophyAnimation() {
@@ -522,7 +664,7 @@
     section.dataset.philosophyReady = "true";
 
     const header = document.getElementById("site-header");
-    const { scrub, blur, hold, minImageVisible } = CONFIG.philosophy;
+    const { scrub, blur, hold, minImageVisible, image: reveal } = CONFIG.philosophy;
     const headerHeight = () => (header ? header.offsetHeight : 0);
     const cardOffset = () => card.offsetTop;
     // Highest viewport position for the stage that keeps the whole card on screen
@@ -546,16 +688,31 @@
           const hidden = { y: bp.y, opacity: 0, filter: `blur(${blur}px)` };
           const shown = { y: 0, opacity: 1, filter: "blur(0px)", ease: "power2.out", duration: 1 };
 
+          const grow = [
+            image,
+            { clipPath: `inset(${reveal.inset}% ${reveal.inset}% 0% 0%)` },
+            { clipPath: "inset(0% 0% 0% 0%)", ease: "power1.inOut", duration: 1 },
+          ];
+
           if (!pinned) {
-            gsap.fromTo(card, hidden, { ...shown, scrollTrigger: { trigger: card, start: "top 95%", end: "top 40%", scrub } });
+            gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: stage, start: "top bottom", end: "bottom 85%", scrub, invalidateOnRefresh: true } })
+              .fromTo(...grow, 0)
+              .fromTo(card, hidden, shown, reveal.cardAt);
             return;
           }
+
+          const pinTop = () => Math.min(headerHeight(), fitTop());
+          // The image grows while the stage scrolls in, from its top entering the viewport until it pins
+          gsap.fromTo(...grow.slice(0, 2), {
+            ...grow[2],
+            scrollTrigger: { trigger: stage, start: "top bottom", end: () => `top ${pinTop()}px`, scrub, invalidateOnRefresh: true },
+          });
 
           gsap.timeline({
             defaults: { ease: "none" },
             scrollTrigger: {
               trigger: stage,
-              start: () => `top ${Math.min(headerHeight(), fitTop())}px`,
+              start: () => `top ${pinTop()}px`,
               end: () => `+=${Math.round(window.innerHeight * bp.distance)}`,
               pin: true,
               scrub,
@@ -1133,8 +1290,8 @@
 
     initSmoothScroll();
     initNavbarScrollState();
-    initHeroShrinkAnimation();
-    initIntroTextReveal();
+    initHeroStackAnimation();
+    initIntroReveal();
     initButterflyAnimation();
     initVisionMissionReveal();
     initVisionMissionWatermark();
