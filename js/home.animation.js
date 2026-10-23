@@ -26,6 +26,17 @@
         "(max-width: 767.98px)": { cover: 0.5 },
       },
     },
+    // Shared text and image reveals (addTextReveal / addImageReveal). Px for distances, degrees for rotations.
+    reveal: {
+      title: { x: [14, 56], y: 22, rotation: 2, blur: 9, ease: "power2.out" }, // headings: scattered words gather
+      text: { y: [6, 12], blur: 4, ease: "sine.out" }, // other text: words rise out of a soft blur
+      block: { y: 12, blur: 5, ease: "sine.out" }, // elements that can't be split into words
+      stagger: 0.4, // share of a reveal's duration over which its words start
+      mobileReach: 0.55, // heading scatter scale below 768px
+      // `offset` (% of the frame) and `rotationY` are where the frame starts; its photo zooms from `zoom` to
+      // `overscan`, which leaves room for a `drift` % parallax inside the frame.
+      image: { offset: 6, scale: 0.9, rotationY: -14, blur: 14, zoom: 1.3, overscan: 1.08, drift: 3.5, ease: "power2.out" },
+    },
     intro: {
       // Scrubbed over the section's height: each element starts as it crosses the `line` viewport position.
       // `duration` and `gap` (minimum delay after the previous element) are fractions of that scroll distance.
@@ -33,10 +44,6 @@
       scrub: 1.2,
       duration: 0.4,
       gap: 0.08,
-      breakpoints: {
-        "(min-width: 768px)": { y: 60, blur: 10 },
-        "(max-width: 767.98px)": { y: 40, blur: 6 },
-      },
     },
     butterfly: {
       start: "top 80%",
@@ -46,10 +53,29 @@
       flap: { duration: 0.16, near: { rotation: -8, scaleX: 0.86 }, far: { rotation: 14, scaleX: 0.7 } },
       hover: { y: 4, rotation: 2, duration: 2.4 },
     },
+    introStack: {
+      // The intro pins with its middle at the viewport's middle (never under the header) while its text blurs away
+      // over `fade` viewport heights. Vision & Mission holds still for `hold` of that distance, then eases into
+      // climbing over the pinned intro across `climb` viewport heights. The pin releases once the intro is fully covered.
+      scrub: 1.2,
+      hold: 0.85,
+      // Timeline units: each step (heading → paragraphs → tagline) blurs to `blur` px while fading out over `duration`;
+      // the next starts `overlap` before it ends.
+      steps: { duration: 1, overlap: 0.4, blur: 14, ease: "sine.in" },
+      breakpoints: {
+        "(min-width: 1024px)": { fade: 2.6, climb: 0.45 },
+        "(min-width: 768px) and (max-width: 1023.98px)": { fade: 2.4, climb: 0.4 },
+        "(max-width: 767.98px)": { fade: 2.2, climb: 0.35 },
+      },
+    },
     visionMission: {
-      // Scrubbed over the section's height: an element animates as it crosses the `line` viewport position.
-      // Durations are fractions of that scroll distance.
-      reveal: { line: "85%", scrub: 1.2, text: { y: 32, blur: 8, duration: 0.12 }, image: { duration: 0.4, after: 0.04 } },
+      // Seconds. Each block (heading, Vision row, Mission row) plays once `visible` of it is on screen above `margin`,
+      // and rewinds after it leaves through the bottom. Row lines start `gap` apart; the image starts at `image.at`.
+      reveal: {
+        visible: 0.2, margin: "0px 0px -12% 0px",
+        text: { duration: 1.2, gap: 0.14 },
+        image: { duration: 1.5, at: 0.3 },
+      },
       watermark: { x: 16, y: 12, rotation: 1.5, durationX: 11, durationY: 8 },
     },
     elements: {
@@ -76,26 +102,29 @@
       blur: 8,
       hold: 0.15, // share of the pin spent fully revealed before unpinning
       minImageVisible: 0.5, // below this share of the image left under the header, reveal without pinning
-      // The image grows from its bottom-left corner, starting clipped by `inset` % on its top and right sides, while
-      // the stage scrolls in; the card then rises during the pin. Unpinned, both share one timeline: the image
-      // takes 1 unit and the card's 1-unit rise starts at `cardAt`.
-      image: { cardAt: 0.8, inset: 40 },
+      // The image comes in (addImageReveal) while the stage scrolls in; the card then rises during the pin. Unpinned,
+      // both share one timeline: the image takes 1 unit and the card's 1-unit rise starts at `cardAt`.
+      image: { cardAt: 0.8 },
+      // Card lines, in units of the card's rise: the first starts at `at`, each next one `step` later
+      text: { at: 0.25, step: 0.1, duration: 0.45 },
       breakpoints: {
         "(min-width: 1024px)": { distance: 1.1, y: 110 },
         "(max-width: 1023.98px)": { distance: 0.85, y: 80 },
       },
     },
     experience: {
-      header: { y: 36, blur: 8, start: "top 90%", end: "top 55%", scrub: 0.8, stagger: 0.15 },
+      // Timeline units: the eyebrow (with its rules) and the heading each take `duration`, the heading `stagger` later
+      header: { start: "top 90%", end: "top 45%", scrub: 0.8, duration: 1, stagger: 0.35 },
       // Times in seconds; `dragThreshold` in px; `throw` projects the release velocity (px/ms) this many ms ahead.
       slider: { interval: 5, duration: 0.8, settle: 0.6, dragThreshold: 6, throw: 120 },
     },
     community: {
-      header: { y: 40, blur: 8, start: "top 95%", end: "top 30%", scrub: 1.5, stagger: 0.15 },
+      // Timeline units: each line takes `duration` and starts `stagger` after the previous one
+      header: { start: "top 95%", end: "top 30%", scrub: 1.5, duration: 1, stagger: 0.3 },
       // Image timeline: from the map's top reaching `start` (fraction of the viewport height) over `distance` viewport heights.
       // Positions and durations of `image` and `markers` are fractions of that scroll distance.
       reveal: { start: 0.92, distance: 0.6, scrub: 1.6 },
-      image: { duration: 0.78, top: 45, right: 40, scale: 1.1 }, // collapsed clip insets in %
+      image: { duration: 0.78 },
       markers: { at: 0.56, duration: 0.22, stagger: 0.055, y: 12 },
       // Strip timeline: begins once the image timeline ends and the strip's bottom has reached `start`,
       // then runs `distance` viewport heights so the strip is on screen while it opens.
@@ -109,9 +138,9 @@
       // (viewport heights) after the previous text line or the start of the main image.
       line: 0.88,
       scrub: 1.6,
-      text: { y: 56, blur: 8, distance: 0.3, gap: 0.05 },
-      image: { distance: 0.55, after: 0.06, top: 40, scale: 1.12 }, // collapsed top inset in %
-      gallery: { distance: 0.4, after: 0.18, stagger: 0.08, y: 40 },
+      text: { distance: 0.3, gap: 0.05, arrow: 8 }, // `arrow`: px the list arrows slide in from
+      image: { distance: 0.55, after: 0.06 },
+      gallery: { distance: 0.4, after: 0.18, stagger: 0.08 },
       breakpoints: {
         // Side by side, the main image waits for the heading; stacked, it sits above the text and leads
         "(min-width: 1024px)": { imageFollowsHeading: true },
@@ -123,15 +152,15 @@
       // and the arrow button fades in over the last `cta.from` share of the image reveal.
       line: 0.88,
       scrub: 1.6,
-      text: { y: 50, blur: 8, distance: 0.3, gap: 0.06 },
-      image: { distance: 0.55, anchor: 0.15, after: 0.08, top: 40, scale: 1.1 }, // collapsed top inset in %
+      text: { distance: 0.3, gap: 0.06 },
+      image: { distance: 0.55, anchor: 0.15, after: 0.08 },
       cta: { from: 0.75, scale: 0.8 },
     },
     location: {
       // Plays once when its trigger's top reaches `start`. Times in seconds; `card.delay` is measured from the
       // first text line when side by side. `outset` (px) keeps the card's shadow unclipped.
       start: "top 80%",
-      text: { y: 56, blur: 8, duration: 1.1, stagger: 0.14, ease: "power3.out" },
+      text: { duration: 1.4, stagger: 0.16 },
       card: { duration: 1.4, delay: 0.25, ease: "power2.inOut", outset: 40 },
       // Per badge: float height (px), half-cycle duration (s) and starting phase. Smaller below 640px,
       // where the badges sit in a tight grid instead of around the hub.
@@ -144,7 +173,8 @@
         },
       },
     },
-    privateVisit: { start: "top 80%", y: 60, blur: 10, duration: 1.2, ease: "power3.out" },
+    // Seconds. Heading lines start `text.stagger` apart; the form starts at `text.formAt`.
+    privateVisit: { start: "top 80%", y: 60, blur: 10, duration: 1.2, ease: "power3.out", text: { duration: 1.4, stagger: 0.2, formAt: 0.45 } },
     // The footer ends the page, so it triggers a little lower to be reachable on tall viewports
     footer: { start: "top 90%", y: 60, blur: 10, duration: 1.2, ease: "power3.out" },
   };
@@ -175,6 +205,7 @@
 
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let lenis = null;
+  let introPinEnd = null; // scroll position where the intro's pin ends, set by initIntroBlurStack
 
   function initSmoothScroll() {
     if (prefersReducedMotion || typeof window.Lenis !== "function") return;
@@ -211,7 +242,8 @@
   // The hero scrolls a little, then pins at full size while the intro section scrolls up over it (no pin
   // spacing, so the intro keeps its natural position and its own triggers). Meanwhile the centred hero
   // content blurs, lifts and fades. Once the intro covers its share of the viewport the pin ends and the
-  // hero carries on from where it was held, so both scroll on together.
+  // hero carries on from where it was held, so both scroll on together. While the intro is itself pinned
+  // (initIntroBlurStack), the hero stays pinned too, so it keeps filling the space above the intro.
   function initHeroStackAnimation() {
     const hero = document.querySelector(".js-hero");
     const content = hero?.querySelector(".js-hero-content");
@@ -230,17 +262,20 @@
           return Math.round(Math.max(vh * minDistance, hero.offsetHeight * (1 - pinAt) - vh * (1 - bp.cover)));
         };
 
+        const start = `${pinAt * 100}% top`;
+
+        ScrollTrigger.create({
+          trigger: hero,
+          start,
+          end: (self) => Math.max(self.start + distance(), introPinEnd?.() ?? 0),
+          pin: true,
+          pinSpacing: false,
+          invalidateOnRefresh: true,
+        });
+
         const tl = gsap.timeline({
           defaults: { ease: "none" },
-          scrollTrigger: {
-            trigger: hero,
-            start: `${pinAt * 100}% top`,
-            end: () => `+=${distance()}`,
-            pin: true,
-            pinSpacing: false,
-            scrub,
-            invalidateOnRefresh: true,
-          },
+          scrollTrigger: { trigger: hero, start, end: () => `+=${distance()}`, scrub, invalidateOnRefresh: true },
         });
 
         tl.fromTo(content, { y: 0, opacity: 1, filter: "blur(0px)" }, { y: end.y, opacity: 0, filter: `blur(${end.blur}px)`, duration: 1 }, 0);
@@ -249,7 +284,7 @@
     });
   }
 
-  // Each text line rises into place out of a blur on one scrubbed timeline, placed at its position within the
+  // Each text line reveals word by word (addTextReveal) on one scrubbed timeline, placed at its position within the
   // section. The lotus emblem stays put: the butterfly flies in and lands on it (see initButterflyAnimation).
   function initIntroReveal() {
     const section = document.getElementById("intro");
@@ -263,16 +298,15 @@
     if (!lines.length) return;
     section.dataset.introReady = "true";
 
-    const { line, scrub, duration, gap, breakpoints } = CONFIG.intro;
+    const { line, scrub, duration, gap } = CONFIG.intro;
     const mm = gsap.matchMedia();
 
-    Object.entries(breakpoints).forEach(([query, bp]) => {
+    ["(min-width: 768px)", "(max-width: 767.98px)"].forEach((query) => {
       mm.add(query, () => {
         const sectionBox = section.getBoundingClientRect();
         const at = (el) => (el.getBoundingClientRect().top - sectionBox.top) / sectionBox.height;
 
         const tl = gsap.timeline({
-          defaults: { ease: "power2.out", duration },
           scrollTrigger: { trigger: section, start: `top ${line}`, end: `bottom ${line}`, scrub },
         });
         tl.set({}, {}, 1);
@@ -280,8 +314,7 @@
         let previous = -Infinity;
         lines.forEach((el) => {
           previous = Math.min(Math.max(at(el), previous + gap), 1 - duration);
-          tl.fromTo(el, { y: bp.y, opacity: 0, filter: `blur(${bp.blur}px)` },
-            { y: 0, opacity: 1, filter: "blur(0px)" }, previous);
+          addTextReveal(tl, el, previous, duration);
         });
       });
     });
@@ -355,50 +388,241 @@
     });
   }
 
-  // Heading → Vision text → Vision image (right to left) → Mission text → Mission image (left to right),
-  // each placed on one scrubbed timeline at its position within the section so it reveals as it scrolls in.
+  // Repeatable pseudo-random value in [0, 1) for a given seed, so the fragment layout and motion are stable
+  const seeded = (seed) => {
+    const x = Math.sin(seed * 12.9898 + 78.233) * 43758.5453;
+    return x - Math.floor(x);
+  };
+  const spread = (i, seed, min, max) => min + seeded((i + 1) * 13 + seed * 101) * (max - min);
+
+  // Wraps each word in an inline-block span inside an aria-hidden layer, next to one screen-reader copy of the text.
+  // Only plain text with inline formatting is split; anything else (links, icons, controls) returns null.
+  const SPLITTABLE = new Set(["SPAN", "EM", "STRONG", "B", "I", "SMALL", "BR"]);
+  const splitCache = new WeakMap();
+  function splitWords(el) {
+    if (splitCache.has(el)) return splitCache.get(el);
+    let words = null;
+    if (el.textContent.trim() && [...el.querySelectorAll("*")].every((node) => SPLITTABLE.has(node.tagName))) {
+      const label = document.createElement("span");
+      label.className = "sr-only";
+      label.textContent = el.textContent.replace(/\s+/g, " ").trim();
+      const visual = document.createElement("span");
+      visual.setAttribute("aria-hidden", "true");
+      const walk = (source, target) => {
+        source.childNodes.forEach((node) => {
+          if (node.nodeType === Node.TEXT_NODE) {
+            node.textContent.split(/(\s+)/).forEach((part) => {
+              if (!part) return;
+              if (/^\s+$/.test(part)) {
+                target.append(" ");
+                return;
+              }
+              const word = document.createElement("span");
+              word.className = "split-word";
+              word.textContent = part;
+              target.append(word);
+            });
+          } else if (node.nodeName === "BR") {
+            target.append(document.createElement("br"));
+          } else if (node.nodeType === Node.ELEMENT_NODE) {
+            const clone = node.cloneNode(false);
+            clone.removeAttribute("id");
+            target.append(clone);
+            walk(node, clone);
+          }
+        });
+      };
+      walk(el, visual);
+      el.replaceChildren(label, visual);
+      words = [...visual.querySelectorAll(".split-word")];
+    }
+    splitCache.set(el, words);
+    return words;
+  }
+
+  const isTitle = (el) => /^H[1-3]$/.test(el.tagName) || el.classList.contains("font-display");
+
+  // Adds a text reveal to `tl`: headings gather word by word from a blurred, scattered state, other text rises word by
+  // word out of a soft blur, and elements that can't be split rise as one. Words start over `stagger` of `duration`.
+  function addTextReveal(tl, el, position, duration) {
+    const { title, text, block, stagger, mobileReach } = CONFIG.reveal;
+    const words = splitWords(el);
+    if (!words) {
+      tl.fromTo(el, { autoAlpha: 0, y: block.y, filter: `blur(${block.blur}px)` },
+        { autoAlpha: 1, y: 0, filter: "blur(0px)", duration, ease: block.ease }, position);
+      return;
+    }
+
+    const amount = words.length > 1 ? duration * stagger : 0;
+    const shown = { autoAlpha: 1, x: 0, y: 0, rotation: 0, filter: "blur(0px)", duration: duration - amount, stagger: { amount } };
+    if (isTitle(el)) {
+      const reach = window.matchMedia("(max-width: 767.98px)").matches ? mobileReach : 1;
+      tl.fromTo(words, {
+        autoAlpha: 0,
+        x: (i) => spread(i, 1, title.x[0], title.x[1]) * reach,
+        y: (i) => spread(i, 2, -title.y, title.y),
+        rotation: (i) => spread(i, 3, -title.rotation, title.rotation),
+        filter: `blur(${title.blur}px)`,
+      }, { ...shown, ease: title.ease }, position);
+    } else {
+      tl.fromTo(words, { autoAlpha: 0, y: (i) => spread(i, 4, text.y[0], text.y[1]), filter: `blur(${text.blur}px)` },
+        { ...shown, ease: text.ease }, position);
+    }
+  }
+
+  // Adds an image reveal to `tl`: the frame fades in, sharpens and turns to face the viewer from a slight offset while
+  // the photo inside it (when it has its own clipping frame) settles out of a zoom into its parallax overscan.
+  function addImageReveal(tl, frame, position, duration, photo = null) {
+    const { image } = CONFIG.reveal;
+    tl.fromTo(frame, {
+      autoAlpha: 0,
+      xPercent: image.offset,
+      yPercent: image.offset * 0.8,
+      scale: image.scale,
+      rotationY: image.rotationY,
+      transformPerspective: 1200,
+      filter: `blur(${image.blur}px)`,
+    }, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 1, rotationY: 0, filter: "blur(0px)", duration, ease: image.ease }, position);
+    if (photo) tl.fromTo(photo, { scale: image.zoom }, { scale: image.overscan, duration, ease: image.ease }, position);
+  }
+
+  // The photo drifts against the scroll inside its clipping frame while the frame crosses the viewport
+  function addImageDrift(frame, photo) {
+    const { drift } = CONFIG.reveal.image;
+    gsap.fromTo(photo, { yPercent: -drift }, {
+      yPercent: drift,
+      ease: "none",
+      scrollTrigger: { trigger: frame, start: "top bottom", end: "bottom top", scrub: true, refreshPriority: -1 },
+    });
+  }
+
+  // The intro pins mid-viewport and its text blurs away in three scrubbed steps. Vision & Mission is pushed down by a
+  // margin and translated back up by the same amount, so it holds still below the intro, then eases into scrolling
+  // over it (translation reaches 0 with zero slope, so its speed never jumps). The pin has no spacing and lasts until
+  // Vision & Mission covers the intro, so the intro stays underneath, as with the hero.
+  function initIntroBlurStack() {
+    const section = document.getElementById("intro");
+    const next = document.getElementById("vision-mission");
+    if (!section || !next || prefersReducedMotion) return;
+
+    const groups = [
+      [section.querySelector(".js-section-heading")],
+      [...section.querySelectorAll(".js-section-content > p")],
+      [section.querySelector(".js-section-tagline")],
+    ].map((group) => group.filter(Boolean)).filter((group) => group.length);
+    if (!groups.length) return;
+
+    const header = document.getElementById("site-header");
+    const { scrub, hold, steps, breakpoints } = CONFIG.introStack;
+    const mm = gsap.matchMedia();
+
+    Object.entries(breakpoints).forEach(([query, bp]) => {
+      mm.add(query, () => {
+        const fadeFor = () => window.innerHeight * bp.fade;
+        const holdFor = () => Math.round(fadeFor() * hold);
+        const climbFor = () => Math.round(window.innerHeight * bp.climb);
+        // Extra scroll the stack adds to the page: the hold plus half the climb (it eases from rest to scroll speed)
+        const liftBy = () => holdFor() + Math.round(climbFor() / 2);
+        const pinTop = () => {
+          const vh = window.innerHeight;
+          const height = section.offsetHeight;
+          const headerHeight = header?.offsetHeight || 0;
+          // Too tall to sit below the header: align its bottom with the viewport's instead
+          return Math.round(height > vh - headerHeight ? vh - height : Math.max(headerHeight, (vh - height) / 2));
+        };
+        const start = () => `top ${pinTop()}px`;
+
+        // Before every refresh, so triggers further down measure the final layout
+        const applyOffset = () => {
+          next.style.marginTop = `${liftBy()}px`;
+          gsap.set(next, { y: 0 });
+        };
+        applyOffset();
+        ScrollTrigger.addEventListener("refreshInit", applyOffset);
+
+        const pinLength = () => liftBy() + section.offsetHeight;
+        // Measured on the pin spacer, which stays in the flow while the intro itself is fixed
+        introPinEnd = () => {
+          const flow = section.parentElement?.classList.contains("pin-spacer") ? section.parentElement : section;
+          return Math.round(flow.getBoundingClientRect().top + window.scrollY - pinTop() + pinLength());
+        };
+
+        ScrollTrigger.create({
+          trigger: section,
+          start,
+          end: () => `+=${pinLength()}`,
+          pin: true,
+          pinSpacing: false,
+          invalidateOnRefresh: true,
+        });
+
+        // Hold: translation cancels the scroll. Ease: power1.out over twice the remaining offset starts at the
+        // scroll's speed and ends at rest, so the section accelerates smoothly into its normal scroll.
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: section,
+            start,
+            end: () => `+=${holdFor() + climbFor()}`,
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        })
+          .fromTo(next, { y: () => -liftBy() }, { y: () => holdFor() - liftBy(), ease: "none", duration: bp.fade * hold })
+          .to(next, { y: 0, ease: "power1.out", duration: bp.climb });
+
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: section, start, end: () => `+=${fadeFor()}`, scrub, invalidateOnRefresh: true },
+        });
+        // Each step softens into a blur while it fades out, in place
+        groups.forEach((group, g) => {
+          tl.fromTo(group, { autoAlpha: 1, filter: "blur(0px)" },
+            { autoAlpha: 0, filter: `blur(${steps.blur}px)`, duration: steps.duration, ease: steps.ease, immediateRender: false },
+            g * (steps.duration - steps.overlap));
+        });
+
+        return () => {
+          ScrollTrigger.removeEventListener("refreshInit", applyOffset);
+          next.style.marginTop = "";
+          introPinEnd = null;
+        };
+      });
+    });
+  }
+
+  // The heading, the Vision row and the Mission row each play their own reveal when they come on screen. Visibility is
+  // observed rather than scroll-triggered because the section is translated while it stacks over the intro, and
+  // IntersectionObserver sees where it is actually drawn.
   function initVisionMissionReveal() {
     const section = document.getElementById("vision-mission");
     if (!section || prefersReducedMotion) return;
 
-    const { line, scrub, text, image } = CONFIG.visionMission.reveal;
-    const rows = [...section.querySelectorAll(".js-vision-row, .js-mission-row")];
-    const hiddenClip = ["inset(0% 0% 0% 100%)", "inset(0% 100% 0% 0%)"];
-    const mm = gsap.matchMedia();
+    const { visible, margin, text, image } = CONFIG.visionMission.reveal;
+    const blocks = new Map();
 
-    // Positions depend on whether rows are stacked or side by side, so rebuild when that changes
-    ["(min-width: 1024px)", "(max-width: 1023.98px)"].forEach((query) => {
-      mm.add(query, () => {
-        const sectionBox = section.getBoundingClientRect();
-        const at = (el) => (el.getBoundingClientRect().top - sectionBox.top) / sectionBox.height;
-        const place = (el, duration) => Math.max(0, Math.min(at(el), 1 - duration));
+    const heading = section.querySelector(".js-section-heading");
+    if (heading) {
+      const tl = gsap.timeline({ paused: true });
+      addTextReveal(tl, heading, 0, text.duration);
+      blocks.set(heading, tl);
+    }
 
-        const tl = gsap.timeline({
-          defaults: { ease: "none" },
-          scrollTrigger: { trigger: section, start: `top ${line}`, end: `bottom ${line}`, scrub },
-        });
-        tl.set({}, {}, 1);
-
-        const revealText = (el) => {
-          tl.fromTo(el, { y: text.y, opacity: 0, filter: `blur(${text.blur}px)` },
-            { y: 0, opacity: 1, filter: "blur(0px)", duration: text.duration, ease: "power2.out" }, place(el, text.duration));
-        };
-
-        const heading = section.querySelector(".js-section-heading");
-        if (heading) revealText(heading);
-
-        rows.forEach((row, i) => {
-          const lines = [...row.querySelectorAll(".js-section-content h3, .js-section-content p")];
-          lines.forEach(revealText);
-
-          const img = row.querySelector(".js-reveal-image");
-          if (!img) return;
-          const start = Math.max(place(img.parentElement, image.duration), lines[0] ? at(lines[0]) + image.after : 0);
-          tl.fromTo(img, { clipPath: hiddenClip[i % 2] }, { clipPath: "inset(0% 0% 0% 0%)", duration: image.duration, ease: "power1.inOut" },
-            Math.min(start, 1 - image.duration));
-        });
-      });
+    section.querySelectorAll(".js-vision-row, .js-mission-row").forEach((row) => {
+      const tl = gsap.timeline({ paused: true });
+      const lines = [...row.querySelectorAll(".js-section-content h3, .js-section-content p")];
+      lines.forEach((el, i) => addTextReveal(tl, el, i * text.gap, text.duration));
+      const figure = row.querySelector(".js-section-image");
+      if (figure) addImageReveal(tl, figure, image.at, image.duration);
+      blocks.set(row, tl);
     });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(({ target, isIntersecting, boundingClientRect, rootBounds }) => {
+        const tl = blocks.get(target);
+        if (isIntersecting) tl.play();
+        else if (rootBounds && boundingClientRect.top >= rootBounds.bottom) tl.reverse();
+      });
+    }, { threshold: visible, rootMargin: margin });
+    blocks.forEach((_, el) => observer.observe(el));
   }
 
   function initVisionMissionWatermark() {
@@ -669,8 +893,8 @@
     });
   }
 
-  // As the image + card wrapper scrolls into view the image grows from its bottom-left corner to its full shape
-  // (clipped, not scaled); the wrapper then pins while the card rises into its layout position, blurred to sharp.
+  // As the image + card wrapper scrolls into view the image comes in (addImageReveal); the wrapper then pins while
+  // the card rises into its layout position, blurred to sharp, its lines revealing word by word.
   // It pins with the image just below the header, or higher when that is needed to show the whole card;
   // when that would hide the card or most of the image, the reveal is scrubbed without a pin.
   function initSection5PhilosophyAnimation() {
@@ -682,7 +906,8 @@
     section.dataset.philosophyReady = "true";
 
     const header = document.getElementById("site-header");
-    const { scrub, blur, hold, minImageVisible, image: reveal } = CONFIG.philosophy;
+    const { scrub, blur, hold, minImageVisible, image: reveal, text } = CONFIG.philosophy;
+    const cardText = [...card.querySelectorAll(":scope > p, :scope > h3")];
     const headerHeight = () => (header ? header.offsetHeight : 0);
     const cardOffset = () => card.offsetTop;
     // Highest viewport position for the stage that keeps the whole card on screen
@@ -705,28 +930,24 @@
         mm.add(query, () => {
           const hidden = { y: bp.y, opacity: 0, filter: `blur(${blur}px)` };
           const shown = { y: 0, opacity: 1, filter: "blur(0px)", ease: "power2.out", duration: 1 };
-
-          const grow = [
-            image,
-            { clipPath: `inset(${reveal.inset}% ${reveal.inset}% 0% 0%)` },
-            { clipPath: "inset(0% 0% 0% 0%)", ease: "power1.inOut", duration: 1 },
-          ];
+          // The card's lines follow its rise, word by word, and settle as it does
+          const revealCardText = (tl, at) => cardText.forEach((el, i) => addTextReveal(tl, el, at + text.at + i * text.step, text.duration));
 
           if (!pinned) {
-            gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: stage, start: "top bottom", end: "bottom 85%", scrub, invalidateOnRefresh: true } })
-              .fromTo(...grow, 0)
-              .fromTo(card, hidden, shown, reveal.cardAt);
+            const tl = gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: stage, start: "top bottom", end: "bottom 85%", scrub, invalidateOnRefresh: true } });
+            addImageReveal(tl, image, 0, 1);
+            tl.fromTo(card, hidden, shown, reveal.cardAt);
+            revealCardText(tl, reveal.cardAt);
             return;
           }
 
           const pinTop = () => Math.min(headerHeight(), fitTop());
-          // The image grows while the stage scrolls in, from its top entering the viewport until it pins
-          gsap.fromTo(...grow.slice(0, 2), {
-            ...grow[2],
+          // The image comes in while the stage scrolls in, from its top entering the viewport until it pins
+          addImageReveal(gsap.timeline({
             scrollTrigger: { trigger: stage, start: "top bottom", end: () => `top ${pinTop()}px`, scrub, invalidateOnRefresh: true },
-          });
+          }), image, 0, 1);
 
-          gsap.timeline({
+          const tl = gsap.timeline({
             defaults: { ease: "none" },
             scrollTrigger: {
               trigger: stage,
@@ -737,8 +958,9 @@
               invalidateOnRefresh: true,
             },
           })
-            .fromTo(card, hidden, shown, 0)
-            .set({}, {}, 1 + hold);
+            .fromTo(card, hidden, shown, 0);
+          revealCardText(tl, 0);
+          tl.set({}, {}, 1 + hold);
         });
       });
     };
@@ -764,15 +986,16 @@
     const header = document.querySelector("#experience .js-section-heading");
     if (!header || prefersReducedMotion) return;
 
-    const { y, blur, start, end, scrub, stagger } = CONFIG.experience.header;
-    gsap.fromTo(header.children, { y, opacity: 0, filter: `blur(${blur}px)` }, {
-      y: 0,
-      opacity: 1,
-      filter: "blur(0px)",
-      ease: "power2.out",
-      stagger,
-      scrollTrigger: { trigger: header, start, end, scrub },
-    });
+    const { start, end, scrub, duration, stagger } = CONFIG.experience.header;
+    const eyebrow = header.querySelector("p");
+    const rules = [...header.querySelectorAll("span[aria-hidden]")];
+    const title = header.querySelector("h2");
+    const tl = gsap.timeline({ scrollTrigger: { trigger: header, start, end, scrub } });
+    if (rules.length) {
+      tl.fromTo(rules, { scaleX: 0, transformOrigin: (i) => (i ? "0% 50%" : "100% 50%") }, { scaleX: 1, duration, ease: "power2.out" }, 0);
+    }
+    if (eyebrow) addTextReveal(tl, eyebrow, 0, duration);
+    if (title) addTextReveal(tl, title, stagger, duration);
   }
 
   // Cards sit on a rail of [clones][originals][clones][clones]. The rail position wraps modulo one set width,
@@ -908,6 +1131,19 @@
       e.preventDefault();
       goTo(index + (e.key === "ArrowRight" ? 1 : -1));
     });
+    const nav = document.querySelector("#experience .js-slider-nav");
+    if (nav) {
+      nav.hidden = false;
+      nav.querySelector(".js-slider-prev")?.addEventListener("click", () => {
+        goTo(index - 1);
+        startAutoplay();
+      });
+      nav.querySelector(".js-slider-next")?.addEventListener("click", () => {
+        goTo(index + 1);
+        startAutoplay();
+      });
+    }
+
     track.addEventListener("focusin", stopAutoplay);
     track.addEventListener("focusout", () => setTimeout(startAutoplay));
     document.addEventListener("visibilitychange", startAutoplay);
@@ -938,15 +1174,9 @@
     const targets = section ? [section.querySelector(".js-section-heading"), ...section.querySelectorAll(".js-section-content > p")].filter(Boolean) : [];
     if (!targets.length || prefersReducedMotion) return;
 
-    const { y, blur, start, end, scrub, stagger } = CONFIG.community.header;
-    gsap.fromTo(targets, { y, opacity: 0, filter: `blur(${blur}px)` }, {
-      y: 0,
-      opacity: 1,
-      filter: "blur(0px)",
-      ease: "power1.out",
-      stagger,
-      scrollTrigger: { trigger: targets[0].parentElement, start, end, scrub },
-    });
+    const { start, end, scrub, duration, stagger } = CONFIG.community.header;
+    const tl = gsap.timeline({ scrollTrigger: { trigger: targets[0].parentElement, start, end, scrub } });
+    targets.forEach((el, i) => addTextReveal(tl, el, i * stagger, duration));
   }
 
   // Splits "40%" into an animated number and an unchanging screen-reader copy of the real value
@@ -976,7 +1206,7 @@
     return { el: dd, counter, end: +number, render, reserveWidth };
   }
 
-  // Image grows up and to the right from its bottom-left corner, markers settle in, then the stats strip
+  // The map comes in (addImageReveal) and its photo drifts while on screen, markers settle in, then the stats strip
   // opens from its right edge while the counters run. The strip has its own scrubbed timeline that waits for the
   // image to finish, so it only opens once it is on screen.
   function initSection7CommunityAnimation() {
@@ -991,8 +1221,6 @@
     const { reveal, image: img, markers, stats: strip, counters } = CONFIG.community;
     const markerItems = [...map.querySelectorAll(".js-estate-marker")];
     const statCounters = [...stats.querySelectorAll("dd")].map(createStatCounter).filter(Boolean);
-    const radius = () => getComputedStyle(figure).borderTopRightRadius;
-    const clip = (top, right) => `inset(${top}% ${right}% 0% 0% round 0px ${radius()} ${radius()} 0px)`;
     // The strip's left inset runs from 100% to -5% with power1.inOut
     const stripFrom = 100;
     const stripTo = -5;
@@ -1000,6 +1228,7 @@
 
     statCounters.forEach((c) => c.reserveWidth());
     document.fonts?.ready.then(() => statCounters.forEach((c) => c.reserveWidth()));
+    addImageDrift(figure, image);
 
     // Rebuilt when the stats switch between a 2×2 grid and a single row, since counter timing follows their layout
     const mm = gsap.matchMedia();
@@ -1016,9 +1245,7 @@
           },
         });
 
-        imageTl
-          .fromTo(figure, { clipPath: () => clip(img.top, img.right) }, { clipPath: () => clip(0, 0), duration: img.duration, ease: "power1.inOut" }, 0)
-          .fromTo(image, { scale: img.scale, transformOrigin: "0% 100%" }, { scale: 1, duration: img.duration, ease: "power1.out" }, 0);
+        addImageReveal(imageTl, figure, 0, img.duration, image);
         // One tween per marker (rather than `stagger`) so each start state renders before the timeline reaches it
         markerItems.forEach((item, i) => {
           imageTl.fromTo(item, { opacity: 0, y: markers.y }, { opacity: 1, y: 0, duration: markers.duration, ease: "power1.out" }, markers.at + i * markers.stagger);
@@ -1057,8 +1284,8 @@
     });
   }
 
-  // Text rises out of a blur line by line, the main image opens upward and outward from its bottom-left corner,
-  // then the two smaller images rise into place. Everything sits on one scrubbed timeline.
+  // Text reveals line by line, the main image comes in (its photo then drifts while on screen), then the two smaller
+  // images follow. Everything sits on one scrubbed timeline.
   function initSection8CommunityAnimation() {
     const section = document.getElementById("community");
     const content = section?.querySelector(".js-section-content");
@@ -1072,6 +1299,7 @@
     const lines = [...content.children].flatMap((el) => (el.tagName === "UL" ? [...el.children] : [el]));
     const galleryImages = [...section.querySelectorAll(".js-community-image")];
     const mm = gsap.matchMedia();
+    addImageDrift(figure, image);
 
     Object.entries(breakpoints).forEach(([query, { imageFollowsHeading }]) => {
       mm.add(query, () => {
@@ -1107,21 +1335,24 @@
           const position = at / total;
           const duration = length / total;
           if (kind === "text") {
-            tl.fromTo(el, { y: text.y, opacity: 0, filter: `blur(${text.blur}px)` },
-              { y: 0, opacity: 1, filter: "blur(0px)", duration, ease: "power1.out" }, position);
+            // List items: the sentence reveals word by word while its arrow slides in beside it
+            const sentence = el.tagName === "LI" ? el.querySelector("p") : null;
+            addTextReveal(tl, sentence || el, position, duration);
+            if (sentence && el.firstElementChild !== sentence) {
+              tl.fromTo(el.firstElementChild, { autoAlpha: 0, x: -text.arrow }, { autoAlpha: 1, x: 0, duration, ease: "sine.out" }, position);
+            }
           } else if (kind === "image") {
-            tl.fromTo(figure, { clipPath: `inset(${img.top}% 100% 0% 0%)` }, { clipPath: "inset(0% 0% 0% 0%)", duration, ease: "power1.inOut" }, position)
-              .fromTo(image, { scale: img.scale, transformOrigin: "0% 100%" }, { scale: 1, duration, ease: "power1.out" }, position);
+            addImageReveal(tl, figure, position, duration, image);
           } else {
-            tl.fromTo(el, { y: gallery.y, clipPath: "inset(100% 0% 0% 0%)" }, { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration, ease: "power1.inOut" }, position);
+            addImageReveal(tl, el, position, duration);
           }
         });
       });
     });
   }
 
-  // Heading rises out of a blur, the image opens upward and to the right from its bottom-left corner with the
-  // arrow button settling in at the end, then the closing lines follow. One scrubbed timeline.
+  // Heading reveals, the image comes in with the arrow button settling in at the end (its photo then drifts while on
+  // screen), then the closing lines follow. One scrubbed timeline.
   function initSection9RootedAnimation() {
     const section = document.getElementById("rooted");
     const heading = section?.querySelector(".js-section-heading");
@@ -1135,6 +1366,7 @@
     const button = figure.querySelector(".js-cta");
     const lines = [...content.children];
     const mm = gsap.matchMedia();
+    addImageDrift(figure, image);
 
     // The figure's aspect ratio and type sizes change at 768px, so positions are measured per layout
     ["(min-width: 768px)", "(max-width: 767.98px)"].forEach((query) => {
@@ -1159,14 +1391,10 @@
           defaults: { ease: "none" },
           scrollTrigger: { trigger: section, start: `top ${line * 100}%`, end: `+=${Math.round(total)}`, scrub },
         });
-        const revealText = (el, at) => {
-          tl.fromTo(el, { y: text.y, opacity: 0, filter: `blur(${text.blur}px)` },
-            { y: 0, opacity: 1, filter: "blur(0px)", duration: textLength / total, ease: "power1.out" }, at / total);
-        };
+        const revealText = (el, at) => addTextReveal(tl, el, at / total, textLength / total);
 
         revealText(heading, headingAt);
-        tl.fromTo(figure, { clipPath: `inset(${img.top}% 100% 0% 0%)` }, { clipPath: "inset(0% 0% 0% 0%)", duration: imageLength / total, ease: "power1.inOut" }, imageAt / total)
-          .fromTo(image, { scale: img.scale, transformOrigin: "0% 100%" }, { scale: 1, duration: imageLength / total, ease: "power1.out" }, imageAt / total);
+        addImageReveal(tl, figure, imageAt / total, imageLength / total, image);
         if (button) {
           tl.fromTo(button, { opacity: 0, scale: cta.scale }, { opacity: 1, scale: 1, duration: (imageLength * (1 - cta.from)) / total, ease: "power1.out" },
             (imageAt + imageLength * cta.from) / total);
@@ -1176,7 +1404,7 @@
     });
   }
 
-  // Text rises out of a blur line by line while the connectivity card opens from its top-right corner,
+  // Text reveals line by line while the connectivity card opens from its top-right corner,
   // played once on entering the viewport. Clipping (rather than scaling) leaves the card's contents undistorted.
   function initSection10LocationAnimation() {
     const section = document.getElementById("location");
@@ -1203,11 +1431,7 @@
     });
     const revealText = (tl) => {
       if (played.text) return;
-      // One tween per line (rather than `stagger`) so every line starts hidden before the timeline plays
-      lines.forEach((el, i) => {
-        tl.fromTo(el, { y: text.y, opacity: 0, filter: `blur(${text.blur}px)` },
-          { y: 0, opacity: 1, filter: "blur(0px)", duration: text.duration, ease: text.ease }, i * text.stagger);
-      });
+      lines.forEach((el, i) => addTextReveal(tl, el, i * text.stagger, text.duration));
     };
     const revealCard = (tl, at) => {
       if (!played.card) tl.fromTo(card, { clipPath: hiddenClip }, { clipPath: shownClip, duration: reveal.duration, ease: reveal.ease }, at);
@@ -1255,25 +1479,30 @@
     });
   }
 
-  // The heading and form rise together out of a blur, once, as the section comes into view. The background stays put.
+  // The heading lines reveal word by word, then the form rises out of a blur, once, as the section comes into view.
+  // The background stays put.
   function initSection11VisitAnimation() {
     const section = document.getElementById("private-visit");
-    const targets = section ? [section.querySelector(".js-section-heading"), section.querySelector(".js-visit-form")].filter(Boolean) : [];
-    if (!targets.length || prefersReducedMotion || section.dataset.visitReady) return;
+    const header = section?.querySelector(".js-section-heading");
+    const form = section?.querySelector(".js-visit-form");
+    if ((!header && !form) || prefersReducedMotion || section.dataset.visitReady) return;
     section.dataset.visitReady = "true";
 
-    const { start, y, blur, duration, ease } = CONFIG.privateVisit;
-    gsap.fromTo(targets, { y, opacity: 0, filter: `blur(${blur}px)` }, {
-      y: 0,
-      opacity: 1,
-      filter: "blur(0px)",
-      duration,
-      ease,
-      // A leftover filter would make the form a containing block for its fixed-position descendants
-      clearProps: "transform,opacity,filter",
-      // Refreshed after the pinned sections above, which rebuild at other breakpoints and shift this one
-      scrollTrigger: { trigger: section, start, once: true, refreshPriority: -1 },
-    });
+    const { start, y, blur, duration, ease, text } = CONFIG.privateVisit;
+    // Refreshed after the pinned sections above, which rebuild at other breakpoints and shift this one
+    const tl = gsap.timeline({ scrollTrigger: { trigger: section, start, once: true, refreshPriority: -1 } });
+    [...(header?.children ?? [])].forEach((el, i) => addTextReveal(tl, el, i * text.stagger, text.duration));
+    if (form) {
+      tl.fromTo(form, { y, opacity: 0, filter: `blur(${blur}px)` }, {
+        y: 0,
+        opacity: 1,
+        filter: "blur(0px)",
+        duration,
+        ease,
+        // A leftover filter would make the form a containing block for its fixed-position descendants
+        clearProps: "transform,opacity,filter",
+      }, header ? text.formAt : 0);
+    }
   }
 
   // The footer's content rises out of a blur, once, as it comes into view. The black background stays put.
@@ -1311,6 +1540,7 @@
     initHeroStackAnimation();
     initIntroReveal();
     initButterflyAnimation();
+    initIntroBlurStack();
     initVisionMissionReveal();
     initVisionMissionWatermark();
     initSection4PinnedSlider();

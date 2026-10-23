@@ -1,0 +1,116 @@
+/* ==========================================================================
+   Vedvan homepage — hero: full-height background video with a bottom-centred
+   oversized serif headline (10.5vw desktop / 17vw mobile).
+   Motion and video playback live in js/home.hero.js.
+   ========================================================================== */
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100vh;
+  height: 100svh;
+  min-height: 32rem;
+  overflow: clip;
+  background: radial-gradient(120% 90% at 50% 100%, #2f3d2b 0%, #1a2218 55%, #10150f 100%);
+  color: #f2ecdb;
+}
+
+.hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.hero__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Fade the video in once it has a frame, over the gradient fallback */
+@media (scripting: enabled) {
+  .hero__video {
+    opacity: 0;
+    transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .hero.is-video-ready .hero__video {
+    opacity: 1;
+  }
+}
+
+.hero.has-video-error .hero__video {
+  display: none;
+}
+
+/* Legibility scrim: darkens behind the header (top) and headline (bottom) */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgb(16 21 15 / 0.45) 0%, rgb(16 21 15 / 0) 22%),
+    linear-gradient(to top, rgb(16 21 15 / 0.78) 0%, rgb(16 21 15 / 0.35) 30%, rgb(16 21 15 / 0) 55%);
+  pointer-events: none;
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0 clamp(1.25rem, 4vw, 3rem) 5rem;
+  text-align: center;
+}
+
+.hero__eyebrow {
+  margin: 0;
+  font-family: "Work Sans", ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #cfc5a6;
+}
+
+.hero__title {
+  margin: 0;
+  font-family: "Cormorant Garamond", "Cormorant", Georgia, "Times New Roman", serif;
+  font-size: 10.5vw;
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: #f2ecdb;
+}
+
+@media (max-width: 47.99rem) {
+  .hero__content {
+    padding-bottom: 4.5rem;
+  }
+
+  .hero__title {
+    font-size: 17vw;
+  }
+}
+
+/* Revealed by js/home.hero.js. The delayed keyframe is a failsafe in case the script never runs. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .hero [data-animate] {
+    visibility: hidden;
+    animation: hero-reveal-failsafe 0s 6s forwards;
+  }
+}
+
+@keyframes hero-reveal-failsafe {
+  to {
+    visibility: visible;
+  }
+}

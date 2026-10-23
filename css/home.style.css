@@ -101,14 +101,6 @@ html.lenis body {
   background-color: #0e1f12;
 }
 
-/* Hero: darkening gradient, radial mist and top vignette (top layer first) */
-.hero-overlay {
-  background:
-    linear-gradient(to bottom, rgba(10, 24, 10, 0.33), rgba(10, 24, 10, 0) 222px),
-    radial-gradient(closest-side, rgba(61, 107, 74, 0), rgba(26, 58, 34, 0.188)),
-    linear-gradient(to bottom, rgba(13, 31, 21, 0.5), rgba(26, 46, 26, 0.38) 50%, rgba(13, 31, 21, 0));
-}
-
 /* Intro: silk texture is intentionally stretched and offset as in the design */
 .intro-bg {
   background: #f4f4f4 url("../assets/images/intro-silk-bg.jpg") 50% 45.3% / 114.17% 233.82% no-repeat;
@@ -123,6 +115,17 @@ html.lenis body {
 
 #vision-mission {
   background-color: #fff;
+}
+
+/* Words of text revealed word by word (splitWords in js/home.animation.js) move individually */
+.split-word {
+  display: inline-block;
+}
+
+/* Words and images start their reveals offset to the right. `clip` (unlike `hidden`) adds no scroll container, and it
+   is set on <main> because on <body> it would be handed to the viewport, which ignores it. */
+main {
+  overflow-x: clip;
 }
 
 /* Lotus watermark — tinted by the element's background colour */
@@ -264,6 +267,40 @@ html.lenis body {
   min-width: 0;
   overflow: hidden;
   gap: inherit;
+}
+
+/* Previous / next buttons, shown once the slider is enabled */
+#experience .experience-nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+#experience .experience-nav[hidden] {
+  display: none;
+}
+
+#experience .experience-nav__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid #c9a86a;
+  border-radius: 9999px;
+  color: #915313;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#experience .experience-nav__btn:hover {
+  background-color: #c9a86a;
+  color: #fff;
+}
+
+#experience .experience-nav__btn:focus-visible {
+  outline: 2px solid #c9a86a;
+  outline-offset: 3px;
 }
 
 #experience .js-card-rail {

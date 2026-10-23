@@ -8,10 +8,13 @@
 
   <link rel="preload" href="assets/fonts/marcellus.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/roboto-variable.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/images/hero-yoga-pond.jpg" as="image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Work+Sans:wght@500&display=swap">
 
   <link rel="stylesheet" href="css/tailwind.css">
   <link rel="stylesheet" href="css/home.style.css">
+  <link rel="stylesheet" href="css/home.hero.css">
   <link rel="stylesheet" href="css/page-transition.css">
 
   <!-- Welcome intro once per session; a short reveal after an in-site page transition -->
@@ -32,6 +35,7 @@
   <script src="js/vendor/ScrollTrigger.min.js" defer></script>
   <script src="js/vendor/lenis.min.js" defer></script>
   <script src="js/home.animation.js" defer></script>
+  <script src="js/home.hero.js" defer></script>
   <script src="js/page-transition.js" defer></script>
 </head>
 <body class="bg-white font-sans text-ink antialiased">
@@ -89,35 +93,15 @@
   <main>
 
     <!-- Section 01: Hero -->
-    <section id="hero" class="js-hero relative h-svh max-h-[807px] min-h-[600px] overflow-hidden text-white">
-      <div class="js-hero-frame absolute inset-0 isolate flex items-center justify-center overflow-hidden">
-        <img src="assets/images/hero-yoga-pond.jpg" alt="A woman meditating on a yoga mat beside a still garden pond" width="2880" height="1620" fetchpriority="high" class="js-hero-image absolute inset-0 -z-10 size-full object-cover">
-        <div class="hero-overlay absolute inset-0 -z-10" aria-hidden="true"></div>
+    <section id="hero" class="hero js-hero" aria-labelledby="hero-title" data-hero>
+      <div class="hero__media">
+        <video class="hero__video" src="assets/videos/vedvan_hero.mp4" autoplay muted playsinline preload="auto" disablepictureinpicture aria-hidden="true" data-hero-video></video>
+        <div class="hero__scrim" aria-hidden="true"></div>
+      </div>
 
-        <div class="js-hero-content mb-10 flex w-full max-w-[707px] flex-col items-center gap-12 px-5 pt-16 text-center md:gap-[60px] md:pt-0">
-          <div class="flex flex-col items-center gap-4">
-            <h1 class="js-hero-title max-w-[732px] font-display text-[38px] leading-[normal] text-shadow-[0px_4px_4px_rgba(0,0,0,0.25)] sm:text-5xl md:text-[60px]">
-              Where <span class="font-display-sc uppercase">Life Returns</span> To Its Elements.
-            </h1>
-            <p class="js-hero-subtitle text-base font-semibold leading-[normal] md:text-lg lg:whitespace-nowrap">
-              A thoughtful vision of living where nature, wellness and the essence of life come together.
-            </p>
-          </div>
-
-          <button type="button" class="js-hero-cta group flex flex-col items-center gap-4 focus-visible:outline-none">
-            <span class="text-base font-semibold uppercase leading-[normal] md:text-lg">Watch the film</span>
-            <span class="flex size-[72px] items-center justify-center rounded-full border border-white p-3 group-hover:bg-white/10 group-focus-visible:outline-2 group-focus-visible:outline-offset-4 group-focus-visible:outline-white">
-              <img src="assets/icons/play.svg" alt="" width="48" height="48" class="size-12">
-            </span>
-          </button>
-        </div>
-
-        <a href="#intro" class="js-scroll-indicator absolute inset-x-0 bottom-16 mx-auto hidden w-fit flex-col items-center gap-2 sm:flex focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
-          <span class="text-[10px] font-semibold uppercase leading-[15px]">Scroll to explore</span>
-          <span class="flex h-8 w-5 justify-center rounded-full border border-white/80 p-[5px]" aria-hidden="true">
-            <span class="js-scroll-dot h-2 w-1 rounded-full bg-sage"></span>
-          </span>
-        </a>
+      <div class="hero__content js-hero-content">
+        <p class="hero__eyebrow" data-animate>An Invitation to - Timeless Living</p>
+        <h1 class="hero__title" id="hero-title" data-animate>Vedvan</h1>
       </div>
     </section>
 
@@ -292,6 +276,15 @@
             <span class="absolute inset-0 -z-10 bg-linear-to-b from-transparent from-55% to-black/60" aria-hidden="true"></span>
             <h3 class="px-4 pb-5 pt-4 text-center font-inter text-[28px] font-semibold leading-[34px] text-white">Water Bodies</h3>
           </article>
+        </div>
+
+        <div class="experience-nav site-container js-slider-nav" hidden>
+          <button type="button" class="experience-nav__btn js-slider-prev" aria-label="Previous experience">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button type="button" class="experience-nav__btn js-slider-next" aria-label="Next experience">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
       </div>
     </section>
