@@ -618,6 +618,22 @@
       if (target !== current) transitionToSlide(current + Math.sign(target - current));
     }
 
+    // While a transition runs (or more are queued), the page can scroll within the pin but not out of it, so a
+    // fast fling can't carry the section away before the slides it triggered have finished
+    let pin = null;
+    let holding = false;
+    function holdInPin() {
+      if (!active || !pin || holding) return;
+      const y = pin.scroll();
+      const to = gsap.utils.clamp(pin.start + 1, pin.end - 1, y);
+      if (to === y) return;
+      holding = true;
+      if (lenis) lenis.scrollTo(to, { immediate: true, force: true });
+      else window.scrollTo(0, to);
+      ScrollTrigger.update();
+      holding = false;
+    }
+
     showSlide(0);
 
     Object.entries(breakpoints).forEach(([query, bp]) => {
@@ -625,7 +641,7 @@
         section.classList.add("is-slider");
         const targetFor = (progress) => bp.thresholds.filter((t) => progress >= t).length;
 
-        ScrollTrigger.create({
+        pin = ScrollTrigger.create({
           trigger: section,
           start: () => `top ${header ? header.offsetHeight : 0}px`,
           end: () => `+=${Math.round(window.innerHeight * bp.distance)}`,
@@ -634,6 +650,7 @@
           onUpdate: (self) => {
             target = targetFor(self.progress);
             advance();
+            holdInPin();
           },
           onRefresh: (self) => {
             target = targetFor(self.progress);
@@ -642,6 +659,7 @@
         });
 
         return () => {
+          pin = null;
           active?.tl.kill();
           active = null;
           showSlide(current);
