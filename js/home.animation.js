@@ -69,12 +69,12 @@
       },
     },
     visionMission: {
-      // Seconds. Each block (heading, Vision row, Mission row) plays once `visible` of it is on screen above `margin`,
-      // and rewinds after it leaves through the bottom. Row lines start `gap` apart; the image starts at `image.at`.
+      // Seconds. Each block plays once its top crosses `margin` above the viewport bottom, and rewinds after it leaves
+      // through the bottom. Text lines start `stagger` apart; images start `image.delay` after coming into view.
       reveal: {
-        visible: 0.2, margin: "0px 0px -12% 0px",
-        text: { duration: 1.2, gap: 0.14 },
-        image: { duration: 1.5, at: 0.3 },
+        margin: "0px 0px -15% 0px",
+        text: { y: 32, blur: 6, duration: 1, stagger: 0.14, ease: "power3.out" },
+        image: { duration: 1.3, delay: 0.2, ease: "power2.inOut" },
       },
       watermark: { x: 16, y: 12, rotation: 1.5, durationX: 11, durationY: 8 },
     },
@@ -85,11 +85,12 @@
         "(min-width: 1024px)": { distance: 2, thresholds: [0.22, 0.58] },
         "(max-width: 1023.98px)": { distance: 1.6, thresholds: [0.22, 0.58] },
       },
-      // Seconds, px for `drift`. The text card starts `cardDelay` after the image and both end together; the card's
-      // text then comes into focus from `text.at`. Steps run `catchUp` times faster while more are queued. With
-      // reduced motion the slides crossfade over `reduced`.
+      // Seconds, px for `y` and `blur`. The current card's text blurs away (`out`) while the incoming card fades in
+      // over it; the incoming text then comes into focus from `text.at`. Steps run `catchUp` times faster while more
+      // are queued. With reduced motion the slides crossfade over `reduced`.
       transition: {
-        image: 2.8, card: 2.6, cardDelay: 0.2, ease: "sine.inOut", drift: 28,
+        image: 2.8, ease: "sine.inOut",
+        out: { duration: 0.8, stagger: 0.08, y: 12, blur: 10, ease: "power2.in" },
         text: { at: 0.9, duration: 1.6, stagger: 0.15, y: -16, blur: 6, ease: "power2.out" },
         dot: 0.5, dotAt: 1.3, catchUp: 2.2, reduced: 0.35,
       },
@@ -115,8 +116,9 @@
     experience: {
       // Timeline units: the eyebrow (with its rules) and the heading each take `duration`, the heading `stagger` later
       header: { start: "top 90%", end: "top 45%", scrub: 0.8, duration: 1, stagger: 0.35 },
-      // Times in seconds; `dragThreshold` in px; `throw` projects the release velocity (px/ms) this many ms ahead.
-      slider: { interval: 5, duration: 0.8, settle: 0.6, dragThreshold: 6, throw: 120 },
+      // The section pins while the cards slide one scroll px per px of travel, eased by `scrub` seconds.
+      // `hold` adds that share of the travel as a pause at the end before the pin releases.
+      slider: { scrub: 1, hold: 0.15 },
     },
     community: {
       // Timeline units: each line takes `duration` and starts `stagger` after the previous one
@@ -138,9 +140,9 @@
       // (viewport heights) after the previous text line or the start of the main image.
       line: 0.88,
       scrub: 1.6,
-      text: { distance: 0.3, gap: 0.05, arrow: 8 }, // `arrow`: px the list arrows slide in from
-      image: { distance: 0.55, after: 0.06 },
-      gallery: { distance: 0.4, after: 0.18, stagger: 0.08 },
+      text: { y: 56, blur: 8, distance: 0.3, gap: 0.05 },
+      image: { distance: 0.55, after: 0.06, top: 40, scale: 1.12 }, // collapsed top inset in %
+      gallery: { distance: 0.4, after: 0.18, stagger: 0.08, y: 40 },
       breakpoints: {
         // Side by side, the main image waits for the heading; stacked, it sits above the text and leads
         "(min-width: 1024px)": { imageFollowsHeading: true },
@@ -285,12 +287,14 @@
   }
 
   // Each text line reveals word by word (addTextReveal) on one scrubbed timeline, placed at its position within the
-  // section. The lotus emblem stays put: the butterfly flies in and lands on it (see initButterflyAnimation).
+  // section. The lotus watermark rises in ahead of the heading; the butterfly flies in and lands on the emblem
+  // (see initButterflyAnimation).
   function initIntroReveal() {
     const section = document.getElementById("intro");
     if (!section || prefersReducedMotion || section.dataset.introReady) return;
 
     const lines = [
+      section.querySelector(".js-intro-lotus"),
       section.querySelector(".js-section-heading"),
       ...section.querySelectorAll(".js-section-content > p"),
       section.querySelector(".js-section-tagline"),
@@ -506,7 +510,7 @@
     if (!section || !next || prefersReducedMotion) return;
 
     const groups = [
-      [section.querySelector(".js-section-heading")],
+      [section.querySelector(".js-intro-lotus"), section.querySelector(".js-butterfly"), section.querySelector(".js-section-heading")],
       [...section.querySelectorAll(".js-section-content > p")],
       [section.querySelector(".js-section-tagline")],
     ].map((group) => group.filter(Boolean)).filter((group) => group.length);
@@ -589,30 +593,37 @@
     });
   }
 
-  // The heading, the Vision row and the Mission row each play their own reveal when they come on screen. Visibility is
-  // observed rather than scroll-triggered because the section is translated while it stacks over the intro, and
-  // IntersectionObserver sees where it is actually drawn.
+  // Heading (with its butterfly), each row's text (line by line) and each row's image (Vision right to left, Mission
+  // left to right) play their own timed reveal as they scroll into view. Visibility is observed rather than
+  // scroll-triggered because the section is translated while it stacks over the intro, and IntersectionObserver
+  // sees where it is actually drawn.
   function initVisionMissionReveal() {
     const section = document.getElementById("vision-mission");
     if (!section || prefersReducedMotion) return;
 
-    const { visible, margin, text, image } = CONFIG.visionMission.reveal;
+    const { margin, text, image } = CONFIG.visionMission.reveal;
     const blocks = new Map();
 
-    const heading = section.querySelector(".js-section-heading");
-    if (heading) {
+    const addBlock = (el, build) => {
+      if (!el) return;
       const tl = gsap.timeline({ paused: true });
-      addTextReveal(tl, heading, 0, text.duration);
-      blocks.set(heading, tl);
-    }
+      build(tl);
+      blocks.set(el, tl);
+    };
+    const revealLines = (tl, lines) => tl.fromTo(lines, { y: text.y, autoAlpha: 0, filter: `blur(${text.blur}px)` },
+      { y: 0, autoAlpha: 1, filter: "blur(0px)", duration: text.duration, ease: text.ease, stagger: text.stagger });
 
-    section.querySelectorAll(".js-vision-row, .js-mission-row").forEach((row) => {
-      const tl = gsap.timeline({ paused: true });
-      const lines = [...row.querySelectorAll(".js-section-content h3, .js-section-content p")];
-      lines.forEach((el, i) => addTextReveal(tl, el, i * text.gap, text.duration));
-      const figure = row.querySelector(".js-section-image");
-      if (figure) addImageReveal(tl, figure, image.at, image.duration);
-      blocks.set(row, tl);
+    const heading = section.querySelector(".js-section-heading");
+    addBlock(heading, (tl) => revealLines(tl, [heading, section.querySelector(".js-butterfly")].filter(Boolean)));
+
+    section.querySelectorAll(".js-vision-row, .js-mission-row").forEach((row, i) => {
+      const content = row.querySelector(".js-section-content");
+      addBlock(content, (tl) => revealLines(tl, content.querySelectorAll("h3, p")));
+
+      const img = row.querySelector(".js-reveal-image");
+      addBlock(img?.parentElement, (tl) => tl.fromTo(img,
+        { clipPath: i % 2 ? "inset(0% 100% 0% 0%)" : "inset(0% 0% 0% 100%)" },
+        { clipPath: "inset(0% 0% 0% 0%)", duration: image.duration, ease: image.ease, delay: image.delay }));
     });
 
     const observer = new IntersectionObserver((entries) => {
@@ -621,7 +632,7 @@
         if (isIntersecting) tl.play();
         else if (rootBounds && boundingClientRect.top >= rootBounds.bottom) tl.reverse();
       });
-    }, { threshold: visible, rootMargin: margin });
+    }, { rootMargin: margin });
     blocks.forEach((_, el) => observer.observe(el));
   }
 
@@ -677,9 +688,9 @@
 
   // Pinned Earth → Water → Air slider. The pin's progress only picks the target slide; each change then plays as
   // a timed (not scrubbed) transition to the neighbouring slide, in either scroll direction: the incoming image
-  // spreads over the current one like water from its bottom-left corner, and the incoming text card spreads over
-  // the panel the same way while settling up and to the right. Transitions run one at a time until the target is
-  // reached; a running one always completes.
+  // spreads over the current one like water from its bottom-left corner, while the current card's text blurs away
+  // and the incoming card's text comes into focus. Transitions run one at a time until the target is reached;
+  // a running one always completes.
   function initSection4PinnedSlider() {
     const section = document.getElementById("elements");
     if (!section || section.dataset.sliderReady) return;
@@ -802,6 +813,7 @@
       const tl = gsap.timeline({
         onComplete: () => {
           gsap.set(outgoing, { clipPath: HIDDEN });
+          gsap.set(cardText.filter((el) => cards[from].contains(el)), { clearProps: "opacity,filter,transform" });
           gsap.set(incoming, { zIndex: 1 });
           active = null;
           markActive(to);
@@ -814,9 +826,11 @@
           .to(dots[from], { ...dotState(false), duration: transition.reduced }, 0)
           .to(dots[to], { ...dotState(true), duration: transition.reduced }, 0);
       } else {
+        const { out } = transition;
         tl.add(spreadOver(images[to], transition.image, to * 2.1), 0)
-          .add(spreadOver(cards[to], transition.card, to * 2.1 + 1), transition.cardDelay)
-          .fromTo(cards[to], { x: -transition.drift, y: transition.drift }, { x: 0, y: 0, duration: transition.card, ease: transition.ease }, transition.cardDelay)
+          .to(cardText.filter((el) => cards[from].contains(el)),
+            { y: out.y, opacity: 0, filter: `blur(${out.blur}px)`, duration: out.duration, stagger: out.stagger, ease: out.ease }, 0)
+          .fromTo(cards[to], { clipPath: "none", opacity: 0 }, { opacity: 1, duration: out.duration, ease: "none" }, 0)
           .fromTo(
             cardText.filter((el) => cards[to].contains(el)),
             { y: text.y, opacity: 0, filter: `blur(${text.blur}px)` },
@@ -998,175 +1012,51 @@
     if (title) addTextReveal(tl, title, stagger, duration);
   }
 
-  // Cards sit on a rail of [clones][originals][clones][clones]. The rail position wraps modulo one set width,
-  // so it can move forever in either direction without a visible reset. Without JS the track scrolls natively.
-  function initSection6InfiniteSlider() {
-    const track = document.querySelector("#experience .js-card-track");
+  // The section pins while scrolling slides the cards to the left until the last one reaches the track's far
+  // content edge, then holds briefly before releasing. Distances are re-measured on every refresh, so it fits any
+  // screen; when all cards already fit there is nothing to travel. Without JS (or with reduced motion) the track
+  // scrolls natively.
+  function initSection6ScrollSlider() {
+    const section = document.getElementById("experience");
+    const track = section?.querySelector(".js-card-track");
     const cards = track ? [...track.querySelectorAll(".js-feature-card")] : [];
-    if (cards.length < 2 || track.dataset.sliderReady) return;
+    if (cards.length < 2 || prefersReducedMotion || track.dataset.sliderReady) return;
     track.dataset.sliderReady = "true";
 
-    const { interval, duration, settle, dragThreshold, throw: throwMs } = CONFIG.experience.slider;
-    const count = cards.length;
-    const cloneSet = () => cards.map((card) => {
-      const clone = card.cloneNode(true);
-      clone.querySelectorAll("[id]").forEach((el) => el.removeAttribute("id"));
-      clone.setAttribute("aria-hidden", "true");
-      clone.inert = true;
-      return clone;
-    });
-
-    // The viewport clips at the track's content edge (cards rest there, as designed) and bleeds to its right edge
-    const viewport = document.createElement("div");
+    const { scrub, hold } = CONFIG.experience.slider;
+    const header = document.getElementById("site-header");
     const rail = document.createElement("div");
-    viewport.className = "js-card-viewport";
     rail.className = "js-card-rail";
-    rail.append(...cloneSet(), ...cards, ...cloneSet(), ...cloneSet());
-    viewport.appendChild(rail);
-    track.appendChild(viewport);
+    rail.append(...cards);
+    track.appendChild(rail);
     track.classList.add("is-slider");
 
-    const setX = gsap.quickSetter(rail, "x", "px");
-    const pos = { x: 0 }; // px travelled from the first original card; may be any value
-    let step = 0;
-    let index = 0; // card the rail is resting on or heading to
-    let tween = null;
-    let timer = null;
-    let drag = null;
-    let hovering = false;
-    let inView = false;
-    let suppressClick = false;
-
-    const measure = () => {
-      step = cards[0].offsetWidth + (parseFloat(getComputedStyle(rail).columnGap) || 0);
-      viewport.style.marginRight = `-${getComputedStyle(track).paddingRight}`;
+    // When the track bleeds to the right edge (no right padding) the last card stops at the mirrored left inset
+    const travel = () => {
+      const { paddingLeft, paddingRight } = getComputedStyle(track);
+      const startInset = parseFloat(paddingLeft) || 0;
+      const endInset = parseFloat(paddingRight) || startInset;
+      return Math.max(0, Math.round(rail.offsetWidth - (track.clientWidth - startInset - endInset)));
     };
-    const render = () => setX(-count * step - gsap.utils.wrap(0, count * step, pos.x));
-
-    const goTo = (target, time = duration, ease = "power2.inOut") => {
-      index = target;
-      tween?.kill();
-      tween = gsap.to(pos, { x: index * step, duration: time, ease, onUpdate: render });
+    // Centred in the space below the header, or bottom-aligned when the section is taller than that space
+    const start = () => {
+      const headerHeight = header?.offsetHeight || 0;
+      const space = window.innerHeight - headerHeight;
+      return section.offsetHeight > space ? "bottom bottom" : `center ${Math.round(headerHeight + space / 2)}px`;
     };
 
-    const stopAutoplay = () => {
-      timer?.kill();
-      timer = null;
-    };
-    const startAutoplay = () => {
-      stopAutoplay();
-      if (prefersReducedMotion || !inView || hovering || drag || document.hidden || track.matches(":focus-visible")) return;
-      timer = gsap.delayedCall(interval, () => {
-        goTo(index + 1);
-        startAutoplay();
-      });
-    };
-
-    const onPointerMove = (e) => {
-      if (!drag || e.pointerId !== drag.id) return;
-      const dx = e.clientX - drag.x;
-      if (!drag.active) {
-        if (Math.abs(dx) < dragThreshold) return;
-        // Mostly vertical: leave the gesture to the page
-        if (Math.abs(e.clientY - drag.y) > Math.abs(dx)) {
-          drag = null;
-          startAutoplay();
-          return;
-        }
-        drag.active = true;
-        tween?.kill();
-        track.setPointerCapture(e.pointerId);
-        track.classList.add("is-dragging");
-      }
-      const dt = e.timeStamp - drag.lastT;
-      if (dt > 0) drag.velocity = (e.clientX - drag.lastX) / dt;
-      drag.lastX = e.clientX;
-      drag.lastT = e.timeStamp;
-      pos.x = drag.startX - dx;
-      render();
-    };
-
-    const onPointerUp = (e) => {
-      if (!drag || e.pointerId !== drag.id) return;
-      const { active, velocity, lastT } = drag;
-      drag = null;
-      track.classList.remove("is-dragging");
-      if (active) {
-        suppressClick = true;
-        const fling = e.timeStamp - lastT < 100 ? velocity * throwMs : 0;
-        const nearest = Math.round(pos.x / step);
-        goTo(gsap.utils.clamp(nearest - 1, nearest + 1, Math.round((pos.x - fling) / step)), settle, "power3.out");
-      }
-      startAutoplay();
-    };
-
-    track.addEventListener("pointerdown", (e) => {
-      if (e.button !== 0) return;
-      suppressClick = false;
-      drag = { id: e.pointerId, x: e.clientX, y: e.clientY, startX: pos.x, lastX: e.clientX, lastT: e.timeStamp, velocity: 0, active: false };
-      stopAutoplay();
-    });
-    track.addEventListener("pointermove", onPointerMove);
-    track.addEventListener("pointerup", onPointerUp);
-    track.addEventListener("pointercancel", onPointerUp);
-    track.addEventListener("pointerenter", (e) => {
-      if (e.pointerType !== "mouse") return;
-      hovering = true;
-      stopAutoplay();
-    });
-    track.addEventListener("pointerleave", (e) => {
-      if (e.pointerType !== "mouse") return;
-      hovering = false;
-      startAutoplay();
-    });
-    track.addEventListener("dragstart", (e) => e.preventDefault());
-    track.addEventListener("click", (e) => {
-      if (!suppressClick) return;
-      suppressClick = false;
-      e.preventDefault();
-      e.stopPropagation();
-    }, true);
-    track.addEventListener("keydown", (e) => {
-      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
-      e.preventDefault();
-      goTo(index + (e.key === "ArrowRight" ? 1 : -1));
-    });
-    const nav = document.querySelector("#experience .js-slider-nav");
-    if (nav) {
-      nav.hidden = false;
-      nav.querySelector(".js-slider-prev")?.addEventListener("click", () => {
-        goTo(index - 1);
-        startAutoplay();
-      });
-      nav.querySelector(".js-slider-next")?.addEventListener("click", () => {
-        goTo(index + 1);
-        startAutoplay();
-      });
-    }
-
-    track.addEventListener("focusin", stopAutoplay);
-    track.addEventListener("focusout", () => setTimeout(startAutoplay));
-    document.addEventListener("visibilitychange", startAutoplay);
-
-    new IntersectionObserver(([entry]) => {
-      inView = entry.isIntersecting;
-      startAutoplay();
-    }).observe(track);
-
-    // Re-measure on layout changes and keep the current card aligned
-    const resizeObserver = new ResizeObserver(() => {
-      const previous = step;
-      measure();
-      if (step === previous) return;
-      tween?.kill();
-      pos.x = index * step;
-      render();
-    });
-    resizeObserver.observe(track);
-    resizeObserver.observe(cards[0]);
-
-    measure();
-    render();
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start,
+        end: () => `+=${Math.round(travel() * (1 + hold))}`,
+        pin: true,
+        scrub,
+        invalidateOnRefresh: true,
+      },
+    })
+      .to(rail, { x: () => -travel(), duration: 1, ease: "none" })
+      .to({}, { duration: hold });
   }
 
   function initSection7HeaderAnimation() {
@@ -1284,8 +1174,8 @@
     });
   }
 
-  // Text reveals line by line, the main image comes in (its photo then drifts while on screen), then the two smaller
-  // images follow. Everything sits on one scrubbed timeline.
+  // Text rises out of a blur line by line, the main image opens upward and outward from its bottom-left corner,
+  // then the two smaller images rise into place. Everything sits on one scrubbed timeline.
   function initSection8CommunityAnimation() {
     const section = document.getElementById("community");
     const content = section?.querySelector(".js-section-content");
@@ -1299,7 +1189,6 @@
     const lines = [...content.children].flatMap((el) => (el.tagName === "UL" ? [...el.children] : [el]));
     const galleryImages = [...section.querySelectorAll(".js-community-image")];
     const mm = gsap.matchMedia();
-    addImageDrift(figure, image);
 
     Object.entries(breakpoints).forEach(([query, { imageFollowsHeading }]) => {
       mm.add(query, () => {
@@ -1335,16 +1224,13 @@
           const position = at / total;
           const duration = length / total;
           if (kind === "text") {
-            // List items: the sentence reveals word by word while its arrow slides in beside it
-            const sentence = el.tagName === "LI" ? el.querySelector("p") : null;
-            addTextReveal(tl, sentence || el, position, duration);
-            if (sentence && el.firstElementChild !== sentence) {
-              tl.fromTo(el.firstElementChild, { autoAlpha: 0, x: -text.arrow }, { autoAlpha: 1, x: 0, duration, ease: "sine.out" }, position);
-            }
+            tl.fromTo(el, { y: text.y, opacity: 0, filter: `blur(${text.blur}px)` },
+              { y: 0, opacity: 1, filter: "blur(0px)", duration, ease: "power1.out" }, position);
           } else if (kind === "image") {
-            addImageReveal(tl, figure, position, duration, image);
+            tl.fromTo(figure, { clipPath: `inset(${img.top}% 100% 0% 0%)` }, { clipPath: "inset(0% 0% 0% 0%)", duration, ease: "power1.inOut" }, position)
+              .fromTo(image, { scale: img.scale, transformOrigin: "0% 100%" }, { scale: 1, duration, ease: "power1.out" }, position);
           } else {
-            addImageReveal(tl, el, position, duration);
+            tl.fromTo(el, { y: gallery.y, clipPath: "inset(100% 0% 0% 0%)" }, { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration, ease: "power1.inOut" }, position);
           }
         });
       });
@@ -1546,7 +1432,7 @@
     initSection4PinnedSlider();
     initSection5PhilosophyAnimation();
     initSection6HeaderAnimation();
-    initSection6InfiniteSlider();
+    initSection6ScrollSlider();
     initSection7HeaderAnimation();
     initSection7CommunityAnimation();
     initSection8CommunityAnimation();

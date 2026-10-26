@@ -110,8 +110,10 @@
       <div class="mx-auto flex max-w-[951px] flex-col items-center gap-9 text-center">
         <div class="flex w-full flex-col items-center gap-2.5">
           <div class="js-intro-emblem relative h-[117px] w-[154px]" aria-hidden="true">
-            <span class="mask-lotus absolute left-[14.62px] top-0 h-[116.945px] w-[139.18px] bg-[rgba(201,168,106,0.07)]"></span>
-            <img src="assets/icons/lotus-gold.png" alt="" width="106" height="82" class="absolute left-[31.2px] top-[17.94px] h-[82px] w-[106px] object-cover">
+            <div class="js-intro-lotus absolute inset-0">
+              <span class="mask-lotus absolute left-[14.62px] top-0 h-[116.945px] w-[139.18px] bg-[rgba(201,168,106,0.07)]"></span>
+              <img src="assets/icons/lotus-gold.png" alt="" width="106" height="82" class="absolute left-[31.2px] top-[17.94px] h-[82px] w-[106px] object-cover">
+            </div>
             <span class="js-butterfly absolute left-0 top-0 size-[73px]">
               <img src="assets/images/butterfly.png" alt="" width="73" height="73" class="js-butterfly-wing-far intro-butterfly-far absolute inset-0 size-full object-cover">
               <img src="assets/images/butterfly.png" alt="" width="73" height="73" class="js-butterfly-wing-near intro-butterfly-near absolute inset-0 size-full object-cover">
@@ -276,15 +278,6 @@
             <span class="absolute inset-0 -z-10 bg-linear-to-b from-transparent from-55% to-black/60" aria-hidden="true"></span>
             <h3 class="px-4 pb-5 pt-4 text-center font-inter text-[28px] font-semibold leading-[34px] text-white">Water Bodies</h3>
           </article>
-        </div>
-
-        <div class="experience-nav site-container js-slider-nav" hidden>
-          <button type="button" class="experience-nav__btn js-slider-prev" aria-label="Previous experience">
-            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <button type="button" class="experience-nav__btn js-slider-next" aria-label="Next experience">
-            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
         </div>
       </div>
     </section>
