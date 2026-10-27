@@ -1,0 +1,430 @@
+/* ==========================================================================
+   Vedvan — home section 3: location & connectivity
+   Desktop (≥1024px): copy + destination list + details on the left, the
+   schematic map filling the right. Below 1024px everything stacks: intro,
+   list, map, (phone: image preview), details.
+   Gold text values are darkened from the reference gold for contrast on
+   ivory: names ≥3:1 (large text), small labels ≥4.5:1.
+   ========================================================================== */
+.location {
+      --vv-forest-700: #2f3d2b;
+      --vv-font-display: "Marcellus", Georgia, serif;
+      --vv-tracking-eyebrow: 0.18em;
+      --vv-gutter: clamp(1.25rem, 4vw, 3rem);
+      --vv-header-top: 0px;
+      --vv-nav-height: 5.5rem;
+      --vv-duration-base: 450ms;
+      --vv-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --loc-ivory: #fbf9ef;
+      --loc-ink: #232e20;
+      --loc-green: var(--vv-forest-700);
+      --loc-gold: #a07a45;
+      --loc-gold-text: #8a6a3d;
+      --loc-pin: #ae8752;
+      --loc-rule: rgb(174 135 82 / 0.32);
+      --loc-muted: #5c5a4e;
+
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: "intro" "list" "map" "details";
+      width: 100%;
+      overflow: hidden;
+      padding:
+        clamp(4.5rem, 10vh, 7rem)
+        var(--vv-gutter)
+        clamp(3.5rem, 8vh, 5.5rem);
+      background-color: var(--loc-ivory);
+      color: var(--loc-ink);
+    }
+  
+    .location :focus-visible {
+      outline: 2px solid var(--loc-green);
+      outline-offset: 4px;
+    }
+  
+    /* Intro ---------------------------------------------------------------- */
+    .location__intro {
+      grid-area: intro;
+    }
+  
+    .location__eyebrow {
+      margin: 0;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: var(--vv-tracking-eyebrow);
+      text-transform: uppercase;
+      color: var(--loc-ink);
+    }
+  
+    .location__title {
+      margin: clamp(0.75rem, 1.8vh, 1.25rem) 0 0;
+      font-family: var(--vv-font-display);
+      font-size: clamp(2.125rem, 2.6vw + 1rem, 3.5rem);
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      color: var(--loc-green);
+    }
+  
+    /* Destination list ----------------------------------------------------- */
+    .location__list {
+      grid-area: list;
+      margin: clamp(1.5rem, 4vh, 2.75rem) 0 0;
+      padding: 0;
+      list-style: none;
+    }
+  
+    .location__item {
+      position: relative;
+      display: block;
+      width: 100%;
+      min-height: 2.75rem;
+      padding: 0.08em 0;
+      border: 0;
+      background: none;
+      font-family: var(--vv-font-display);
+      font-size: clamp(2rem, 1.9vw + 1.1rem, 3.25rem);
+      font-weight: 400;
+      line-height: 1.12;
+      text-align: left;
+      color: var(--loc-gold);
+      cursor: pointer;
+      transition: color var(--vv-duration-base) var(--vv-ease-out);
+    }
+  
+    /* Active marker: a thin rule beside the name (plus italic + colour) */
+    .location__item::before {
+      content: "";
+      position: absolute;
+      top: 0.22em;
+      bottom: 0.16em;
+      left: calc(-1 * clamp(0.625rem, 1vw, 1rem));
+      width: 1px;
+      background-color: var(--loc-green);
+      transform: scaleY(0);
+      transition: transform var(--vv-duration-base) var(--vv-ease-out);
+    }
+  
+    .location__item[aria-pressed="true"] {
+      font-style: italic;
+      color: var(--loc-green);
+    }
+  
+    .location__item[aria-pressed="true"]::before {
+      transform: scaleY(1);
+    }
+  
+    .location__item:hover {
+      color: var(--loc-green);
+    }
+  
+    /* Map ------------------------------------------------------------------- */
+    .location__map {
+      grid-area: map;
+      position: relative;
+      margin-top: clamp(1.5rem, 4vh, 2.5rem);
+    }
+  
+    .location__stage {
+      position: relative;
+      height: clamp(20rem, 62vw, 34rem);
+    }
+  
+    /* Map surface fades into the ivory on every side */
+    .location__canvas {
+      position: absolute;
+      inset: 0;
+      -webkit-mask-image: radial-gradient(ellipse 58% 54% at 52% 48%, #000 58%, transparent 100%);
+      mask-image: radial-gradient(ellipse 58% 54% at 52% 48%, #000 58%, transparent 100%);
+    }
+  
+    .location__svg,
+    .location__canvas canvas {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  
+    .location.has-webgl .location__svg {
+      display: none;
+    }
+  
+    .location__note {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      margin: 0;
+      font-size: 0.6875rem;
+      letter-spacing: 0.04em;
+      color: var(--loc-muted);
+    }
+  
+    /* Site badge (Vedvan) above the footprint */
+    .location__site {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: none;
+      transform: translate(var(--x, 0), var(--y, 0)) translate(-50%, -100%);
+    }
+  
+    .location__site-badge {
+      display: grid;
+      place-items: center;
+      width: clamp(1.75rem, 2.2vw, 2.25rem);
+      aspect-ratio: 1;
+      border-radius: 0.25rem;
+      background-color: var(--loc-green);
+    }
+  
+    .location__site-badge img {
+      width: 72%;
+      height: auto;
+    }
+  
+    .location__site::after {
+      content: "";
+      width: 1px;
+      height: clamp(0.75rem, 1.4vw, 1.25rem);
+      background-color: var(--loc-green);
+    }
+  
+    /* Markers: the button's anchor is the pin's foot on the map point */
+    .location__markers {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+  
+    .location__marker {
+      --pin: 1.5rem;
+      position: absolute;
+      top: 0;
+      left: 0;
+      min-width: 2.75rem;
+      min-height: 2.75rem;
+      padding: 0 0.375rem 0.375rem;
+      border: 0;
+      background: none;
+      color: var(--loc-gold-text);
+      cursor: pointer;
+      pointer-events: auto;
+      transform: translate(var(--x, 0), var(--y, 0)) translate(-50%, calc(-1 * var(--pin)));
+    }
+  
+    .location__marker-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .location__pin {
+      position: relative;
+      width: 0.875rem;
+      height: var(--pin);
+    }
+  
+    .location__pin::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0.875rem;
+      height: 0.875rem;
+      border-radius: 50%;
+      background-color: var(--loc-pin);
+      transition:
+        background-color var(--vv-duration-base) var(--vv-ease-out),
+        box-shadow var(--vv-duration-base) var(--vv-ease-out),
+        transform var(--vv-duration-base) var(--vv-ease-out);
+    }
+  
+    .location__pin::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      height: calc(var(--pin) - 0.875rem);
+      background-color: var(--loc-pin);
+      transition: background-color var(--vv-duration-base) var(--vv-ease-out);
+    }
+  
+    .location__label {
+      max-width: 7.5rem;
+      margin-top: 0.3rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      line-height: 1.25;
+      text-align: center;
+      white-space: nowrap;
+      text-shadow: 0 0 2px var(--loc-ivory), 0 0 6px var(--loc-ivory), 0 0 10px var(--loc-ivory);
+      transform: translateX(var(--nudge, 0));
+      transition: color var(--vv-duration-base) var(--vv-ease-out);
+    }
+  
+    .location__marker--left .location__label::before {
+      content: "← ";
+    }
+  
+    .location__marker--right .location__label::after {
+      content: " →";
+    }
+  
+    .location__marker:hover,
+    .location__marker.is-active {
+      color: var(--loc-green);
+    }
+  
+    .location__marker:hover .location__pin::before,
+    .location__marker.is-active .location__pin::before {
+      background-color: var(--loc-green);
+    }
+  
+    .location__marker:hover .location__pin::after,
+    .location__marker.is-active .location__pin::after {
+      background-color: var(--loc-green);
+    }
+  
+    /* Active is also shown by a ring and weight, not colour alone */
+    .location__marker.is-active .location__pin::before {
+      box-shadow: 0 0 0 0.3rem rgb(47 61 43 / 0.16);
+      transform: scale(1.12);
+    }
+  
+    .location__marker.is-active .location__label {
+      font-weight: 600;
+    }
+  
+    /* Floating preview (positioned by location.js) */
+    .location__preview {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 3;
+      width: clamp(8.5rem, 12vw, 12.5rem);
+      margin: 0;
+      pointer-events: none;
+    }
+  
+    .location__preview-frame {
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      border-radius: 0.75rem;
+      background-color: #ebe5d3;
+      box-shadow: 0 1.25rem 2.5rem -1.75rem rgb(35 46 32 / 0.45);
+      opacity: 0;
+      visibility: hidden;
+    }
+  
+    .location__preview-img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  
+    /* Details ---------------------------------------------------------------- */
+    .location__details {
+      grid-area: details;
+      margin-top: clamp(1.75rem, 4vh, 2.5rem);
+      padding-top: clamp(1.25rem, 3vh, 2rem);
+      border-top: 1px solid var(--loc-rule);
+    }
+  
+    .location__details-name {
+      margin: 0;
+      font-size: clamp(0.9375rem, 0.3vw + 0.85rem, 1.125rem);
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--loc-ink);
+    }
+  
+    .location__details-time {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: clamp(0.875rem, 2vh, 1.25rem) 0 0;
+      font-size: 1rem;
+      color: var(--loc-ink);
+    }
+  
+    .location__icon {
+      flex: none;
+      color: var(--loc-gold-text);
+    }
+  
+    .location__details-label {
+      font-size: 0.8125rem;
+      color: var(--loc-muted);
+    }
+  
+    .location__details-text {
+      max-width: 32rem;
+      margin: clamp(0.875rem, 2vh, 1.25rem) 0 0;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--loc-muted);
+    }
+  
+    /* Phone: preview in flow under the map ---------------------------------- */
+    @media (max-width: 47.99rem) {
+      .location__stage {
+        height: clamp(18rem, 92vw, 24rem);
+      }
+  
+      .location__label {
+        font-size: 0.6875rem;
+      }
+    }
+  
+    /* Desktop: two columns, map fills the right ------------------------------ */
+    @media (min-width: 64rem) {
+      .location {
+        grid-template-columns: minmax(0, 34fr) minmax(0, 66fr);
+        grid-template-rows: auto auto 1fr;
+        grid-template-areas: "intro map" "list map" "details map";
+        column-gap: clamp(1.5rem, 3vw, 3rem);
+        min-height: 100vh;
+        min-height: 100svh;
+        padding-top: calc(var(--vv-header-top) + var(--vv-nav-height) + clamp(2rem, 6vh, 4rem));
+      }
+  
+      .location__map {
+        margin: 0 calc(-1 * var(--vv-gutter)) 0 0;
+      }
+  
+      .location__stage {
+        position: absolute;
+        inset: 0;
+        height: auto;
+      }
+  
+      .location__details {
+        align-self: end;
+      }
+  
+      .location__note {
+        right: var(--vv-gutter);
+      }
+    }
+  
+    @media (prefers-reduced-motion: reduce) {
+      .location__item,
+      .location__item::before,
+      .location__pin::before,
+      .location__pin::after,
+      .location__label {
+        transition: none;
+      }
+    }
+  

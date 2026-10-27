@@ -16,6 +16,8 @@
   <link rel="stylesheet" href="css/home.style.css">
   <link rel="stylesheet" href="css/home.hero.css">
   <link rel="stylesheet" href="css/page-transition.css">
+  <link rel="stylesheet" href="css/location.css">
+
 
   <!-- Welcome intro once per session; a short reveal after an in-site page transition -->
   <script>
@@ -37,6 +39,16 @@
   <script src="js/home.animation.js" defer></script>
   <script src="js/home.hero.js" defer></script>
   <script src="js/page-transition.js" defer></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.min.js"
+      }
+    }
+  </script>
+  <script src="js/location.data.js" defer></script>
+  <script src="js/location.geometry.js" defer></script>
+  <script src="js/location.js" defer></script>
 </head>
 <body class="bg-white font-sans text-ink antialiased">
 
@@ -432,57 +444,108 @@
     </section>
 
     <!-- Section 10: Location & Connectivity -->
-    <section id="location" class="mx-auto max-w-[1440px] px-5 py-16 md:px-10 lg:py-[128px] xl:px-[88px]">
-      <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center lg:gap-x-8 xl:gap-x-12">
-        <div class="js-section-content flex flex-col items-start lg:col-span-5">
-          <p class="pb-3 text-xs font-semibold uppercase leading-4 tracking-[3px] text-gold">Location</p>
-          <h2 class="js-section-heading max-w-[464px] pb-6 font-display text-[30px] leading-[normal] text-night md:text-4xl">Away From the Rush. <span class="text-pine">Connected to What Matters.</span></h2>
-          <p class="max-w-[440px] pb-6 text-base font-light leading-6 text-[rgba(31,41,55,0.8)]">Vedvan brings together the calm of nature and the convenience of connectivity. Thoughtfully located to keep everyday destinations within reach while creating enough distance from the constant pace of city life, it offers a lifestyle where accessibility and tranquillity coexist.</p>
-          <p class="max-w-[464px] pb-8 text-xs font-semibold uppercase leading-4 tracking-[1.2px] text-gold">Stay connected to the city. Without carrying its chaos home.</p>
-          <a href="#" class="js-cta bg-gold px-7 py-4 text-xs font-semibold uppercase leading-4 text-night hover:bg-[#b8975a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-night">Explore location &amp; connectivity →</a>
+    <section
+    class="location"
+    id="location"
+    aria-labelledby="location-title"
+    data-location
+  >
+    <div class="location__intro">
+      <p class="location__eyebrow">Location &amp; Connectivity</p>
+      <h2 class="location__title" id="location-title">
+        Everything Within Reach
+      </h2>
+    </div>
+
+    <ul
+      class="location__list"
+      aria-label="Nearby destinations"
+      data-location-list
+    ></ul>
+
+    <div
+      class="location__map"
+      role="region"
+      aria-label="Schematic map of Vedvan and nearby destinations, not to scale"
+      data-location-map
+    >
+      <div class="location__stage" data-location-stage>
+        <div class="location__canvas" data-location-canvas>
+          <svg
+            class="location__svg"
+            aria-hidden="true"
+            focusable="false"
+            data-location-svg
+          ></svg>
         </div>
-
-        <div class="js-connectivity-map flex flex-col gap-8 rounded-3xl bg-white p-6 shadow-[0px_0px_20px_0px_rgba(0,0,0,0.18)] md:p-12 lg:col-span-7">
-          <div class="flex flex-col items-center gap-[6.5px] pt-[5.5px] text-center">
-            <p class="text-xs font-medium uppercase leading-4 tracking-[1.2px] text-[#6b7280]">Seamless regional mobility</p>
-            <h3 class="font-display text-2xl leading-[normal] text-night md:text-[28px]">Effortless Highway Access</h3>
-          </div>
-
-          <div class="relative flex flex-col gap-4 sm:block sm:h-[320px]">
-            <div class="relative flex h-[260px] items-center justify-center sm:absolute sm:inset-0 sm:h-auto">
-              <span class="absolute aspect-square w-[min(288px,100%)] rounded-full border border-dashed border-[#e8e1d3]" aria-hidden="true"></span>
-              <span class="absolute aspect-square w-[min(192px,66.67%)] rounded-full border border-dashed border-[rgba(197,160,89,0.3)]" aria-hidden="true"></span>
-              <div class="js-connectivity-hub relative flex size-24 flex-col items-center justify-center rounded-full border-2 border-[#c5a059] bg-pine p-0.5 shadow-[0px_20px_25px_-5px_rgba(0,0,0,0.1),0px_8px_10px_-6px_rgba(0,0,0,0.1)]">
-                <span class="relative mb-1 size-5" aria-hidden="true">
-                  <img src="assets/icons/hub-vector-1.svg" alt="" width="16" height="9" class="absolute left-[1.875px] top-[9.375px] h-[8.75px] w-[16.25px]">
-                  <img src="assets/icons/hub-vector-2.svg" alt="" width="1" height="16" class="absolute left-[9.375px] top-[1.875px] h-[16.25px] w-[1.25px]">
-                </span>
-                <span class="font-inter text-xs font-bold uppercase leading-4 tracking-[0.6px] text-white">VEDVAN</span>
-              </div>
-            </div>
-
-            <ul class="grid grid-cols-1 gap-2 min-[400px]:grid-cols-2 sm:contents" aria-label="Travel times from Vedvan">
-              <li class="js-destination-badge flex items-center gap-2.5 rounded-xl border border-[rgba(166,127,56,0.3)] bg-[#faf7f0] p-3 shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.1),0px_2px_4px_-2px_rgba(0,0,0,0.1)] sm:absolute sm:left-8 sm:top-4">
-                <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-night font-jakarta text-xs font-bold leading-4 text-[#c5a059]" aria-hidden="true">D</span>
-                <span class="flex min-w-0 flex-col font-inter"><span class="text-xs font-bold leading-4 text-night">Delhi</span><span class="text-[10px] font-semibold leading-[15px] text-[#a67f38]">~30 mins drive</span></span>
-              </li>
-              <li class="js-destination-badge flex items-center gap-2.5 rounded-xl border border-[rgba(166,127,56,0.3)] bg-[#faf7f0] p-3 shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.1),0px_2px_4px_-2px_rgba(0,0,0,0.1)] sm:absolute sm:right-8 sm:top-4">
-                <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-night font-jakarta text-xs font-bold leading-4 text-[#c5a059]" aria-hidden="true">G</span>
-                <span class="flex min-w-0 flex-col font-inter"><span class="text-xs font-bold leading-4 text-night">Ghaziabad</span><span class="text-[10px] font-semibold leading-[15px] text-[#a67f38]">~20 mins drive</span></span>
-              </li>
-              <li class="js-destination-badge flex items-center gap-2.5 rounded-xl border border-[rgba(166,127,56,0.3)] bg-[#faf7f0] p-3 shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.1),0px_2px_4px_-2px_rgba(0,0,0,0.1)] sm:absolute sm:bottom-4 sm:left-8">
-                <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-night font-jakarta text-xs font-bold leading-4 text-[#c5a059]" aria-hidden="true">N</span>
-                <span class="flex min-w-0 flex-col font-inter"><span class="text-xs font-bold leading-4 text-night">Noida</span><span class="text-[10px] font-semibold leading-[15px] text-[#a67f38]">~30 mins drive</span></span>
-              </li>
-              <li class="js-destination-badge flex items-center gap-2.5 rounded-xl border border-[rgba(166,127,56,0.3)] bg-[#faf7f0] p-3 shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.1),0px_2px_4px_-2px_rgba(0,0,0,0.1)] sm:absolute sm:bottom-4 sm:right-8">
-                <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-night font-jakarta text-xs font-bold leading-4 text-[#c5a059]" aria-hidden="true">E</span>
-                <span class="flex min-w-0 flex-col font-inter"><span class="text-xs font-bold leading-4 text-night">Delhi-Meerut Exp.</span><span class="text-[10px] font-semibold leading-[15px] text-[#a67f38]">Direct Corridor</span></span>
-              </li>
-            </ul>
-          </div>
+        <div class="location__site" aria-hidden="true" data-location-site>
+          <span class="location__site-badge"
+            ><img
+              src="assets/home/logos/vedvan_icon.png"
+              alt=""
+              width="150"
+              height="122"
+              decoding="async"
+          /></span>
         </div>
+        <div class="location__markers" data-location-markers></div>
+        <p class="location__note">Illustrative map · not to scale</p>
       </div>
-    </section>
+      <figure class="location__preview" data-location-preview>
+        <div class="location__preview-frame" data-location-preview-frame>
+          <img
+            class="location__preview-img"
+            alt=""
+            width="800"
+            height="600"
+            decoding="async"
+            fetchpriority="low"
+            data-location-preview-img
+          />
+        </div>
+      </figure>
+    </div>
+
+    <div
+      class="location__details"
+      id="location-details"
+      aria-live="polite"
+      data-location-details
+    >
+      <div class="location__details-inner" data-location-details-inner>
+        <h3 class="location__details-name" data-location-name></h3>
+        <p class="location__details-time">
+          <svg
+            class="location__icon"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="8.5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+            />
+            <path
+              d="M12 7.5V12l3 2"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.3"
+              stroke-linecap="round"
+            />
+          </svg>
+          <span data-location-time></span>
+          <span class="location__details-label">travel time</span>
+        </p>
+        <p class="location__details-text" data-location-description></p>
+      </div>
+    </div>
+  </section>
 
     <!-- Section 11: Request a Private Visit -->
     <section id="private-visit" class="relative isolate overflow-hidden px-5 py-16 md:px-10 lg:min-h-[758px] lg:pb-[165px] lg:pt-[79px]">
