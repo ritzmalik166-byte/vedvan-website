@@ -104,8 +104,6 @@
       clamp(4.5rem, 10vh, 7rem)
       var(--vv-gutter)
       clamp(3.5rem, 8vh, 5.5rem);
-    background-color: var(--loc-ivory);
-    color: var(--loc-ink);
     font-family: var(--loc-font-body);
   }
   
@@ -126,17 +124,16 @@
     font-weight: 500;
     letter-spacing: var(--vv-tracking-eyebrow);
     text-transform: uppercase;
-    color: var(--loc-ink);
   }
   
   .location__title {
     margin: clamp(0.75rem, 1.8vh, 1.25rem) 0 0;
     font-family: var(--loc-font-title);
-    font-size: clamp(2.125rem, 2.6vw + 1rem, 3.5rem);
+    font-size: clamp(2.125rem, 1.6vw + 1rem, 3.5rem);
     font-weight: 400;
     line-height: 1.05;
     letter-spacing: -0.01em;
-    color: var(--loc-green);
+    color: black;
   }
   
   /* Destination list ----------------------------------------------------- */
@@ -155,14 +152,12 @@
     padding: 0.08em 0;
     border: 0;
     background: none;
-    font-family: var(--loc-font-title);
-    font-size: clamp(2rem, 0.9vw + 1.1rem, 3.25rem);
+    font-family: var(--loc-font-body);
+    font-size:clamp(1.8rem, 0.5vw + 1.1rem, 3.25rem);
     font-weight: 400;
     line-height: 1.12;
     text-align: left;
-    color: var(--loc-gold);
     cursor: pointer;
-    transition: color var(--vv-duration-base) var(--vv-ease-out);
   }
   
   /* Active marker: a thin rule beside the name (plus italic + colour) */
@@ -173,14 +168,14 @@
     bottom: 0.16em;
     left: calc(-1 * clamp(0.625rem, 1vw, 1rem));
     width: 1px;
-    background-color: var(--loc-green);
+    background-color:black;
     transform: scaleY(0);
     transition: transform var(--vv-duration-base) var(--vv-ease-out);
   }
   
   .location__item[aria-pressed="true"] {
-    font-style: italic;
-    color: var(--loc-green);
+   
+    color: black;
   }
   
   .location__item[aria-pressed="true"]::before {
@@ -422,7 +417,6 @@
     font-weight: 400;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--loc-ink);
   }
   
   .location__details-time {
@@ -432,7 +426,6 @@
     margin: clamp(0.875rem, 2vh, 1.25rem) 0 0;
     font-family: var(--loc-font-body);
     font-size: 1rem;
-    color: var(--loc-ink);
   }
   
   .location__icon {
