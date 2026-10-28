@@ -181,29 +181,94 @@
     footer: { start: "top 90%", y: 60, blur: 10, duration: 1.2, ease: "power3.out" },
   };
 
-  const ELEMENT_SLIDES = [
-    {
-      number: "01",
-      title: "Earth",
-      tagline: "The Art of Being Grounded.",
-      description: "A connection to the soil, greenery and natural surroundings that brings us closer to our roots.",
-      image: { src: "assets/images/earth-mountains.jpg", alt: "Mist rolling over lush green mountain valleys", width: 2880, height: 1614 },
+ 
+const ELEMENT_SLIDES = [
+  {
+    number: "01",
+    title: "Earth",
+    tagline: "The Art of Being Grounded.",
+    description: "A connection to the soil, greenery and natural surroundings that brings us closer to our roots.",
+    image: {
+      desktop: {
+        src: "assets/updates/earth_desktop.jpg",
+        width: 2880,
+        height: 1614,
+      },
+      tablet: {
+        src: "assets/updates/earth_tab.jpg",
+        width: 0,
+        height: 0,
+      },
+      mobile: {
+        src: "assets/updates/earth_mobile.jpg",
+        width: 0,
+        height: 0,
+      },
+      alt: "Mist rolling over lush green mountain valleys",
     },
-    {
-      number: "02",
-      title: "Water",
-      tagline: "The Art of Finding Flow.",
-      description: "Discover a calmer rhythm through flowing water, mindful living and a deeper connection with nature.",
-      image: { src: "assets/images/experience-water-bodies.jpg", alt: "A still forest river edged with lotus leaves and tall grass", width: 928, height: 1152 },
+  },
+  {
+    number: "02",
+    title: "Water",
+    tagline: "The Art of Finding Flow.",
+    description: "Discover a calmer rhythm through flowing water, mindful living and a deeper connection with nature.",
+    image: {
+      desktop: {
+        src: "assets/updates/water_desktop.jpg",
+        width: 928,
+        height: 1152,
+      },
+      tablet: {
+        src: "assets/updates/water_tab.jpg",
+        width: 0,
+        height: 0,
+      },
+      mobile: {
+        src: "assets/updates/water_mobile.jpg",
+        width: 0,
+        height: 0,
+      },
+      alt: "A still forest river edged with lotus leaves and tall grass",
     },
-    {
-      number: "03",
-      title: "Air",
-      tagline: "The Art of Breathing Freely.",
-      description: "Reconnect with open skies, fresh air and the quiet balance of a life shaped by nature.",
-      image: { src: "assets/images/air-mountain-sky.jpg", alt: "Mountain peaks under an open sky with soft drifting clouds", width: 2400, height: 1600 },
+  },
+  {
+    number: "03",
+    title: "Air",
+    tagline: "The Art of Breathing Freely.",
+    description: "Reconnect with open skies, fresh air and the quiet balance of a life shaped by nature.",
+    image: {
+      desktop: {
+        src: "assets/updates/air_desktop.jpg",
+        width: 2400,
+        height: 1600,
+      },
+      tablet: {
+        src: "assets/updates/air_tab.jpg",
+        width: 0,
+        height: 0,
+      },
+      mobile: {
+        src: "assets/updates/air_mobile.jpg",
+        width: 0,
+        height: 0,
+      },
+      alt: "Mountain peaks under an open sky with soft drifting clouds",
     },
-  ];
+  },
+];
+
+function getResponsiveElementImage(image) {
+  const isMobile = window.matchMedia("(max-width: 767.98px)").matches;
+  const isTablet = window.matchMedia(
+    "(min-width: 768px) and (max-width: 1023.98px)"
+  ).matches;
+
+  if (isMobile) return image.mobile;
+  if (isTablet) return image.tablet;
+
+  return image.desktop;
+}
+
 
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let lenis = null;
@@ -657,20 +722,46 @@
     });
   }
 
+
   function applyElementSlide(scope, slide) {
     const set = (selector, apply) => {
       const el = scope.querySelector(selector);
       if (el) apply(el);
     };
-    set(".js-element-number", (el) => { el.textContent = slide.number; });
-    set(".js-element-name", (el) => { el.textContent = slide.title; });
-    set(".js-element-tagline", (el) => { el.textContent = slide.tagline; });
-    set(".js-element-description", (el) => { el.textContent = slide.description; });
+  
+    set(".js-element-number", (el) => {
+      el.textContent = slide.number;
+    });
+  
+    set(".js-element-name", (el) => {
+      el.textContent = slide.title;
+    });
+  
+    set(".js-element-tagline", (el) => {
+      el.textContent = slide.tagline;
+    });
+  
+    set(".js-element-description", (el) => {
+      el.textContent = slide.description;
+    });
+  
     set(".js-element-image", (el) => {
-      const { src, alt, width, height } = slide.image;
-      Object.assign(el, { src, alt, width, height });
+      const image = getResponsiveElementImage(slide.image);
+  
+      el.src = image.src;
+      el.alt = slide.image.alt;
+  
+      // Let the browser calculate the correct responsive dimensions.
+      if (image.width && image.height) {
+        el.width = image.width;
+        el.height = image.height;
+      } else {
+        el.removeAttribute("width");
+        el.removeAttribute("height");
+      }
     });
   }
+  
 
   // Without GSAP the Water and Air slides follow Earth as static sections.
   function renderStaticElementSlides(section) {
@@ -721,14 +812,29 @@
       el.style.visibility = "hidden";
       el.setAttribute("aria-hidden", "true");
     });
-    const images = ELEMENT_SLIDES.map((slide, k) => {
-      if (!k) return image;
-      const layer = image.cloneNode(true);
-      const { src, alt, width, height } = slide.image;
-      Object.assign(layer, { src, alt, width, height });
-      image.parentNode.appendChild(layer);
-      return layer;
-    });
+   
+const images = ELEMENT_SLIDES.map((slide, k) => {
+  const layer = k === 0 ? image : image.cloneNode(true);
+  const responsiveImage = getResponsiveElementImage(slide.image);
+
+  layer.src = responsiveImage.src;
+  layer.alt = slide.image.alt;
+
+  if (responsiveImage.width && responsiveImage.height) {
+    layer.width = responsiveImage.width;
+    layer.height = responsiveImage.height;
+  } else {
+    layer.removeAttribute("width");
+    layer.removeAttribute("height");
+  }
+
+  if (k !== 0) {
+    image.parentNode.appendChild(layer);
+  }
+
+  return layer;
+});
+
 
     // Cards sit inside the panel, so its percentage paddings would resolve differently; copy the used values
     const syncCardPadding = () => {
