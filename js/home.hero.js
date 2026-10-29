@@ -112,3 +112,109 @@
   initVideo();
   initIntro();
 })();
+
+/* Responsive Hero Video */
+
+(() => {
+  const heroVideo = document.querySelector("[data-hero-video]");
+  const soundButton = document.querySelector("[data-hero-sound]");
+  const mutedIcon = document.querySelector("[data-sound-muted-icon]");
+  const soundOnIcon = document.querySelector("[data-sound-on-icon]");
+
+  if (!heroVideo) return;
+
+  const videoSources = {
+    desktop:
+      "https://contenaissance.blob.core.windows.net/ct-assets/VEDVAN%20%20Walkthrough%20Final%201440%20x%20797%20(2).mp4",
+
+    tablet:
+      "https://contenaissance.blob.core.windows.net/ct-assets/Vedvan%2012sep%20Video%20768px%20-%20797px%2001.mp4",
+
+    mobile:
+      "https://contenaissance.blob.core.windows.net/ct-assets/Vedvan%2012sep%20Video%20375px%20-%20797px%2001.mp4",
+  };
+
+  let currentSource = "";
+
+  const getVideoSource = () => {
+    const width = window.innerWidth;
+
+    if (width >= 1024) return videoSources.desktop;
+    if (width >= 768) return videoSources.tablet;
+
+    return videoSources.mobile;
+  };
+
+  // Update sound button appearance and accessibility state.
+  const updateSoundButton = () => {
+    if (!soundButton) return;
+
+    const isMuted = heroVideo.muted;
+
+    soundButton.setAttribute(
+      "aria-label",
+      isMuted ? "Unmute video" : "Mute video"
+    );
+
+    soundButton.setAttribute(
+      "aria-pressed",
+      String(!isMuted)
+    );
+
+    if (mutedIcon) {
+      mutedIcon.classList.toggle("hidden", !isMuted);
+    }
+
+    if (soundOnIcon) {
+      soundOnIcon.classList.toggle("hidden", isMuted);
+    }
+  };
+
+  // Start muted by default.
+  heroVideo.muted = true;
+  heroVideo.defaultMuted = true;
+
+  const updateHeroVideo = () => {
+    const newSource = getVideoSource();
+
+    if (currentSource === newSource) return;
+
+    currentSource = newSource;
+
+    heroVideo.src = newSource;
+    heroVideo.load();
+
+    const playPromise = heroVideo.play();
+
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        // Browser autoplay restrictions may prevent playback.
+      });
+    }
+  };
+
+  // Toggle mute/unmute when the sound button is clicked.
+  if (soundButton) {
+    soundButton.addEventListener("click", () => {
+      heroVideo.muted = !heroVideo.muted;
+      updateSoundButton();
+
+      // Ensure playback continues after the interaction.
+      if (heroVideo.paused) {
+        heroVideo.play().catch(() => {});
+      }
+    });
+  }
+
+  // Set the correct video on page load.
+  updateHeroVideo();
+  updateSoundButton();
+
+  // Switch video when crossing responsive breakpoints.
+  window.addEventListener("resize", updateHeroVideo, {
+    passive: true,
+  });
+
+  // Keep the icon in sync if mute state changes elsewhere.
+  heroVideo.addEventListener("volumechange", updateSoundButton);
+})();
