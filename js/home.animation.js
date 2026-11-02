@@ -190,17 +190,17 @@ const ELEMENT_SLIDES = [
     description: "A connection to the soil, greenery and natural surroundings that brings us closer to our roots.",
     image: {
       desktop: {
-        src: "assets/updates/earth_desktop.jpg",
+        src: "assets/updates/earthD.jpg",
         width: 2880,
         height: 1614,
       },
       tablet: {
-        src: "assets/updates/earth_tab.jpg",
+        src: "assets/updates/earthT.jpg",
         width: 0,
         height: 0,
       },
       mobile: {
-        src: "assets/updates/earth_mobile.jpg",
+        src: "assets/updates/earthM.jpg",
         width: 0,
         height: 0,
       },
@@ -214,17 +214,17 @@ const ELEMENT_SLIDES = [
     description: "Discover a calmer rhythm through flowing water, mindful living and a deeper connection with nature.",
     image: {
       desktop: {
-        src: "assets/updates/water_desktop.jpg",
+        src: "assets/updates/waterD2.jpg",
         width: 928,
         height: 1152,
       },
       tablet: {
-        src: "assets/updates/water_tab.jpg",
+        src: "assets/updates/waterT.jpg",
         width: 0,
         height: 0,
       },
       mobile: {
-        src: "assets/updates/water_mobile.jpg",
+        src: "assets/updates/waterM.jpg",
         width: 0,
         height: 0,
       },
@@ -238,17 +238,17 @@ const ELEMENT_SLIDES = [
     description: "Reconnect with open skies, fresh air and the quiet balance of a life shaped by nature.",
     image: {
       desktop: {
-        src: "assets/updates/air_desktop.jpg",
+        src: "assets/updates/airD.jpg",
         width: 2400,
         height: 1600,
       },
       tablet: {
-        src: "assets/updates/air_tab.jpg",
+        src: "assets/updates/airT.jpg",
         width: 0,
         height: 0,
       },
       mobile: {
-        src: "assets/updates/air_mobile.jpg",
+        src: "assets/updates/airM.jpg",
         width: 0,
         height: 0,
       },
@@ -813,27 +813,56 @@ function getResponsiveElementImage(image) {
       el.setAttribute("aria-hidden", "true");
     });
    
-const images = ELEMENT_SLIDES.map((slide, k) => {
-  const layer = k === 0 ? image : image.cloneNode(true);
-  const responsiveImage = getResponsiveElementImage(slide.image);
+// ---- Replace the existing `const images = ELEMENT_SLIDES.map(...)` block with this ----
 
-  layer.src = responsiveImage.src;
-  layer.alt = slide.image.alt;
+    // A <picture>'s <source> tags (and any srcset) override img.src, so layers would never change.
+    // Use a plain <img>: JS already picks the right file per breakpoint.
+    const picture = image.closest("picture");
+    if (picture) picture.replaceWith(image);
 
-  if (responsiveImage.width && responsiveImage.height) {
-    layer.width = responsiveImage.width;
-    layer.height = responsiveImage.height;
-  } else {
-    layer.removeAttribute("width");
-    layer.removeAttribute("height");
-  }
+    const host = image.parentElement;
+    if (getComputedStyle(host).position === "static") host.style.position = "relative";
 
-  if (k !== 0) {
-    image.parentNode.appendChild(layer);
-  }
+    // If the original image is not already absolutely positioned, the clones must overlay it,
+    // otherwise they stack below it in normal flow and z-index has no effect.
+    const overlay = getComputedStyle(image).position !== "absolute";
 
-  return layer;
-});
+    const images = ELEMENT_SLIDES.map((slide, k) => {
+      const layer = k === 0 ? image : image.cloneNode(true);
+      const responsiveImage = getResponsiveElementImage(slide.image);
+
+      layer.removeAttribute("srcset");
+      layer.removeAttribute("sizes");
+      layer.loading = "eager"; // hidden layers must still load before they spread in
+      layer.src = responsiveImage.src;
+      layer.alt = slide.image.alt;
+
+      if (responsiveImage.width && responsiveImage.height) {
+        layer.width = responsiveImage.width;
+        layer.height = responsiveImage.height;
+      } else {
+        layer.removeAttribute("width");
+        layer.removeAttribute("height");
+      }
+
+      if (k === 0) {
+        // Stays in flow (it sizes the container on mobile) but must be positioned so z-index applies
+        if (overlay) layer.style.position = "relative";
+      } else {
+        if (overlay) {
+          Object.assign(layer.style, {
+            position: "absolute",
+            inset: "0",
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          });
+        }
+        host.appendChild(layer);
+      }
+
+      return layer;
+    });
 
 
     // Cards sit inside the panel, so its percentage paddings would resolve differently; copy the used values
