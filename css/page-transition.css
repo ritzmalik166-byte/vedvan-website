@@ -96,7 +96,7 @@ html.is-transitioning {
   display: block;
   width: clamp(64px, 12vw, 96px);
   height: 1px;
-  background: linear-gradient(90deg, rgba(201, 168, 106, 0), #c9a86a, rgba(201, 168, 106, 0));
+  background: linear-gradient(90deg, rgba(201, 168, 106, 0), #b6a96e, rgba(201, 168, 106, 0));
 }
 
 /* Intro starts with the brand hidden; GSAP reveals it */

@@ -85,10 +85,10 @@
     --loc-ink: #232e20;
     --loc-green: var(--vv-forest-700);
     --loc-gold: #a07a45;
-    --loc-gold-text: #8a6a3d;
-    --loc-pin: #ae8752;
+    --loc-gold-text: #b6a96e;
+    --loc-pin: #b6a96e;
     --loc-rule: rgb(174 135 82 / 0.32);
-    --loc-muted: #5c5a4e;
+    --loc-muted: #02391a;
   
     /* Font stacks */
     --loc-font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
