@@ -74,7 +74,7 @@
   }
   
   .location {
-    --vv-forest-700: #2f3d2b;
+    --vv-forest-700: #b6a96e;
     --vv-tracking-eyebrow: 0.18em;
     --vv-gutter: clamp(1.25rem, 4vw, 3rem);
     --vv-header-top: 0px;
@@ -133,7 +133,7 @@
     font-weight: 400;
     line-height: 1.05;
     letter-spacing: -0.01em;
-    color: black;
+    color: #02391A;
   }
   
   /* Destination list ----------------------------------------------------- */
@@ -168,14 +168,14 @@
     bottom: 0.16em;
     left: calc(-1 * clamp(0.625rem, 1vw, 1rem));
     width: 1px;
-    background-color:black;
+    background-color:#02391A;
     transform: scaleY(0);
     transition: transform var(--vv-duration-base) var(--vv-ease-out);
   }
   
   .location__item[aria-pressed="true"] {
    
-    color: black;
+    color: #02391A;
   }
   
   .location__item[aria-pressed="true"]::before {
