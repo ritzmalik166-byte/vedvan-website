@@ -153,11 +153,11 @@
             </li>
           </ul>
           <a
-          href="#private-visit"
-          class="js-header-cta bg-gold px-7 py-[10.5px] text-base font-semibold leading-[normal] text-white"
-      >
-          PRIVATE VISIT
-      </a>
+            href="#private-visit"
+            class="js-header-cta bg-gold px-7 py-[10.5px] text-base font-semibold leading-[normal] text-white"
+          >
+            PRIVATE VISIT
+          </a>
         </nav>
 
         <button
@@ -226,71 +226,59 @@
           ></div>
         </div>
 
-      
+        <!-- Sound Toggle Button -->
+        <button
+          type="button"
+          data-hero-sound
+          aria-label="Unmute video"
+          aria-pressed="false"
+          style="
+            position: fixed !important;
+            right: 20px !important;
+            bottom: 24px !important;
+            left: auto !important;
+            top: auto !important;
+            transform: none;
+            margin: 0 !important;
+          "
+          class="z-[9999] flex h-12 w-12 items-center justify-center transition-colors duration-300 hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+        >
+          <!-- Muted Icon -->
+          <svg
+            data-sound-muted-icon
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="h-5 w-5"
+            aria-hidden="true"
+          >
+            <path d="M11 5 6 9H2v6h4l5 4V5Z" />
+            <line x1="23" y1="9" x2="17" y2="15" />
+            <line x1="17" y1="9" x2="23" y2="15" />
+          </svg>
 
-
-<!-- Sound Toggle Button -->
-<button
-  type="button"
-  data-hero-sound
-  aria-label="Unmute video"
-  aria-pressed="false"
-  style="
-    position: fixed !important;
-    right: 20px !important;
-    bottom: 24px !important;
-    left: auto !important;
-    top: auto !important;
-    transform: none;
-    margin: 0 !important;
-  "
-  class="z-[9999] flex h-12 w-12
-         items-center justify-center
-       
-         transition-colors duration-300
-         hover:bg-white/20
-         focus-visible:outline-none
-         focus-visible:ring-2 focus-visible:ring-white"
->
-  <!-- Muted Icon -->
-  <svg
-    data-sound-muted-icon
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.7"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    class="h-5 w-5"
-    aria-hidden="true"
-  >
-    <path d="M11 5 6 9H2v6h4l5 4V5Z"/>
-    <line x1="23" y1="9" x2="17" y2="15"/>
-    <line x1="17" y1="9" x2="23" y2="15"/>
-  </svg>
-
-  <!-- Unmuted Icon -->
-  <svg
-    data-sound-on-icon
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.7"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    class="hidden h-5 w-5"
-    aria-hidden="true"
-  >
-    <path d="M11 5 6 9H2v6h4l5 4V5Z"/>
-    <path d="M15.5 8.5a5 5 0 0 1 0 7"/>
-    <path d="M19 5a10 10 0 0 1 0 14"/>
-  </svg>
-</button>
-
-
-
+          <!-- Unmuted Icon -->
+          <svg
+            data-sound-on-icon
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="hidden h-5 w-5"
+            aria-hidden="true"
+          >
+            <path d="M11 5 6 9H2v6h4l5 4V5Z" />
+            <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+            <path d="M19 5a10 10 0 0 1 0 14" />
+          </svg>
+        </button>
       </section>
 
       <!-- Section 02: Intro — A Life Rooted in Nature -->
@@ -487,99 +475,103 @@
         </div>
       </section>
 
- <!-- Section 04: Elements — Earth, Water, Air (Water and Air slides are added by js/home.animation.js) -->
- <section
- id="elements"
- class="js-elements relative isolate flex flex-col overflow-hidden lg:block lg:h-[620px] xl:h-[750px]"
- aria-label="The elements of Vedvan"
->
- <!-- LEFT SIDE: text panel. On mobile/tablet it shows first (above the image); on desktop it is the left 43.21% column.
+      <!-- Section 04: Elements — Earth, Water, Air (Water and Air slides are added by js/home.animation.js) -->
+      <section
+        id="elements"
+        class="js-elements relative isolate flex flex-col overflow-hidden lg:block lg:h-[620px] xl:h-[750px]"
+        aria-label="The elements of Vedvan"
+      >
+        <!-- LEFT SIDE: text panel. On mobile/tablet it shows first (above the image); on desktop it is the left 43.21% column.
       The panel's % paddings are divided by 0.4321 so they still equal 6.94% / 2.08% of the full section width. -->
- <div
-   class="elements-left order-first flex flex-col lg:absolute lg:inset-y-0 lg:left-0 lg:w-[43.21%]"
- >
-   <div
-     class="js-element-panel flex flex-col bg-linear-to-b from-[#155c35] to-[#0c1611] px-6 py-14 text-white sm:px-10 lg:absolute lg:inset-0 lg:justify-end lg:pb-[96px] lg:pl-[calc(6.94%/0.4321)] lg:pr-[calc(2.08%/0.4321)] lg:pt-0"
-   >
-     <div
-       class="js-element-title relative mx-auto h-[211px] w-[240.3px] shrink-0"
-     >
-       <span
-         class="mask-earth-glyph absolute left-[6.3px] top-0 h-[106.23px] w-[110.27px] bg-white"
-         aria-hidden="true"
-       ></span>
-       <span
-         class="js-element-number absolute left-0 top-[144px] font-montserrat text-[54.78px] font-semibold leading-[normal] text-[#8bb39d] opacity-60"
-         aria-hidden="true"
-         >01</span
-       >
-       <span
-         class="absolute left-[61.3px] top-[153px] flex size-[39.35px] items-center justify-center"
-         aria-hidden="true"
-       >
-         <img
-           src="assets/icons/title-separator.svg"
-           alt=""
-           width="30"
-           height="30"
-           class="size-[29.35px] rotate-[26.45deg]"
-         />
-       </span>
-       <h2
-         class="js-element-name absolute left-[104.3px] top-[126px] whitespace-nowrap text-[56.74px] font-semibold leading-[70.44px]"
-       >
-         Earth
-       </h2>
-     </div>
+        <div
+          class="elements-left order-first flex flex-col lg:absolute lg:inset-y-0 lg:left-0 lg:w-[43.21%]"
+        >
+          <div
+            class="js-element-panel flex flex-col bg-linear-to-b from-[#155c35] to-[#0c1611] px-6 py-14 text-white sm:px-10 lg:absolute lg:inset-0 lg:justify-end lg:pb-[96px] lg:pl-[calc(6.94%/0.4321)] lg:pr-[calc(2.08%/0.4321)] lg:pt-0"
+          >
+            <div
+              class="js-element-title relative mx-auto h-[211px] w-[240.3px] shrink-0"
+            >
+              <span
+                class="mask-earth-glyph absolute left-[6.3px] top-0 h-[106.23px] w-[110.27px] bg-white"
+                aria-hidden="true"
+              ></span>
+              <span
+                class="js-element-number absolute left-0 top-[144px] font-montserrat text-[54.78px] font-semibold leading-[normal] text-[#8bb39d] opacity-60"
+                aria-hidden="true"
+                >01</span
+              >
+              <span
+                class="absolute left-[61.3px] top-[153px] flex size-[39.35px] items-center justify-center"
+                aria-hidden="true"
+              >
+                <img
+                  src="assets/icons/title-separator.svg"
+                  alt=""
+                  width="30"
+                  height="30"
+                  class="size-[29.35px] rotate-[26.45deg]"
+                />
+              </span>
+              <h2
+                class="js-element-name absolute left-[104.3px] top-[126px] whitespace-nowrap text-[56.74px] font-semibold leading-[70.44px]"
+              >
+                Earth
+              </h2>
+            </div>
 
-     <div
-       class="js-section-content mt-12 grid w-full max-w-[466px] lg:mt-20"
-     >
-       <div
-         class="js-element-text flex flex-col gap-[13.78px] [grid-area:1/1]"
-       >
-         <p class="js-element-tagline text-lg font-bold leading-[normal]">
-           The Art of Being Grounded.
-         </p>
-         <p class="js-element-description text-base leading-[22px]">
-           A connection to the soil, greenery and natural surroundings that
-           brings us closer to our roots.
-         </p>
-       </div>
-     </div>
+            <div
+              class="js-section-content mt-12 grid w-full max-w-[466px] lg:mt-20"
+            >
+              <div
+                class="js-element-text flex flex-col gap-[13.78px] [grid-area:1/1]"
+              >
+                <p
+                  class="js-element-tagline text-lg font-bold leading-[normal]"
+                >
+                  The Art of Being Grounded.
+                </p>
+                <p class="js-element-description text-base leading-[22px]">
+                  A connection to the soil, greenery and natural surroundings
+                  that brings us closer to our roots.
+                </p>
+              </div>
+            </div>
 
-     <div
-       class="js-element-dots mt-8 flex gap-[11.74px]"
-       aria-hidden="true"
-     >
-       <span class="element-dot is-active"></span>
-       <span class="element-dot"></span>
-       <span class="element-dot"></span>
-     </div>
-   </div>
- </div>
+            <div
+              class="js-element-dots mt-8 flex gap-[11.74px]"
+              aria-hidden="true"
+            >
+              <span class="element-dot is-active"></span>
+              <span class="element-dot"></span>
+              <span class="element-dot"></span>
+              <span class="element-dot"></span>
+              <span class="element-dot"></span>
+            </div>
+          </div>
+        </div>
 
- <!-- RIGHT SIDE: image. On mobile/tablet it sits below the panel; on desktop it is the right 56.79% column.
+        <!-- RIGHT SIDE: image. On mobile/tablet it sits below the panel; on desktop it is the right 56.79% column.
       The photo layer is widened (100% / 0.5679) to the full section width, behind the left panel exactly
       as before, so the image crop and the water-spread transition stay unchanged. -->
- <div
-   class="elements-right shrink-0 lg:absolute lg:inset-y-0 lg:right-0 lg:w-[56.79%]"
- >
-   <div
-   style="width: 100%; height: 100%;"
-     class="js-element-media relative shrink-0 overflow-hidden  lg:absolute lg:inset-y-0 lg:right-0 lg:-z-10 h-full ]"
-   >
-     <img
-       src="assets/updates/earthD.jpg"
-       alt="Mist rolling over lush green mountain valleys"
-       width="2880"
-       height="1614"
-       loading="lazy"
-       class="js-element-image absolute inset-0 size-full object-cover"
-     />
-   </div>
- </div>
-</section>
+        <div
+          class="elements-right shrink-0 lg:absolute lg:inset-y-0 lg:right-0 lg:w-[56.79%]"
+        >
+          <div
+            style="width: 100%; height: 100%"
+            class="js-element-media relative shrink-0 overflow-hidden lg:absolute lg:inset-y-0 lg:right-0 lg:-z-10 h-full ]"
+          >
+            <img
+              src="assets/updates/earthD.jpg"
+              alt="Mist rolling over lush green mountain valleys"
+              width="2880"
+              height="1614"
+              loading="lazy"
+              class="js-element-image absolute inset-0 size-full object-cover"
+            />
+          </div>
+        </div>
+      </section>
 
       <!-- Section 05: Philosophy of Living -->
       <section
@@ -589,7 +581,7 @@
         <h2
           class="js-section-heading font-display text-[30px] leading-[1.3] text-black md:text-[38px] md:leading-[50px] lg:pl-[7px] text-forest"
         >
-        THE WELLNESS PHILOSOPHY
+          THE WELLNESS PHILOSOPHY
         </h2>
 
         <div class="js-philosophy-stage relative mt-8 lg:mt-[63px]">
@@ -613,7 +605,7 @@
             <h3
               class="pb-[31px] pt-[25px] font-display text-[28px] leading-[1.4] text-ink md:text-4xl md:leading-[58px]"
             >
-            Wellness Begins Before You Need It.
+              Wellness Begins Before You Need It.
             </h3>
 
             <div
@@ -664,16 +656,19 @@
             <p
               class="pb-[27px] pt-7 text-[16px] leading-8 text-black/60 md:text-[17px] md:leading-10"
             >
-            Well-being is not merely about addressing discomfort. It is about cultivating habits and surroundings that support a healthier, more balanced life.
-            Rooted in the philosophy of preventive living, Vedvan draws inspiration from ancient wellness traditions and contemporary approaches to mindful living.
-            From the restorative principles of Ayurveda and Panchakarma to the calming experiences of sound therapy, yoga and nature immersion, every inspiration reflects a simple belief:
-            
+              Well-being is not merely about addressing discomfort. It is about
+              cultivating habits and surroundings that support a healthier, more
+              balanced life. Rooted in the philosophy of preventive living,
+              Vedvan draws inspiration from ancient wellness traditions and
+              contemporary approaches to mindful living. From the restorative
+              principles of Ayurveda and Panchakarma to the calming experiences
+              of sound therapy, yoga and nature immersion, every inspiration
+              reflects a simple belief:
             </p>
             <p
               class="font-display text-[22px] leading-9 text-forest md:text-[24.5px]"
             >
-            The way we live today shapes how we feel tomorrow.
-
+              The way we live today shapes how we feel tomorrow.
             </p>
 
             <div class="pt-6">
@@ -828,19 +823,21 @@
           <h2
             class="js-section-heading shrink-0 font-display text-[34px] capitalize leading-[1.3] text-black md:text-5xl md:leading-[69px] lg:w-[47%] xl:w-[542px] text-forest"
           >
-          A Little More Nature. A Lot More Life.
-        </h2>
+            A Little More Nature. A Lot More Life.
+          </h2>
           <div
             class="js-section-content flex min-w-0 flex-col gap-4 font-inter text-base leading-7 md:text-lg lg:max-w-[694px]"
           >
             <p class="text-[rgba(17,17,17,0.6)]">
-              Imagine mornings that begin with birdsong, afternoons spent beneath the shade of trees and evenings that invite you to look up at the stars.
-
+              Imagine mornings that begin with birdsong, afternoons spent
+              beneath the shade of trees and evenings that invite you to look up
+              at the stars.
             </p>
             <p class="max-w-[677px] text-black/60">
-              A childhood filled with discovery. Moments of stillness between busy days. Conversations that last a little longer.
-Vedvan celebrates these simple experiences that modern life often leaves behind.
-
+              A childhood filled with discovery. Moments of stillness between
+              busy days. Conversations that last a little longer. Vedvan
+              celebrates these simple experiences that modern life often leaves
+              behind.
             </p>
           </div>
         </div>
@@ -868,8 +865,8 @@ Vedvan celebrates these simple experiences that modern life often leaves behind.
             <figcaption
               class="absolute bottom-4 left-4 right-4 text-[10px] font-semibold uppercase leading-[normal] tracking-[0.756px] text-[#dce3d9] sm:bottom-auto sm:left-[28.81%] sm:right-auto sm:top-[87.15%] sm:text-[11.344px]"
             >
-            Because sometimes, moving forward means returning to what matters.
-          </figcaption>
+              Because sometimes, moving forward means returning to what matters.
+            </figcaption>
           </figure>
 
           <ul
@@ -1099,7 +1096,7 @@ Vedvan celebrates these simple experiences that modern life often leaves behind.
                 COMMUNITY AT VEDVAN
               </p>
               <h2
-                class="js-section-heading mt-2.5 max-w-[473px] font-display text-[30px] leading-[normal]   md:text-4xl text-forest"
+                class="js-section-heading mt-2.5 max-w-[473px] font-display text-[30px] leading-[normal] md:text-4xl text-forest"
               >
                 Come Home to Something More Meaningful.
               </h2>
@@ -1208,7 +1205,7 @@ Vedvan celebrates these simple experiences that modern life often leaves behind.
       <section id="rooted" class="bg-[#f8f8f8] py-14">
         <div class="site-container">
           <h2
-            class="js-section-heading font-display text-[30px] leading-[1.3]   md:text-[38px] md:leading-[50px] text-forest"
+            class="js-section-heading font-display text-[30px] leading-[1.3] md:text-[38px] md:leading-[50px] text-forest"
           >
             Thoughtfully Rooted. Naturally Inspired.
           </h2>

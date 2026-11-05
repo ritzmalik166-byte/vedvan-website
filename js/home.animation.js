@@ -104,8 +104,14 @@
       // The pin's progress picks the slide: slide i + 1 becomes the target once progress passes thresholds[i].
       // `distance` is the pin length as a multiple of the viewport height.
       breakpoints: {
-        "(min-width: 1024px)": { distance: 2, thresholds: [0.22, 0.58] },
-        "(max-width: 1023.98px)": { distance: 1.6, thresholds: [0.22, 0.58] },
+        "(min-width: 1024px)":  {
+          distance: 2.5,
+          thresholds: [0.20, 0.40, 0.60, 0.80, 1.0],
+        },
+        "(max-width: 1023.98px)": {
+          distance: 2,
+          thresholds: [0.20, 0.40, 0.60, 0.80, 1.0],
+        },
       },
       // Seconds, px for `y` and `blur`. The current card's text blurs away (`out`) while the incoming card fades in
       // over it; the incoming text then comes into focus from `text.at`. Steps run `catchUp` times faster while more
