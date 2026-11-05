@@ -35,7 +35,16 @@
       mobileReach: 0.55, // heading scatter scale below 768px
       // `offset` (% of the frame) and `rotationY` are where the frame starts; its photo zooms from `zoom` to
       // `overscan`, which leaves room for a `drift` % parallax inside the frame.
-      image: { offset: 6, scale: 0.9, rotationY: -14, blur: 14, zoom: 1.3, overscan: 1.08, drift: 3.5, ease: "power2.out" },
+      image: {
+        offset: 6,
+        scale: 0.9,
+        rotationY: -14,
+        blur: 14,
+        zoom: 1.3,
+        overscan: 1.08,
+        drift: 3.5,
+        ease: "power2.out",
+      },
     },
     intro: {
       // Scrubbed over the section's height: each element starts as it crosses the `line` viewport position.
@@ -50,7 +59,11 @@
       duration: 2.2,
       arc: 36, // px the flight path dips below and rises above the resting point
       tilt: 14,
-      flap: { duration: 0.16, near: { rotation: -8, scaleX: 0.86 }, far: { rotation: 14, scaleX: 0.7 } },
+      flap: {
+        duration: 0.16,
+        near: { rotation: -8, scaleX: 0.86 },
+        far: { rotation: 14, scaleX: 0.7 },
+      },
       hover: { y: 4, rotation: 2, duration: 2.4 },
     },
     introStack: {
@@ -64,7 +77,10 @@
       steps: { duration: 1, overlap: 0.4, blur: 14, ease: "sine.in" },
       breakpoints: {
         "(min-width: 1024px)": { fade: 2.6, climb: 0.45 },
-        "(min-width: 768px) and (max-width: 1023.98px)": { fade: 2.4, climb: 0.4 },
+        "(min-width: 768px) and (max-width: 1023.98px)": {
+          fade: 2.4,
+          climb: 0.4,
+        },
         "(max-width: 767.98px)": { fade: 2.2, climb: 0.35 },
       },
     },
@@ -73,7 +89,13 @@
       // through the bottom. Text lines start `stagger` apart; images start `image.delay` after coming into view.
       reveal: {
         margin: "0px 0px -15% 0px",
-        text: { y: 32, blur: 6, duration: 1, stagger: 0.14, ease: "power3.out" },
+        text: {
+          y: 32,
+          blur: 6,
+          duration: 1,
+          stagger: 0.14,
+          ease: "power3.out",
+        },
         image: { duration: 1.3, delay: 0.2, ease: "power2.inOut" },
       },
       watermark: { x: 16, y: 12, rotation: 1.5, durationX: 11, durationY: 8 },
@@ -89,10 +111,27 @@
       // over it; the incoming text then comes into focus from `text.at`. Steps run `catchUp` times faster while more
       // are queued. With reduced motion the slides crossfade over `reduced`.
       transition: {
-        image: 2.8, ease: "sine.inOut",
-        out: { duration: 0.8, stagger: 0.08, y: 12, blur: 10, ease: "power2.in" },
-        text: { at: 0.9, duration: 1.6, stagger: 0.15, y: -16, blur: 6, ease: "power2.out" },
-        dot: 0.5, dotAt: 1.3, catchUp: 2.2, reduced: 0.35,
+        image: 2.8,
+        ease: "sine.inOut",
+        out: {
+          duration: 0.8,
+          stagger: 0.08,
+          y: 12,
+          blur: 10,
+          ease: "power2.in",
+        },
+        text: {
+          at: 0.9,
+          duration: 1.6,
+          stagger: 0.15,
+          y: -16,
+          blur: 6,
+          ease: "power2.out",
+        },
+        dot: 0.5,
+        dotAt: 1.3,
+        catchUp: 2.2,
+        reduced: 0.35,
       },
       // Water-spread edge: `reach` is the final radius (box-normalised, past the far corner), `lead` pushes the
       // diagonal ahead of the sides, `ripple` is the wave height as a share of the box's shorter side.
@@ -115,14 +154,26 @@
     },
     experience: {
       // Timeline units: the eyebrow (with its rules) and the heading each take `duration`, the heading `stagger` later
-      header: { start: "top 90%", end: "top 45%", scrub: 0.8, duration: 1, stagger: 0.35 },
+      header: {
+        start: "top 90%",
+        end: "top 45%",
+        scrub: 0.8,
+        duration: 1,
+        stagger: 0.35,
+      },
       // The section pins while the cards slide one scroll px per px of travel, eased by `scrub` seconds.
       // `hold` adds that share of the travel as a pause at the end before the pin releases.
       slider: { scrub: 1, hold: 0.15 },
     },
     community: {
       // Timeline units: each line takes `duration` and starts `stagger` after the previous one
-      header: { start: "top 95%", end: "top 30%", scrub: 1.5, duration: 1, stagger: 0.3 },
+      header: {
+        start: "top 95%",
+        end: "top 30%",
+        scrub: 1.5,
+        duration: 1,
+        stagger: 0.3,
+      },
       // Image timeline: from the map's top reaching `start` (fraction of the viewport height) over `distance` viewport heights.
       // Positions and durations of `image` and `markers` are fractions of that scroll distance.
       reveal: { start: 0.92, distance: 0.6, scrub: 1.6 },
@@ -176,101 +227,167 @@
       },
     },
     // Seconds. Heading lines start `text.stagger` apart; the form starts at `text.formAt`.
-    privateVisit: { start: "top 80%", y: 60, blur: 10, duration: 1.2, ease: "power3.out", text: { duration: 1.4, stagger: 0.2, formAt: 0.45 } },
+    privateVisit: {
+      start: "top 80%",
+      y: 60,
+      blur: 10,
+      duration: 1.2,
+      ease: "power3.out",
+      text: { duration: 1.4, stagger: 0.2, formAt: 0.45 },
+    },
     // The footer ends the page, so it triggers a little lower to be reachable on tall viewports
-    footer: { start: "top 90%", y: 60, blur: 10, duration: 1.2, ease: "power3.out" },
+    footer: {
+      start: "top 90%",
+      y: 60,
+      blur: 10,
+      duration: 1.2,
+      ease: "power3.out",
+    },
   };
 
- 
-const ELEMENT_SLIDES = [
-  {
-    number: "01",
-    title: "Earth",
-    tagline: "The Art of Being Grounded.",
-    description: "A connection to the soil, greenery and natural surroundings that brings us closer to our roots.",
-    image: {
-      desktop: {
-        src: "assets/updates/earthD.jpg",
-        width: 2880,
-        height: 1614,
+  const ELEMENT_SLIDES = [
+    {
+      number: "01",
+      title: "Earth",
+      tagline: "The Art of Being Grounded.",
+      description:
+        "A connection to the soil, greenery and natural surroundings that brings us closer to our roots.",
+      image: {
+        desktop: {
+          src: "assets/updates/earthD.jpg",
+          width: 2880,
+          height: 1614,
+        },
+        tablet: {
+          src: "assets/updates/earthT.jpg",
+          width: 0,
+          height: 0,
+        },
+        mobile: {
+          src: "assets/updates/earthM.jpg",
+          width: 0,
+          height: 0,
+        },
+        alt: "Mist rolling over lush green mountain valleys",
       },
-      tablet: {
-        src: "assets/updates/earthT.jpg",
-        width: 0,
-        height: 0,
-      },
-      mobile: {
-        src: "assets/updates/earthM.jpg",
-        width: 0,
-        height: 0,
-      },
-      alt: "Mist rolling over lush green mountain valleys",
     },
-  },
-  {
-    number: "02",
-    title: "Water",
-    tagline: "The Art of Finding Flow.",
-    description: "Discover a calmer rhythm through flowing water, mindful living and a deeper connection with nature.",
-    image: {
-      desktop: {
-        src: "assets/updates/waterD2.jpg",
-        width: 928,
-        height: 1152,
+    {
+      number: "02",
+      title: "Water",
+      tagline: "The Rhythm of Renewal.",
+      description:
+        "Inspired by the fluidity of water, embracing restoration, balance and the beauty of slowing down.",
+      image: {
+        desktop: {
+          src: "assets/updates/waterD2.jpg",
+          width: 928,
+          height: 1152,
+        },
+        tablet: {
+          src: "assets/updates/waterT.jpg",
+          width: 0,
+          height: 0,
+        },
+        mobile: {
+          src: "assets/updates/waterM.jpg",
+          width: 0,
+          height: 0,
+        },
+        alt: "A still forest river edged with lotus leaves and tall grass",
       },
-      tablet: {
-        src: "assets/updates/waterT.jpg",
-        width: 0,
-        height: 0,
-      },
-      mobile: {
-        src: "assets/updates/waterM.jpg",
-        width: 0,
-        height: 0,
-      },
-      alt: "A still forest river edged with lotus leaves and tall grass",
     },
-  },
-  {
-    number: "03",
-    title: "Air",
-    tagline: "The Art of Breathing Freely.",
-    description: "Reconnect with open skies, fresh air and the quiet balance of a life shaped by nature.",
-    image: {
-      desktop: {
-        src: "assets/updates/airD.jpg",
-        width: 2400,
-        height: 1600,
+    {
+      number: "03",
+      title: "Air",
+      tagline: "The Freedom to Breathe.",
+      description:
+        "A reminder of the importance of openness, fresh surroundings and moments that allow the mind to unwind.",
+      image: {
+        desktop: {
+          src: "assets/updates/airD.jpg",
+          width: 2400,
+          height: 1600,
+        },
+        tablet: {
+          src: "assets/updates/airT.jpg",
+          width: 0,
+          height: 0,
+        },
+        mobile: {
+          src: "assets/updates/airM.jpg",
+          width: 0,
+          height: 0,
+        },
+        alt: "Mountain peaks under an open sky with soft drifting clouds",
       },
-      tablet: {
-        src: "assets/updates/airT.jpg",
-        width: 0,
-        height: 0,
-      },
-      mobile: {
-        src: "assets/updates/airM.jpg",
-        width: 0,
-        height: 0,
-      },
-      alt: "Mountain peaks under an open sky with soft drifting clouds",
     },
-  },
-];
+    {
+      number: "04",
+      title: "Fire",
+      tagline: "The Energy Within.",
+      description:
+        "A celebration of vitality, movement and the inner energy that inspires purposeful living.",
+      image: {
+        desktop: {
+          src: "assets/updates/fireD.jpg",
+          width: 0,
+          height: 0,
+        },
+        tablet: {
+          src: "assets/updates/fireT.jpg",
+          width: 0,
+          height: 0,
+        },
+        mobile: {
+          src: "assets/updates/fireM.jpg",
+          width: 0,
+          height: 0,
+        },
+        alt: "A warm natural landscape illuminated by the golden glow of fire",
+      },
+    },
+    {
+      number: "05",
+      title: "Space",
+      tagline: "The Luxury of Simply Being.",
+      description:
+        "The freedom to pause, reflect and experience life without the constant rush of the outside world.",
+      image: {
+        desktop: {
+          src: "assets/updates/spaceD.jpg",
+          width: 0,
+          height: 0,
+        },
+        tablet: {
+          src: "assets/updates/spaceT.jpg",
+          width: 0,
+          height: 0,
+        },
+        mobile: {
+          src: "assets/updates/spaceM.jpg",
+          width: 0,
+          height: 0,
+        },
+        alt: "An expansive tranquil landscape reflecting openness and stillness",
+      },
+    },
+  ];
 
-function getResponsiveElementImage(image) {
-  const isMobile = window.matchMedia("(max-width: 767.98px)").matches;
-  const isTablet = window.matchMedia(
-    "(min-width: 768px) and (max-width: 1023.98px)"
+  function getResponsiveElementImage(image) {
+    const isMobile = window.matchMedia("(max-width: 767.98px)").matches;
+    const isTablet = window.matchMedia(
+      "(min-width: 768px) and (max-width: 1023.98px)",
+    ).matches;
+
+    if (isMobile) return image.mobile;
+    if (isTablet) return image.tablet;
+
+    return image.desktop;
+  }
+
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
   ).matches;
-
-  if (isMobile) return image.mobile;
-  if (isTablet) return image.tablet;
-
-  return image.desktop;
-}
-
-
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let lenis = null;
   let introPinEnd = null; // scroll position where the intro's pin ends, set by initIntroBlurStack
 
@@ -302,7 +419,9 @@ function getResponsiveElementImage(image) {
     if (lenis) {
       lenis.on("scroll", ({ scroll }) => update(scroll));
     } else {
-      window.addEventListener("scroll", () => update(window.scrollY), { passive: true });
+      window.addEventListener("scroll", () => update(window.scrollY), {
+        passive: true,
+      });
     }
   }
 
@@ -326,7 +445,12 @@ function getResponsiveElementImage(image) {
         // Scroll from the pin until the intro's top (at 1 - pinAt of the hero height) reaches 1 - cover of the viewport
         const distance = () => {
           const vh = window.innerHeight;
-          return Math.round(Math.max(vh * minDistance, hero.offsetHeight * (1 - pinAt) - vh * (1 - bp.cover)));
+          return Math.round(
+            Math.max(
+              vh * minDistance,
+              hero.offsetHeight * (1 - pinAt) - vh * (1 - bp.cover),
+            ),
+          );
         };
 
         const start = `${pinAt * 100}% top`;
@@ -334,7 +458,8 @@ function getResponsiveElementImage(image) {
         ScrollTrigger.create({
           trigger: hero,
           start,
-          end: (self) => Math.max(self.start + distance(), introPinEnd?.() ?? 0),
+          end: (self) =>
+            Math.max(self.start + distance(), introPinEnd?.() ?? 0),
           pin: true,
           pinSpacing: false,
           invalidateOnRefresh: true,
@@ -342,10 +467,21 @@ function getResponsiveElementImage(image) {
 
         const tl = gsap.timeline({
           defaults: { ease: "none" },
-          scrollTrigger: { trigger: hero, start, end: () => `+=${distance()}`, scrub, invalidateOnRefresh: true },
+          scrollTrigger: {
+            trigger: hero,
+            start,
+            end: () => `+=${distance()}`,
+            scrub,
+            invalidateOnRefresh: true,
+          },
         });
 
-        tl.fromTo(content, { y: 0, opacity: 1, filter: "blur(0px)" }, { y: end.y, opacity: 0, filter: `blur(${end.blur}px)`, duration: 1 }, 0);
+        tl.fromTo(
+          content,
+          { y: 0, opacity: 1, filter: "blur(0px)" },
+          { y: end.y, opacity: 0, filter: `blur(${end.blur}px)`, duration: 1 },
+          0,
+        );
         if (indicator) tl.to(indicator, { autoAlpha: 0, duration: 0.35 }, 0);
       });
     });
@@ -373,10 +509,16 @@ function getResponsiveElementImage(image) {
     ["(min-width: 768px)", "(max-width: 767.98px)"].forEach((query) => {
       mm.add(query, () => {
         const sectionBox = section.getBoundingClientRect();
-        const at = (el) => (el.getBoundingClientRect().top - sectionBox.top) / sectionBox.height;
+        const at = (el) =>
+          (el.getBoundingClientRect().top - sectionBox.top) / sectionBox.height;
 
         const tl = gsap.timeline({
-          scrollTrigger: { trigger: section, start: `top ${line}`, end: `bottom ${line}`, scrub },
+          scrollTrigger: {
+            trigger: section,
+            start: `top ${line}`,
+            end: `bottom ${line}`,
+            scrub,
+          },
         });
         tl.set({}, {}, 1);
 
@@ -392,7 +534,13 @@ function getResponsiveElementImage(image) {
   function initButterflyFlap(near, far) {
     const { duration, near: nearPose, far: farPose } = CONFIG.butterfly.flap;
 
-    return gsap.timeline({ repeat: -1, yoyo: true, paused: true, defaults: { duration, ease: "sine.inOut" } })
+    return gsap
+      .timeline({
+        repeat: -1,
+        yoyo: true,
+        paused: true,
+        defaults: { duration, ease: "sine.inOut" },
+      })
       .to(near, nearPose, 0)
       .to(far, farPose, 0);
   }
@@ -408,11 +556,27 @@ function getResponsiveElementImage(image) {
     const { start, duration, arc, tilt, hover } = CONFIG.butterfly;
 
     const flap = near && far ? initButterflyFlap(near, far) : null;
-    const float = gsap.timeline({ repeat: -1, yoyo: true, paused: true, defaults: { duration: hover.duration, ease: "sine.inOut" } })
-      .fromTo(butterfly, { y: -hover.y, rotation: -hover.rotation }, { y: hover.y, rotation: hover.rotation, immediateRender: false });
+    const float = gsap
+      .timeline({
+        repeat: -1,
+        yoyo: true,
+        paused: true,
+        defaults: { duration: hover.duration, ease: "sine.inOut" },
+      })
+      .fromTo(
+        butterfly,
+        { y: -hover.y, rotation: -hover.rotation },
+        { y: hover.y, rotation: hover.rotation, immediateRender: false },
+      );
 
     // Distance from the butterfly's resting spot to just past the left edge of the viewport
-    const offscreenX = () => -(emblem.getBoundingClientRect().left + butterfly.offsetLeft + butterfly.offsetWidth + 24);
+    const offscreenX = () =>
+      -(
+        emblem.getBoundingClientRect().left +
+        butterfly.offsetLeft +
+        butterfly.offsetWidth +
+        24
+      );
 
     let entered = false;
 
@@ -427,21 +591,42 @@ function getResponsiveElementImage(image) {
       },
     });
 
-    const entrance = gsap.timeline({
-      paused: true,
-      onComplete: () => {
-        entered = true;
-        float.progress(0.5);
-        if (visibility.isActive) float.play();
-        else flap?.pause();
-      },
-    })
-      .fromTo(butterfly, { x: offscreenX }, { x: 0, duration, ease: "power2.out" }, 0)
-      .fromTo(butterfly, { y: arc, rotation: tilt }, { y: -arc * 0.5, rotation: -tilt * 0.4, duration: duration * 0.55, ease: "sine.out" }, 0)
-      .to(butterfly, { y: 0, rotation: 0, duration: duration * 0.45, ease: "sine.inOut" }, duration * 0.55);
+    const entrance = gsap
+      .timeline({
+        paused: true,
+        onComplete: () => {
+          entered = true;
+          float.progress(0.5);
+          if (visibility.isActive) float.play();
+          else flap?.pause();
+        },
+      })
+      .fromTo(
+        butterfly,
+        { x: offscreenX },
+        { x: 0, duration, ease: "power2.out" },
+        0,
+      )
+      .fromTo(
+        butterfly,
+        { y: arc, rotation: tilt },
+        {
+          y: -arc * 0.5,
+          rotation: -tilt * 0.4,
+          duration: duration * 0.55,
+          ease: "sine.out",
+        },
+        0,
+      )
+      .to(
+        butterfly,
+        { y: 0, rotation: 0, duration: duration * 0.45, ease: "sine.inOut" },
+        duration * 0.55,
+      );
 
     const resetStartPosition = () => {
-      if (entrance.progress() === 0 && !entrance.isActive()) entrance.invalidate().progress(0).pause();
+      if (entrance.progress() === 0 && !entrance.isActive())
+        entrance.invalidate().progress(0).pause();
     };
     ScrollTrigger.addEventListener("refresh", resetStartPosition);
     entrance.eventCallback("onStart", () => {
@@ -462,7 +647,8 @@ function getResponsiveElementImage(image) {
     const x = Math.sin(seed * 12.9898 + 78.233) * 43758.5453;
     return x - Math.floor(x);
   };
-  const spread = (i, seed, min, max) => min + seeded((i + 1) * 13 + seed * 101) * (max - min);
+  const spread = (i, seed, min, max) =>
+    min + seeded((i + 1) * 13 + seed * 101) * (max - min);
 
   // Wraps each word in an inline-block span inside an aria-hidden layer, next to one screen-reader copy of the text.
   // Only plain text with inline formatting is split; anything else (links, icons, controls) returns null.
@@ -471,7 +657,12 @@ function getResponsiveElementImage(image) {
   function splitWords(el) {
     if (splitCache.has(el)) return splitCache.get(el);
     let words = null;
-    if (el.textContent.trim() && [...el.querySelectorAll("*")].every((node) => SPLITTABLE.has(node.tagName))) {
+    if (
+      el.textContent.trim() &&
+      [...el.querySelectorAll("*")].every((node) =>
+        SPLITTABLE.has(node.tagName),
+      )
+    ) {
       const label = document.createElement("span");
       label.className = "sr-only";
       label.textContent = el.textContent.replace(/\s+/g, " ").trim();
@@ -509,7 +700,8 @@ function getResponsiveElementImage(image) {
     return words;
   }
 
-  const isTitle = (el) => /^H[1-3]$/.test(el.tagName) || el.classList.contains("font-display");
+  const isTitle = (el) =>
+    /^H[1-3]$/.test(el.tagName) || el.classList.contains("font-display");
 
   // Adds a text reveal to `tl`: headings gather word by word from a blurred, scattered state, other text rises word by
   // word out of a soft blur, and elements that can't be split rise as one. Words start over `stagger` of `duration`.
@@ -517,25 +709,52 @@ function getResponsiveElementImage(image) {
     const { title, text, block, stagger, mobileReach } = CONFIG.reveal;
     const words = splitWords(el);
     if (!words) {
-      tl.fromTo(el, { autoAlpha: 0, y: block.y, filter: `blur(${block.blur}px)` },
-        { autoAlpha: 1, y: 0, filter: "blur(0px)", duration, ease: block.ease }, position);
+      tl.fromTo(
+        el,
+        { autoAlpha: 0, y: block.y, filter: `blur(${block.blur}px)` },
+        { autoAlpha: 1, y: 0, filter: "blur(0px)", duration, ease: block.ease },
+        position,
+      );
       return;
     }
 
     const amount = words.length > 1 ? duration * stagger : 0;
-    const shown = { autoAlpha: 1, x: 0, y: 0, rotation: 0, filter: "blur(0px)", duration: duration - amount, stagger: { amount } };
+    const shown = {
+      autoAlpha: 1,
+      x: 0,
+      y: 0,
+      rotation: 0,
+      filter: "blur(0px)",
+      duration: duration - amount,
+      stagger: { amount },
+    };
     if (isTitle(el)) {
-      const reach = window.matchMedia("(max-width: 767.98px)").matches ? mobileReach : 1;
-      tl.fromTo(words, {
-        autoAlpha: 0,
-        x: (i) => spread(i, 1, title.x[0], title.x[1]) * reach,
-        y: (i) => spread(i, 2, -title.y, title.y),
-        rotation: (i) => spread(i, 3, -title.rotation, title.rotation),
-        filter: `blur(${title.blur}px)`,
-      }, { ...shown, ease: title.ease }, position);
+      const reach = window.matchMedia("(max-width: 767.98px)").matches
+        ? mobileReach
+        : 1;
+      tl.fromTo(
+        words,
+        {
+          autoAlpha: 0,
+          x: (i) => spread(i, 1, title.x[0], title.x[1]) * reach,
+          y: (i) => spread(i, 2, -title.y, title.y),
+          rotation: (i) => spread(i, 3, -title.rotation, title.rotation),
+          filter: `blur(${title.blur}px)`,
+        },
+        { ...shown, ease: title.ease },
+        position,
+      );
     } else {
-      tl.fromTo(words, { autoAlpha: 0, y: (i) => spread(i, 4, text.y[0], text.y[1]), filter: `blur(${text.blur}px)` },
-        { ...shown, ease: text.ease }, position);
+      tl.fromTo(
+        words,
+        {
+          autoAlpha: 0,
+          y: (i) => spread(i, 4, text.y[0], text.y[1]),
+          filter: `blur(${text.blur}px)`,
+        },
+        { ...shown, ease: text.ease },
+        position,
+      );
     }
   }
 
@@ -543,26 +762,56 @@ function getResponsiveElementImage(image) {
   // the photo inside it (when it has its own clipping frame) settles out of a zoom into its parallax overscan.
   function addImageReveal(tl, frame, position, duration, photo = null) {
     const { image } = CONFIG.reveal;
-    tl.fromTo(frame, {
-      autoAlpha: 0,
-      xPercent: image.offset,
-      yPercent: image.offset * 0.8,
-      scale: image.scale,
-      rotationY: image.rotationY,
-      transformPerspective: 1200,
-      filter: `blur(${image.blur}px)`,
-    }, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 1, rotationY: 0, filter: "blur(0px)", duration, ease: image.ease }, position);
-    if (photo) tl.fromTo(photo, { scale: image.zoom }, { scale: image.overscan, duration, ease: image.ease }, position);
+    tl.fromTo(
+      frame,
+      {
+        autoAlpha: 0,
+        xPercent: image.offset,
+        yPercent: image.offset * 0.8,
+        scale: image.scale,
+        rotationY: image.rotationY,
+        transformPerspective: 1200,
+        filter: `blur(${image.blur}px)`,
+      },
+      {
+        autoAlpha: 1,
+        xPercent: 0,
+        yPercent: 0,
+        scale: 1,
+        rotationY: 0,
+        filter: "blur(0px)",
+        duration,
+        ease: image.ease,
+      },
+      position,
+    );
+    if (photo)
+      tl.fromTo(
+        photo,
+        { scale: image.zoom },
+        { scale: image.overscan, duration, ease: image.ease },
+        position,
+      );
   }
 
   // The photo drifts against the scroll inside its clipping frame while the frame crosses the viewport
   function addImageDrift(frame, photo) {
     const { drift } = CONFIG.reveal.image;
-    gsap.fromTo(photo, { yPercent: -drift }, {
-      yPercent: drift,
-      ease: "none",
-      scrollTrigger: { trigger: frame, start: "top bottom", end: "bottom top", scrub: true, refreshPriority: -1 },
-    });
+    gsap.fromTo(
+      photo,
+      { yPercent: -drift },
+      {
+        yPercent: drift,
+        ease: "none",
+        scrollTrigger: {
+          trigger: frame,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+          refreshPriority: -1,
+        },
+      },
+    );
   }
 
   // The intro pins mid-viewport and its text blurs away in three scrubbed steps. Vision & Mission is pushed down by a
@@ -575,10 +824,16 @@ function getResponsiveElementImage(image) {
     if (!section || !next || prefersReducedMotion) return;
 
     const groups = [
-      [section.querySelector(".js-intro-lotus"), section.querySelector(".js-butterfly"), section.querySelector(".js-section-heading")],
+      [
+        section.querySelector(".js-intro-lotus"),
+        section.querySelector(".js-butterfly"),
+        section.querySelector(".js-section-heading"),
+      ],
       [...section.querySelectorAll(".js-section-content > p")],
       [section.querySelector(".js-section-tagline")],
-    ].map((group) => group.filter(Boolean)).filter((group) => group.length);
+    ]
+      .map((group) => group.filter(Boolean))
+      .filter((group) => group.length);
     if (!groups.length) return;
 
     const header = document.getElementById("site-header");
@@ -597,7 +852,11 @@ function getResponsiveElementImage(image) {
           const height = section.offsetHeight;
           const headerHeight = header?.offsetHeight || 0;
           // Too tall to sit below the header: align its bottom with the viewport's instead
-          return Math.round(height > vh - headerHeight ? vh - height : Math.max(headerHeight, (vh - height) / 2));
+          return Math.round(
+            height > vh - headerHeight
+              ? vh - height
+              : Math.max(headerHeight, (vh - height) / 2),
+          );
         };
         const start = () => `top ${pinTop()}px`;
 
@@ -612,8 +871,15 @@ function getResponsiveElementImage(image) {
         const pinLength = () => liftBy() + section.offsetHeight;
         // Measured on the pin spacer, which stays in the flow while the intro itself is fixed
         introPinEnd = () => {
-          const flow = section.parentElement?.classList.contains("pin-spacer") ? section.parentElement : section;
-          return Math.round(flow.getBoundingClientRect().top + window.scrollY - pinTop() + pinLength());
+          const flow = section.parentElement?.classList.contains("pin-spacer")
+            ? section.parentElement
+            : section;
+          return Math.round(
+            flow.getBoundingClientRect().top +
+              window.scrollY -
+              pinTop() +
+              pinLength(),
+          );
         };
 
         ScrollTrigger.create({
@@ -627,26 +893,50 @@ function getResponsiveElementImage(image) {
 
         // Hold: translation cancels the scroll. Ease: power1.out over twice the remaining offset starts at the
         // scroll's speed and ends at rest, so the section accelerates smoothly into its normal scroll.
-        gsap.timeline({
-          scrollTrigger: {
-            trigger: section,
-            start,
-            end: () => `+=${holdFor() + climbFor()}`,
-            scrub: true,
-            invalidateOnRefresh: true,
-          },
-        })
-          .fromTo(next, { y: () => -liftBy() }, { y: () => holdFor() - liftBy(), ease: "none", duration: bp.fade * hold })
+        gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: section,
+              start,
+              end: () => `+=${holdFor() + climbFor()}`,
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+          })
+          .fromTo(
+            next,
+            { y: () => -liftBy() },
+            {
+              y: () => holdFor() - liftBy(),
+              ease: "none",
+              duration: bp.fade * hold,
+            },
+          )
           .to(next, { y: 0, ease: "power1.out", duration: bp.climb });
 
         const tl = gsap.timeline({
-          scrollTrigger: { trigger: section, start, end: () => `+=${fadeFor()}`, scrub, invalidateOnRefresh: true },
+          scrollTrigger: {
+            trigger: section,
+            start,
+            end: () => `+=${fadeFor()}`,
+            scrub,
+            invalidateOnRefresh: true,
+          },
         });
         // Each step softens into a blur while it fades out, in place
         groups.forEach((group, g) => {
-          tl.fromTo(group, { autoAlpha: 1, filter: "blur(0px)" },
-            { autoAlpha: 0, filter: `blur(${steps.blur}px)`, duration: steps.duration, ease: steps.ease, immediateRender: false },
-            g * (steps.duration - steps.overlap));
+          tl.fromTo(
+            group,
+            { autoAlpha: 1, filter: "blur(0px)" },
+            {
+              autoAlpha: 0,
+              filter: `blur(${steps.blur}px)`,
+              duration: steps.duration,
+              ease: steps.ease,
+              immediateRender: false,
+            },
+            g * (steps.duration - steps.overlap),
+          );
         });
 
         return () => {
@@ -675,29 +965,66 @@ function getResponsiveElementImage(image) {
       build(tl);
       blocks.set(el, tl);
     };
-    const revealLines = (tl, lines) => tl.fromTo(lines, { y: text.y, autoAlpha: 0, filter: `blur(${text.blur}px)` },
-      { y: 0, autoAlpha: 1, filter: "blur(0px)", duration: text.duration, ease: text.ease, stagger: text.stagger });
+    const revealLines = (tl, lines) =>
+      tl.fromTo(
+        lines,
+        { y: text.y, autoAlpha: 0, filter: `blur(${text.blur}px)` },
+        {
+          y: 0,
+          autoAlpha: 1,
+          filter: "blur(0px)",
+          duration: text.duration,
+          ease: text.ease,
+          stagger: text.stagger,
+        },
+      );
 
     const heading = section.querySelector(".js-section-heading");
-    addBlock(heading, (tl) => revealLines(tl, [heading, section.querySelector(".js-butterfly")].filter(Boolean)));
+    addBlock(heading, (tl) =>
+      revealLines(
+        tl,
+        [heading, section.querySelector(".js-butterfly")].filter(Boolean),
+      ),
+    );
 
-    section.querySelectorAll(".js-vision-row, .js-mission-row").forEach((row, i) => {
-      const content = row.querySelector(".js-section-content");
-      addBlock(content, (tl) => revealLines(tl, content.querySelectorAll("h3, p")));
+    section
+      .querySelectorAll(".js-vision-row, .js-mission-row")
+      .forEach((row, i) => {
+        const content = row.querySelector(".js-section-content");
+        addBlock(content, (tl) =>
+          revealLines(tl, content.querySelectorAll("h3, p")),
+        );
 
-      const img = row.querySelector(".js-reveal-image");
-      addBlock(img?.parentElement, (tl) => tl.fromTo(img,
-        { clipPath: i % 2 ? "inset(0% 100% 0% 0%)" : "inset(0% 0% 0% 100%)" },
-        { clipPath: "inset(0% 0% 0% 0%)", duration: image.duration, ease: image.ease, delay: image.delay }));
-    });
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(({ target, isIntersecting, boundingClientRect, rootBounds }) => {
-        const tl = blocks.get(target);
-        if (isIntersecting) tl.play();
-        else if (rootBounds && boundingClientRect.top >= rootBounds.bottom) tl.reverse();
+        const img = row.querySelector(".js-reveal-image");
+        addBlock(img?.parentElement, (tl) =>
+          tl.fromTo(
+            img,
+            {
+              clipPath: i % 2 ? "inset(0% 100% 0% 0%)" : "inset(0% 0% 0% 100%)",
+            },
+            {
+              clipPath: "inset(0% 0% 0% 0%)",
+              duration: image.duration,
+              ease: image.ease,
+              delay: image.delay,
+            },
+          ),
+        );
       });
-    }, { rootMargin: margin });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(
+          ({ target, isIntersecting, boundingClientRect, rootBounds }) => {
+            const tl = blocks.get(target);
+            if (isIntersecting) tl.play();
+            else if (rootBounds && boundingClientRect.top >= rootBounds.bottom)
+              tl.reverse();
+          },
+        );
+      },
+      { rootMargin: margin },
+    );
     blocks.forEach((_, el) => observer.observe(el));
   }
 
@@ -706,51 +1033,60 @@ function getResponsiveElementImage(image) {
     const watermark = section?.querySelector(".js-vision-watermark");
     if (!watermark || prefersReducedMotion) return;
 
-    const { x, y, rotation, durationX, durationY } = CONFIG.visionMission.watermark;
+    const { x, y, rotation, durationX, durationY } =
+      CONFIG.visionMission.watermark;
     const loop = { ease: "sine.inOut", repeat: -1, yoyo: true, paused: true };
     // Each loop starts halfway through, i.e. at the watermark's design position
     const drift = [
-      gsap.fromTo(watermark, { x: -x, rotation: -rotation }, { ...loop, x, rotation, duration: durationX }).progress(0.5),
-      gsap.fromTo(watermark, { y: -y }, { ...loop, y, duration: durationY }).progress(0.5),
+      gsap
+        .fromTo(
+          watermark,
+          { x: -x, rotation: -rotation },
+          { ...loop, x, rotation, duration: durationX },
+        )
+        .progress(0.5),
+      gsap
+        .fromTo(watermark, { y: -y }, { ...loop, y, duration: durationY })
+        .progress(0.5),
     ];
 
     ScrollTrigger.create({
       trigger: section,
       start: "top bottom",
       end: "bottom top",
-      onToggle: ({ isActive }) => drift.forEach((tween) => tween.paused(!isActive)),
+      onToggle: ({ isActive }) =>
+        drift.forEach((tween) => tween.paused(!isActive)),
     });
   }
-
 
   function applyElementSlide(scope, slide) {
     const set = (selector, apply) => {
       const el = scope.querySelector(selector);
       if (el) apply(el);
     };
-  
+
     set(".js-element-number", (el) => {
       el.textContent = slide.number;
     });
-  
+
     set(".js-element-name", (el) => {
       el.textContent = slide.title;
     });
-  
+
     set(".js-element-tagline", (el) => {
       el.textContent = slide.tagline;
     });
-  
+
     set(".js-element-description", (el) => {
       el.textContent = slide.description;
     });
-  
+
     set(".js-element-image", (el) => {
       const image = getResponsiveElementImage(slide.image);
-  
+
       el.src = image.src;
       el.alt = slide.image.alt;
-  
+
       // Let the browser calculate the correct responsive dimensions.
       if (image.width && image.height) {
         el.width = image.width;
@@ -761,7 +1097,6 @@ function getResponsiveElementImage(image) {
       }
     });
   }
-  
 
   // Without GSAP the Water and Air slides follow Earth as static sections.
   function renderStaticElementSlides(section) {
@@ -771,7 +1106,9 @@ function getResponsiveElementImage(image) {
       clone.id = `elements-${slide.title.toLowerCase()}`;
       clone.setAttribute("aria-label", `${slide.title} element`);
       applyElementSlide(clone, slide);
-      clone.querySelectorAll(".element-dot").forEach((dot, d) => dot.classList.toggle("is-active", d === i + 1));
+      clone
+        .querySelectorAll(".element-dot")
+        .forEach((dot, d) => dot.classList.toggle("is-active", d === i + 1));
       previous.after(clone);
       previous = clone;
     });
@@ -787,7 +1124,10 @@ function getResponsiveElementImage(image) {
     if (!section || section.dataset.sliderReady) return;
     section.dataset.sliderReady = "true";
 
-    if (typeof window.gsap === "undefined" || typeof window.ScrollTrigger === "undefined") {
+    if (
+      typeof window.gsap === "undefined" ||
+      typeof window.ScrollTrigger === "undefined"
+    ) {
       renderStaticElementSlides(section);
       return;
     }
@@ -808,12 +1148,14 @@ function getResponsiveElementImage(image) {
       panel.appendChild(card);
       return card;
     });
-    panelContent.filter((el) => el !== sharedDots).forEach((el) => {
-      el.style.visibility = "hidden";
-      el.setAttribute("aria-hidden", "true");
-    });
-   
-// ---- Replace the existing `const images = ELEMENT_SLIDES.map(...)` block with this ----
+    panelContent
+      .filter((el) => el !== sharedDots)
+      .forEach((el) => {
+        el.style.visibility = "hidden";
+        el.setAttribute("aria-hidden", "true");
+      });
+
+    // ---- Replace the existing `const images = ELEMENT_SLIDES.map(...)` block with this ----
 
     // A <picture>'s <source> tags (and any srcset) override img.src, so layers would never change.
     // Use a plain <img>: JS already picks the right file per breakpoint.
@@ -821,7 +1163,8 @@ function getResponsiveElementImage(image) {
     if (picture) picture.replaceWith(image);
 
     const host = image.parentElement;
-    if (getComputedStyle(host).position === "static") host.style.position = "relative";
+    if (getComputedStyle(host).position === "static")
+      host.style.position = "relative";
 
     // If the original image is not already absolutely positioned, the clones must overlay it,
     // otherwise they stack below it in normal flow and z-index has no effect.
@@ -864,11 +1207,18 @@ function getResponsiveElementImage(image) {
       return layer;
     });
 
-
     // Cards sit inside the panel, so its percentage paddings would resolve differently; copy the used values
     const syncCardPadding = () => {
-      const { paddingTop, paddingRight, paddingBottom, paddingLeft } = getComputedStyle(panel);
-      cards.forEach((card) => Object.assign(card.style, { paddingTop, paddingRight, paddingBottom, paddingLeft }));
+      const { paddingTop, paddingRight, paddingBottom, paddingLeft } =
+        getComputedStyle(panel);
+      cards.forEach((card) =>
+        Object.assign(card.style, {
+          paddingTop,
+          paddingRight,
+          paddingBottom,
+          paddingLeft,
+        }),
+      );
     };
     syncCardPadding();
     new ResizeObserver(syncCardPadding).observe(panel);
@@ -877,12 +1227,23 @@ function getResponsiveElementImage(image) {
     const header = document.getElementById("site-header");
     const { transition, spread, breakpoints } = CONFIG.elements;
     const { text } = transition;
-    const cardText = cards.flatMap((card) => [...card.querySelectorAll(":scope > .js-element-title, :scope > .js-section-content")]);
+    const cardText = cards.flatMap((card) => [
+      ...card.querySelectorAll(
+        ":scope > .js-element-title, :scope > .js-section-content",
+      ),
+    ]);
     const mm = gsap.matchMedia();
     const HIDDEN = "polygon(0% 100%, 0% 100%, 0% 100%)";
-    const dotState = (active) => (active
-      ? { backgroundColor: "rgba(255, 255, 255, 1)", borderColor: "rgba(255, 255, 255, 1)" }
-      : { backgroundColor: "rgba(255, 255, 255, 0)", borderColor: "rgba(192, 207, 221, 1)" });
+    const dotState = (active) =>
+      active
+        ? {
+            backgroundColor: "rgba(255, 255, 255, 1)",
+            borderColor: "rgba(255, 255, 255, 1)",
+          }
+        : {
+            backgroundColor: "rgba(255, 255, 255, 0)",
+            borderColor: "rgba(192, 207, 221, 1)",
+          };
 
     // Boundary of a reveal spreading from the bottom-left corner of a w × h box at progress p (0–1): a quarter
     // ellipse (box-normalised, so it sweeps along the diagonal) that bulges towards the top-right corner, with
@@ -897,10 +1258,14 @@ function getResponsiveElementImage(image) {
       for (let i = 0; i <= spread.points; i++) {
         const a = (i / spread.points) * (Math.PI / 2);
         const s = (a * r * (w + h)) / 2; // ≈ distance along the edge, so wave sizes don't depend on the angle
-        const wave = 0.7 * Math.sin(s / (ref * 0.3) + p * 3.5 + seed) + 0.3 * Math.sin(s / (ref * 0.14) - p * 5 + seed * 1.7);
+        const wave =
+          0.7 * Math.sin(s / (ref * 0.3) + p * 3.5 + seed) +
+          0.3 * Math.sin(s / (ref * 0.14) - p * 5 + seed * 1.7);
         const k = r * (1 + spread.lead * Math.sin(2 * a));
         const d = amp * wave;
-        points.push(`${((k * w + d) * Math.cos(a)).toFixed(1)}px ${(h - (k * h + d) * Math.sin(a)).toFixed(1)}px`);
+        points.push(
+          `${((k * w + d) * Math.cos(a)).toFixed(1)}px ${(h - (k * h + d) * Math.sin(a)).toFixed(1)}px`,
+        );
       }
       return `polygon(${points.join(", ")})`;
     };
@@ -913,7 +1278,9 @@ function getResponsiveElementImage(image) {
         p: 1,
         duration,
         ease: transition.ease,
-        onUpdate: () => { el.style.clipPath = spreadClip(w, h, state.p, seed); },
+        onUpdate: () => {
+          el.style.clipPath = spreadClip(w, h, state.p, seed);
+        },
       });
     };
 
@@ -921,7 +1288,10 @@ function getResponsiveElementImage(image) {
     let target = 0; // slide picked by the scroll position
     let active = null; // running transition: { tl, to }
 
-    const setHidden = (el, hidden) => (hidden ? el.setAttribute("aria-hidden", "true") : el.removeAttribute("aria-hidden"));
+    const setHidden = (el, hidden) =>
+      hidden
+        ? el.setAttribute("aria-hidden", "true")
+        : el.removeAttribute("aria-hidden");
     const markActive = (index) => {
       current = index;
       cards.forEach((card, k) => setHidden(card, k !== index));
@@ -930,7 +1300,12 @@ function getResponsiveElementImage(image) {
 
     // Shows a slide immediately (layout changes, restored scroll positions)
     const showSlide = (index) => {
-      gsap.set([...cards, ...images], { zIndex: 1, opacity: 1, clipPath: (k, el) => (el === cards[index] || el === images[index] ? "none" : HIDDEN) });
+      gsap.set([...cards, ...images], {
+        zIndex: 1,
+        opacity: 1,
+        clipPath: (k, el) =>
+          el === cards[index] || el === images[index] ? "none" : HIDDEN,
+      });
       gsap.set(cards, { x: 0, y: 0 });
       gsap.set(cardText, { clearProps: "opacity,filter,transform" });
       dots.forEach((dot, k) => gsap.set(dot, dotState(k === index)));
@@ -948,7 +1323,10 @@ function getResponsiveElementImage(image) {
       const tl = gsap.timeline({
         onComplete: () => {
           gsap.set(outgoing, { clipPath: HIDDEN });
-          gsap.set(cardText.filter((el) => cards[from].contains(el)), { clearProps: "opacity,filter,transform" });
+          gsap.set(
+            cardText.filter((el) => cards[from].contains(el)),
+            { clearProps: "opacity,filter,transform" },
+          );
           gsap.set(incoming, { zIndex: 1 });
           active = null;
           markActive(to);
@@ -957,23 +1335,63 @@ function getResponsiveElementImage(image) {
       });
 
       if (prefersReducedMotion) {
-        tl.fromTo(incoming, { clipPath: "none", opacity: 0 }, { opacity: 1, duration: transition.reduced, ease: "none" }, 0)
-          .to(dots[from], { ...dotState(false), duration: transition.reduced }, 0)
+        tl.fromTo(
+          incoming,
+          { clipPath: "none", opacity: 0 },
+          { opacity: 1, duration: transition.reduced, ease: "none" },
+          0,
+        )
+          .to(
+            dots[from],
+            { ...dotState(false), duration: transition.reduced },
+            0,
+          )
           .to(dots[to], { ...dotState(true), duration: transition.reduced }, 0);
       } else {
         const { out } = transition;
         tl.add(spreadOver(images[to], transition.image, to * 2.1), 0)
-          .to(cardText.filter((el) => cards[from].contains(el)),
-            { y: out.y, opacity: 0, filter: `blur(${out.blur}px)`, duration: out.duration, stagger: out.stagger, ease: out.ease }, 0)
-          .fromTo(cards[to], { clipPath: "none", opacity: 0 }, { opacity: 1, duration: out.duration, ease: "none" }, 0)
+          .to(
+            cardText.filter((el) => cards[from].contains(el)),
+            {
+              y: out.y,
+              opacity: 0,
+              filter: `blur(${out.blur}px)`,
+              duration: out.duration,
+              stagger: out.stagger,
+              ease: out.ease,
+            },
+            0,
+          )
+          .fromTo(
+            cards[to],
+            { clipPath: "none", opacity: 0 },
+            { opacity: 1, duration: out.duration, ease: "none" },
+            0,
+          )
           .fromTo(
             cardText.filter((el) => cards[to].contains(el)),
             { y: text.y, opacity: 0, filter: `blur(${text.blur}px)` },
-            { y: 0, opacity: 1, filter: "blur(0px)", duration: text.duration, stagger: text.stagger, ease: text.ease, clearProps: "filter" },
+            {
+              y: 0,
+              opacity: 1,
+              filter: "blur(0px)",
+              duration: text.duration,
+              stagger: text.stagger,
+              ease: text.ease,
+              clearProps: "filter",
+            },
             text.at,
           )
-          .to(dots[from], { ...dotState(false), duration: transition.dot }, transition.dotAt)
-          .to(dots[to], { ...dotState(true), duration: transition.dot }, transition.dotAt);
+          .to(
+            dots[from],
+            { ...dotState(false), duration: transition.dot },
+            transition.dotAt,
+          )
+          .to(
+            dots[to],
+            { ...dotState(true), duration: transition.dot },
+            transition.dotAt,
+          );
       }
 
       active = { tl, to };
@@ -981,14 +1399,16 @@ function getResponsiveElementImage(image) {
     }
 
     // Runs faster while more transitions are queued behind the current one
-    const pace = () => active.tl.timeScale(target === active.to ? 1 : transition.catchUp);
+    const pace = () =>
+      active.tl.timeScale(target === active.to ? 1 : transition.catchUp);
 
     function advance() {
       if (active) {
         pace();
         return;
       }
-      if (target !== current) transitionToSlide(current + Math.sign(target - current));
+      if (target !== current)
+        transitionToSlide(current + Math.sign(target - current));
     }
 
     // While a transition runs (or more are queued), the page can scroll within the pin but not out of it, so a
@@ -1012,7 +1432,8 @@ function getResponsiveElementImage(image) {
     Object.entries(breakpoints).forEach(([query, bp]) => {
       mm.add(query, () => {
         section.classList.add("is-slider");
-        const targetFor = (progress) => bp.thresholds.filter((t) => progress >= t).length;
+        const targetFor = (progress) =>
+          bp.thresholds.filter((t) => progress >= t).length;
 
         pin = ScrollTrigger.create({
           trigger: section,
@@ -1051,11 +1472,24 @@ function getResponsiveElementImage(image) {
     const stage = section?.querySelector(".js-philosophy-stage");
     const card = stage?.querySelector(".js-philosophy-panel");
     const image = stage?.querySelector(".js-section-image");
-    if (!card || !image || prefersReducedMotion || section.dataset.philosophyReady) return;
+    if (
+      !card ||
+      !image ||
+      prefersReducedMotion ||
+      section.dataset.philosophyReady
+    )
+      return;
     section.dataset.philosophyReady = "true";
 
     const header = document.getElementById("site-header");
-    const { scrub, blur, hold, minImageVisible, image: reveal, text } = CONFIG.philosophy;
+    const {
+      scrub,
+      blur,
+      hold,
+      minImageVisible,
+      image: reveal,
+      text,
+    } = CONFIG.philosophy;
     const cardText = [...card.querySelectorAll(":scope > p, :scope > h3")];
     const headerHeight = () => (header ? header.offsetHeight : 0);
     const cardOffset = () => card.offsetTop;
@@ -1064,8 +1498,11 @@ function getResponsiveElementImage(image) {
     // Pin only if the card's content (its top padding may tuck under the header) and at least half the image stay visible
     const canPin = () => {
       const top = Math.min(headerHeight(), fitTop());
-      const cardContentVisible = top + cardOffset() + parseFloat(getComputedStyle(card).paddingTop) >= headerHeight();
-      const imageVisible = (top + image.offsetHeight - headerHeight()) / image.offsetHeight;
+      const cardContentVisible =
+        top + cardOffset() + parseFloat(getComputedStyle(card).paddingTop) >=
+        headerHeight();
+      const imageVisible =
+        (top + image.offsetHeight - headerHeight()) / image.offsetHeight;
       return cardContentVisible && imageVisible >= minImageVisible;
     };
 
@@ -1078,12 +1515,35 @@ function getResponsiveElementImage(image) {
       Object.entries(CONFIG.philosophy.breakpoints).forEach(([query, bp]) => {
         mm.add(query, () => {
           const hidden = { y: bp.y, opacity: 0, filter: `blur(${blur}px)` };
-          const shown = { y: 0, opacity: 1, filter: "blur(0px)", ease: "power2.out", duration: 1 };
+          const shown = {
+            y: 0,
+            opacity: 1,
+            filter: "blur(0px)",
+            ease: "power2.out",
+            duration: 1,
+          };
           // The card's lines follow its rise, word by word, and settle as it does
-          const revealCardText = (tl, at) => cardText.forEach((el, i) => addTextReveal(tl, el, at + text.at + i * text.step, text.duration));
+          const revealCardText = (tl, at) =>
+            cardText.forEach((el, i) =>
+              addTextReveal(
+                tl,
+                el,
+                at + text.at + i * text.step,
+                text.duration,
+              ),
+            );
 
           if (!pinned) {
-            const tl = gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: stage, start: "top bottom", end: "bottom 85%", scrub, invalidateOnRefresh: true } });
+            const tl = gsap.timeline({
+              defaults: { ease: "none" },
+              scrollTrigger: {
+                trigger: stage,
+                start: "top bottom",
+                end: "bottom 85%",
+                scrub,
+                invalidateOnRefresh: true,
+              },
+            });
             addImageReveal(tl, image, 0, 1);
             tl.fromTo(card, hidden, shown, reveal.cardAt);
             revealCardText(tl, reveal.cardAt);
@@ -1092,21 +1552,33 @@ function getResponsiveElementImage(image) {
 
           const pinTop = () => Math.min(headerHeight(), fitTop());
           // The image comes in while the stage scrolls in, from its top entering the viewport until it pins
-          addImageReveal(gsap.timeline({
-            scrollTrigger: { trigger: stage, start: "top bottom", end: () => `top ${pinTop()}px`, scrub, invalidateOnRefresh: true },
-          }), image, 0, 1);
+          addImageReveal(
+            gsap.timeline({
+              scrollTrigger: {
+                trigger: stage,
+                start: "top bottom",
+                end: () => `top ${pinTop()}px`,
+                scrub,
+                invalidateOnRefresh: true,
+              },
+            }),
+            image,
+            0,
+            1,
+          );
 
-          const tl = gsap.timeline({
-            defaults: { ease: "none" },
-            scrollTrigger: {
-              trigger: stage,
-              start: () => `top ${pinTop()}px`,
-              end: () => `+=${Math.round(window.innerHeight * bp.distance)}`,
-              pin: true,
-              scrub,
-              invalidateOnRefresh: true,
-            },
-          })
+          const tl = gsap
+            .timeline({
+              defaults: { ease: "none" },
+              scrollTrigger: {
+                trigger: stage,
+                start: () => `top ${pinTop()}px`,
+                end: () => `+=${Math.round(window.innerHeight * bp.distance)}`,
+                pin: true,
+                scrub,
+                invalidateOnRefresh: true,
+              },
+            })
             .fromTo(card, hidden, shown, 0);
           revealCardText(tl, 0);
           tl.set({}, {}, 1 + hold);
@@ -1139,9 +1611,16 @@ function getResponsiveElementImage(image) {
     const eyebrow = header.querySelector("p");
     const rules = [...header.querySelectorAll("span[aria-hidden]")];
     const title = header.querySelector("h2");
-    const tl = gsap.timeline({ scrollTrigger: { trigger: header, start, end, scrub } });
+    const tl = gsap.timeline({
+      scrollTrigger: { trigger: header, start, end, scrub },
+    });
     if (rules.length) {
-      tl.fromTo(rules, { scaleX: 0, transformOrigin: (i) => (i ? "0% 50%" : "100% 50%") }, { scaleX: 1, duration, ease: "power2.out" }, 0);
+      tl.fromTo(
+        rules,
+        { scaleX: 0, transformOrigin: (i) => (i ? "0% 50%" : "100% 50%") },
+        { scaleX: 1, duration, ease: "power2.out" },
+        0,
+      );
     }
     if (eyebrow) addTextReveal(tl, eyebrow, 0, duration);
     if (title) addTextReveal(tl, title, stagger, duration);
@@ -1155,7 +1634,8 @@ function getResponsiveElementImage(image) {
     const section = document.getElementById("experience");
     const track = section?.querySelector(".js-card-track");
     const cards = track ? [...track.querySelectorAll(".js-feature-card")] : [];
-    if (cards.length < 2 || prefersReducedMotion || track.dataset.sliderReady) return;
+    if (cards.length < 2 || prefersReducedMotion || track.dataset.sliderReady)
+      return;
     track.dataset.sliderReady = "true";
 
     const { scrub, hold } = CONFIG.experience.slider;
@@ -1171,36 +1651,51 @@ function getResponsiveElementImage(image) {
       const { paddingLeft, paddingRight } = getComputedStyle(track);
       const startInset = parseFloat(paddingLeft) || 0;
       const endInset = parseFloat(paddingRight) || startInset;
-      return Math.max(0, Math.round(rail.offsetWidth - (track.clientWidth - startInset - endInset)));
+      return Math.max(
+        0,
+        Math.round(
+          rail.offsetWidth - (track.clientWidth - startInset - endInset),
+        ),
+      );
     };
     // Centred in the space below the header, or bottom-aligned when the section is taller than that space
     const start = () => {
       const headerHeight = header?.offsetHeight || 0;
       const space = window.innerHeight - headerHeight;
-      return section.offsetHeight > space ? "bottom bottom" : `center ${Math.round(headerHeight + space / 2)}px`;
+      return section.offsetHeight > space
+        ? "bottom bottom"
+        : `center ${Math.round(headerHeight + space / 2)}px`;
     };
 
-    gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start,
-        end: () => `+=${Math.round(travel() * (1 + hold))}`,
-        pin: true,
-        scrub,
-        invalidateOnRefresh: true,
-      },
-    })
+    gsap
+      .timeline({
+        scrollTrigger: {
+          trigger: section,
+          start,
+          end: () => `+=${Math.round(travel() * (1 + hold))}`,
+          pin: true,
+          scrub,
+          invalidateOnRefresh: true,
+        },
+      })
       .to(rail, { x: () => -travel(), duration: 1, ease: "none" })
       .to({}, { duration: hold });
   }
 
   function initSection7HeaderAnimation() {
     const section = document.getElementById("wellness-community");
-    const targets = section ? [section.querySelector(".js-section-heading"), ...section.querySelectorAll(".js-section-content > p")].filter(Boolean) : [];
+    const targets = section
+      ? [
+          section.querySelector(".js-section-heading"),
+          ...section.querySelectorAll(".js-section-content > p"),
+        ].filter(Boolean)
+      : [];
     if (!targets.length || prefersReducedMotion) return;
 
     const { start, end, scrub, duration, stagger } = CONFIG.community.header;
-    const tl = gsap.timeline({ scrollTrigger: { trigger: targets[0].parentElement, start, end, scrub } });
+    const tl = gsap.timeline({
+      scrollTrigger: { trigger: targets[0].parentElement, start, end, scrub },
+    });
     targets.forEach((el, i) => addTextReveal(tl, el, i * stagger, duration));
   }
 
@@ -1220,7 +1715,9 @@ function getResponsiveElementImage(image) {
     dd.replaceChildren(visual, label);
 
     const counter = { value: 0 };
-    const render = () => { visual.textContent = `${prefix}${counter.value.toFixed(decimals)}${suffix}`; };
+    const render = () => {
+      visual.textContent = `${prefix}${counter.value.toFixed(decimals)}${suffix}`;
+    };
     // Reserve the final width so the strip's layout does not shift while digits change
     const reserveWidth = () => {
       visual.style.minWidth = "";
@@ -1240,19 +1737,36 @@ function getResponsiveElementImage(image) {
     const figure = map?.querySelector("figure");
     const image = figure?.querySelector(".js-section-image");
     const stats = section?.querySelector(".js-estate-stats");
-    if (!image || !stats || prefersReducedMotion || section.dataset.communityReady) return;
+    if (
+      !image ||
+      !stats ||
+      prefersReducedMotion ||
+      section.dataset.communityReady
+    )
+      return;
     section.dataset.communityReady = "true";
 
-    const { reveal, image: img, markers, stats: strip, counters } = CONFIG.community;
+    const {
+      reveal,
+      image: img,
+      markers,
+      stats: strip,
+      counters,
+    } = CONFIG.community;
     const markerItems = [...map.querySelectorAll(".js-estate-marker")];
-    const statCounters = [...stats.querySelectorAll("dd")].map(createStatCounter).filter(Boolean);
+    const statCounters = [...stats.querySelectorAll("dd")]
+      .map(createStatCounter)
+      .filter(Boolean);
     // The strip's left inset runs from 100% to -5% with power1.inOut
     const stripFrom = 100;
     const stripTo = -5;
-    const easeInOutInverse = (y) => (y < 0.5 ? Math.sqrt(y / 2) : 1 - Math.sqrt((1 - y) / 2));
+    const easeInOutInverse = (y) =>
+      y < 0.5 ? Math.sqrt(y / 2) : 1 - Math.sqrt((1 - y) / 2);
 
     statCounters.forEach((c) => c.reserveWidth());
-    document.fonts?.ready.then(() => statCounters.forEach((c) => c.reserveWidth()));
+    document.fonts?.ready.then(() =>
+      statCounters.forEach((c) => c.reserveWidth()),
+    );
     addImageDrift(figure, image);
 
     // Rebuilt when the stats switch between a 2×2 grid and a single row, since counter timing follows their layout
@@ -1273,7 +1787,17 @@ function getResponsiveElementImage(image) {
         addImageReveal(imageTl, figure, 0, img.duration, image);
         // One tween per marker (rather than `stagger`) so each start state renders before the timeline reaches it
         markerItems.forEach((item, i) => {
-          imageTl.fromTo(item, { opacity: 0, y: markers.y }, { opacity: 1, y: 0, duration: markers.duration, ease: "power1.out" }, markers.at + i * markers.stagger);
+          imageTl.fromTo(
+            item,
+            { opacity: 0, y: markers.y },
+            {
+              opacity: 1,
+              y: 0,
+              duration: markers.duration,
+              ease: "power1.out",
+            },
+            markers.at + i * markers.stagger,
+          );
         });
         imageTl.set({}, {}, 1);
 
@@ -1281,11 +1805,15 @@ function getResponsiveElementImage(image) {
           defaults: { ease: "none" },
           scrollTrigger: {
             trigger: stats,
-            start: () => Math.max(
-              imageTl.scrollTrigger.end,
-              stats.getBoundingClientRect().bottom + window.scrollY - window.innerHeight * strip.start,
-            ),
-            end: (self) => self.start + Math.round(window.innerHeight * strip.distance),
+            start: () =>
+              Math.max(
+                imageTl.scrollTrigger.end,
+                stats.getBoundingClientRect().bottom +
+                  window.scrollY -
+                  window.innerHeight * strip.start,
+              ),
+            end: (self) =>
+              self.start + Math.round(window.innerHeight * strip.distance),
             scrub: reveal.scrub,
             invalidateOnRefresh: true,
             // Refresh renders with callbacks suppressed, so redraw the digits from the counters' current values
@@ -1294,15 +1822,46 @@ function getResponsiveElementImage(image) {
         });
 
         // Negative insets keep the strip's drop shadow; the left inset opens from the right edge
-        stripTl.fromTo(stats, { clipPath: `inset(-30% 0% -30% ${stripFrom}%)` }, { clipPath: `inset(-30% ${stripTo}% -30% ${stripTo}%)`, duration: strip.duration, ease: "power1.inOut" }, 0);
+        stripTl.fromTo(
+          stats,
+          { clipPath: `inset(-30% 0% -30% ${stripFrom}%)` },
+          {
+            clipPath: `inset(-30% ${stripTo}% -30% ${stripTo}%)`,
+            duration: strip.duration,
+            ease: "power1.inOut",
+          },
+          0,
+        );
 
         const stripBox = stats.getBoundingClientRect();
         statCounters.forEach((c) => {
-          const column = (c.el.closest(".js-stat") || c.el).getBoundingClientRect();
-          const inset = ((column.right - column.width * counters.visible - stripBox.left) / stripBox.width) * 100;
-          const opened = gsap.utils.clamp(0, 1, (stripFrom - inset) / (stripFrom - stripTo));
-          const at = Math.min(easeInOutInverse(opened) * strip.duration, 1 - counters.duration);
-          stripTl.fromTo(c.counter, { value: 0 }, { value: c.end, duration: counters.duration, ease: "power1.out", onUpdate: c.render }, at);
+          const column = (
+            c.el.closest(".js-stat") || c.el
+          ).getBoundingClientRect();
+          const inset =
+            ((column.right - column.width * counters.visible - stripBox.left) /
+              stripBox.width) *
+            100;
+          const opened = gsap.utils.clamp(
+            0,
+            1,
+            (stripFrom - inset) / (stripFrom - stripTo),
+          );
+          const at = Math.min(
+            easeInOutInverse(opened) * strip.duration,
+            1 - counters.duration,
+          );
+          stripTl.fromTo(
+            c.counter,
+            { value: 0 },
+            {
+              value: c.end,
+              duration: counters.duration,
+              ease: "power1.out",
+              onUpdate: c.render,
+            },
+            at,
+          );
         });
         stripTl.set({}, {}, 1);
       });
@@ -1316,12 +1875,27 @@ function getResponsiveElementImage(image) {
     const content = section?.querySelector(".js-section-content");
     const figure = section?.querySelector("figure.js-section-image");
     const image = figure?.querySelector("img");
-    if (!content || !image || prefersReducedMotion || section.dataset.communityStoryReady) return;
+    if (
+      !content ||
+      !image ||
+      prefersReducedMotion ||
+      section.dataset.communityStoryReady
+    )
+      return;
     section.dataset.communityStoryReady = "true";
 
-    const { line, scrub, text, image: img, gallery, breakpoints } = CONFIG.communityStory;
+    const {
+      line,
+      scrub,
+      text,
+      image: img,
+      gallery,
+      breakpoints,
+    } = CONFIG.communityStory;
     const heading = content.querySelector(".js-section-heading");
-    const lines = [...content.children].flatMap((el) => (el.tagName === "UL" ? [...el.children] : [el]));
+    const lines = [...content.children].flatMap((el) =>
+      el.tagName === "UL" ? [...el.children] : [el],
+    );
     const galleryImages = [...section.querySelectorAll(".js-community-image")];
     const mm = gsap.matchMedia();
 
@@ -1330,7 +1904,8 @@ function getResponsiveElementImage(image) {
         const vh = window.innerHeight;
         const sectionTop = section.getBoundingClientRect().top;
         // Scroll distance (px) from the timeline's start until the element's top reaches `line`
-        const reach = (el) => Math.max(0, el.getBoundingClientRect().top - sectionTop);
+        const reach = (el) =>
+          Math.max(0, el.getBoundingClientRect().top - sectionTop);
         const steps = [];
 
         let previous = -Infinity;
@@ -1342,30 +1917,72 @@ function getResponsiveElementImage(image) {
           steps.push([el, at, text.distance * vh, "text"]);
         });
 
-        const imageAt = imageFollowsHeading ? Math.max(reach(figure), headingAt + img.after * vh) : reach(figure);
+        const imageAt = imageFollowsHeading
+          ? Math.max(reach(figure), headingAt + img.after * vh)
+          : reach(figure);
         steps.push([figure, imageAt, img.distance * vh, "image"]);
         galleryImages.forEach((el, i) => {
-          const at = Math.max(reach(el), imageAt + gallery.after * vh) + i * gallery.stagger * vh;
+          const at =
+            Math.max(reach(el), imageAt + gallery.after * vh) +
+            i * gallery.stagger * vh;
           steps.push([el, at, gallery.distance * vh, "gallery"]);
         });
 
         const total = Math.max(...steps.map(([, at, length]) => at + length));
         const tl = gsap.timeline({
           defaults: { ease: "none" },
-          scrollTrigger: { trigger: section, start: `top ${line * 100}%`, end: `+=${Math.round(total)}`, scrub },
+          scrollTrigger: {
+            trigger: section,
+            start: `top ${line * 100}%`,
+            end: `+=${Math.round(total)}`,
+            scrub,
+          },
         });
 
         steps.forEach(([el, at, length, kind]) => {
           const position = at / total;
           const duration = length / total;
           if (kind === "text") {
-            tl.fromTo(el, { y: text.y, opacity: 0, filter: `blur(${text.blur}px)` },
-              { y: 0, opacity: 1, filter: "blur(0px)", duration, ease: "power1.out" }, position);
+            tl.fromTo(
+              el,
+              { y: text.y, opacity: 0, filter: `blur(${text.blur}px)` },
+              {
+                y: 0,
+                opacity: 1,
+                filter: "blur(0px)",
+                duration,
+                ease: "power1.out",
+              },
+              position,
+            );
           } else if (kind === "image") {
-            tl.fromTo(figure, { clipPath: `inset(${img.top}% 100% 0% 0%)` }, { clipPath: "inset(0% 0% 0% 0%)", duration, ease: "power1.inOut" }, position)
-              .fromTo(image, { scale: img.scale, transformOrigin: "0% 100%" }, { scale: 1, duration, ease: "power1.out" }, position);
+            tl.fromTo(
+              figure,
+              { clipPath: `inset(${img.top}% 100% 0% 0%)` },
+              {
+                clipPath: "inset(0% 0% 0% 0%)",
+                duration,
+                ease: "power1.inOut",
+              },
+              position,
+            ).fromTo(
+              image,
+              { scale: img.scale, transformOrigin: "0% 100%" },
+              { scale: 1, duration, ease: "power1.out" },
+              position,
+            );
           } else {
-            tl.fromTo(el, { y: gallery.y, clipPath: "inset(100% 0% 0% 0%)" }, { y: 0, clipPath: "inset(0% 0% 0% 0%)", duration, ease: "power1.inOut" }, position);
+            tl.fromTo(
+              el,
+              { y: gallery.y, clipPath: "inset(100% 0% 0% 0%)" },
+              {
+                y: 0,
+                clipPath: "inset(0% 0% 0% 0%)",
+                duration,
+                ease: "power1.inOut",
+              },
+              position,
+            );
           }
         });
       });
@@ -1380,7 +1997,14 @@ function getResponsiveElementImage(image) {
     const image = section?.querySelector("figure .js-section-image");
     const figure = image?.parentElement;
     const content = section?.querySelector(".js-section-content");
-    if (!heading || !image || !content || prefersReducedMotion || section.dataset.rootedReady) return;
+    if (
+      !heading ||
+      !image ||
+      !content ||
+      prefersReducedMotion ||
+      section.dataset.rootedReady
+    )
+      return;
     section.dataset.rootedReady = "true";
 
     const { line, scrub, text, image: img, cta } = CONFIG.rooted;
@@ -1395,10 +2019,14 @@ function getResponsiveElementImage(image) {
         const vh = window.innerHeight;
         const sectionTop = section.getBoundingClientRect().top;
         // Scroll distance (px) from the timeline's start until the element's top reaches `line`
-        const reach = (el) => Math.max(0, el.getBoundingClientRect().top - sectionTop);
+        const reach = (el) =>
+          Math.max(0, el.getBoundingClientRect().top - sectionTop);
 
         const headingAt = reach(heading);
-        const imageAt = Math.max(reach(figure) + figure.offsetHeight * img.anchor, headingAt + img.after * vh);
+        const imageAt = Math.max(
+          reach(figure) + figure.offsetHeight * img.anchor,
+          headingAt + img.after * vh,
+        );
         const imageLength = img.distance * vh;
         let previous = imageAt;
         const lineSteps = lines.map((el) => {
@@ -1406,19 +2034,37 @@ function getResponsiveElementImage(image) {
           return [el, previous];
         });
         const textLength = text.distance * vh;
-        const total = Math.max(imageAt + imageLength, ...lineSteps.map(([, at]) => at + textLength));
+        const total = Math.max(
+          imageAt + imageLength,
+          ...lineSteps.map(([, at]) => at + textLength),
+        );
 
         const tl = gsap.timeline({
           defaults: { ease: "none" },
-          scrollTrigger: { trigger: section, start: `top ${line * 100}%`, end: `+=${Math.round(total)}`, scrub },
+          scrollTrigger: {
+            trigger: section,
+            start: `top ${line * 100}%`,
+            end: `+=${Math.round(total)}`,
+            scrub,
+          },
         });
-        const revealText = (el, at) => addTextReveal(tl, el, at / total, textLength / total);
+        const revealText = (el, at) =>
+          addTextReveal(tl, el, at / total, textLength / total);
 
         revealText(heading, headingAt);
         addImageReveal(tl, figure, imageAt / total, imageLength / total, image);
         if (button) {
-          tl.fromTo(button, { opacity: 0, scale: cta.scale }, { opacity: 1, scale: 1, duration: (imageLength * (1 - cta.from)) / total, ease: "power1.out" },
-            (imageAt + imageLength * cta.from) / total);
+          tl.fromTo(
+            button,
+            { opacity: 0, scale: cta.scale },
+            {
+              opacity: 1,
+              scale: 1,
+              duration: (imageLength * (1 - cta.from)) / total,
+              ease: "power1.out",
+            },
+            (imageAt + imageLength * cta.from) / total,
+          );
         }
         lineSteps.forEach(([el, at]) => revealText(el, at));
       });
@@ -1431,13 +2077,21 @@ function getResponsiveElementImage(image) {
     const section = document.getElementById("location");
     const content = section?.querySelector(".js-section-content");
     const card = section?.querySelector(".js-connectivity-map");
-    if (!content || !card || prefersReducedMotion || section.dataset.locationReady) return;
+    if (
+      !content ||
+      !card ||
+      prefersReducedMotion ||
+      section.dataset.locationReady
+    )
+      return;
     section.dataset.locationReady = "true";
 
     const { start, text, card: reveal } = CONFIG.location;
     const lines = [...content.children];
-    const radius = () => parseFloat(getComputedStyle(card).borderTopRightRadius) || 0;
-    const hiddenClip = () => `inset(0px 0px ${card.offsetHeight}px ${card.offsetWidth}px round ${radius()}px)`;
+    const radius = () =>
+      parseFloat(getComputedStyle(card).borderTopRightRadius) || 0;
+    const hiddenClip = () =>
+      `inset(0px 0px ${card.offsetHeight}px ${card.offsetWidth}px round ${radius()}px)`;
     const shownClip = () => {
       const o = reveal.outset;
       return `inset(${-o}px ${-o}px ${-o}px ${-o}px round ${radius() + o}px)`;
@@ -1447,15 +2101,30 @@ function getResponsiveElementImage(image) {
     // Refreshed after the pinned sections above, which rebuild at other breakpoints and shift this one
     // Parts that have already played stay revealed when a breakpoint change rebuilds the timelines
     const played = { text: false, card: false };
-    const entrance = (trigger, parts) => gsap.timeline({
-      scrollTrigger: { trigger, start, once: true, refreshPriority: -1, onEnter: () => parts.forEach((part) => (played[part] = true)) },
-    });
+    const entrance = (trigger, parts) =>
+      gsap.timeline({
+        scrollTrigger: {
+          trigger,
+          start,
+          once: true,
+          refreshPriority: -1,
+          onEnter: () => parts.forEach((part) => (played[part] = true)),
+        },
+      });
     const revealText = (tl) => {
       if (played.text) return;
-      lines.forEach((el, i) => addTextReveal(tl, el, i * text.stagger, text.duration));
+      lines.forEach((el, i) =>
+        addTextReveal(tl, el, i * text.stagger, text.duration),
+      );
     };
     const revealCard = (tl, at) => {
-      if (!played.card) tl.fromTo(card, { clipPath: hiddenClip }, { clipPath: shownClip, duration: reveal.duration, ease: reveal.ease }, at);
+      if (!played.card)
+        tl.fromTo(
+          card,
+          { clipPath: hiddenClip },
+          { clipPath: shownClip, duration: reveal.duration, ease: reveal.ease },
+          at,
+        );
     };
 
     // Side by side, text and card share one entrance; stacked, the card waits until it is itself in view
@@ -1474,8 +2143,15 @@ function getResponsiveElementImage(image) {
   function initSection10DestinationFloat() {
     const section = document.getElementById("location");
     const card = section?.querySelector(".js-connectivity-map");
-    const badges = card ? [...card.querySelectorAll(".js-destination-badge")] : [];
-    if (!badges.length || prefersReducedMotion || section.dataset.locationFloatReady) return;
+    const badges = card
+      ? [...card.querySelectorAll(".js-destination-badge")]
+      : [];
+    if (
+      !badges.length ||
+      prefersReducedMotion ||
+      section.dataset.locationFloatReady
+    )
+      return;
     section.dataset.locationFloatReady = "true";
 
     const { durations, phases, breakpoints } = CONFIG.location.float;
@@ -1485,7 +2161,19 @@ function getResponsiveElementImage(image) {
       mm.add(query, () => {
         const floats = badges.map((badge, i) => {
           const duration = durations[i % durations.length];
-          return gsap.fromTo(badge, { y: 0 }, { y: -heights[i % heights.length], duration, ease: "sine.inOut", repeat: -1, yoyo: true, paused: true })
+          return gsap
+            .fromTo(
+              badge,
+              { y: 0 },
+              {
+                y: -heights[i % heights.length],
+                duration,
+                ease: "sine.inOut",
+                repeat: -1,
+                yoyo: true,
+                paused: true,
+              },
+            )
             .seek(duration * 2 * phases[i % phases.length]);
         });
 
@@ -1494,7 +2182,10 @@ function getResponsiveElementImage(image) {
           start: "top bottom",
           end: "bottom top",
           refreshPriority: -1,
-          onToggle: ({ isActive }) => floats.forEach((tween) => (isActive ? tween.play() : tween.pause())),
+          onToggle: ({ isActive }) =>
+            floats.forEach((tween) =>
+              isActive ? tween.play() : tween.pause(),
+            ),
         });
       });
     });
@@ -1506,23 +2197,42 @@ function getResponsiveElementImage(image) {
     const section = document.getElementById("private-visit");
     const header = section?.querySelector(".js-section-heading");
     const form = section?.querySelector(".js-visit-form");
-    if ((!header && !form) || prefersReducedMotion || section.dataset.visitReady) return;
+    if (
+      (!header && !form) ||
+      prefersReducedMotion ||
+      section.dataset.visitReady
+    )
+      return;
     section.dataset.visitReady = "true";
 
     const { start, y, blur, duration, ease, text } = CONFIG.privateVisit;
     // Refreshed after the pinned sections above, which rebuild at other breakpoints and shift this one
-    const tl = gsap.timeline({ scrollTrigger: { trigger: section, start, once: true, refreshPriority: -1 } });
-    [...(header?.children ?? [])].forEach((el, i) => addTextReveal(tl, el, i * text.stagger, text.duration));
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start,
+        once: true,
+        refreshPriority: -1,
+      },
+    });
+    [...(header?.children ?? [])].forEach((el, i) =>
+      addTextReveal(tl, el, i * text.stagger, text.duration),
+    );
     if (form) {
-      tl.fromTo(form, { y, opacity: 0, filter: `blur(${blur}px)` }, {
-        y: 0,
-        opacity: 1,
-        filter: "blur(0px)",
-        duration,
-        ease,
-        // A leftover filter would make the form a containing block for its fixed-position descendants
-        clearProps: "transform,opacity,filter",
-      }, header ? text.formAt : 0);
+      tl.fromTo(
+        form,
+        { y, opacity: 0, filter: `blur(${blur}px)` },
+        {
+          y: 0,
+          opacity: 1,
+          filter: "blur(0px)",
+          duration,
+          ease,
+          // A leftover filter would make the form a containing block for its fixed-position descendants
+          clearProps: "transform,opacity,filter",
+        },
+        header ? text.formAt : 0,
+      );
     }
   }
 
@@ -1534,20 +2244,32 @@ function getResponsiveElementImage(image) {
     footer.dataset.footerReady = "true";
 
     const { start, y, blur, duration, ease } = CONFIG.footer;
-    gsap.fromTo(content, { y, opacity: 0, filter: `blur(${blur}px)` }, {
-      y: 0,
-      opacity: 1,
-      filter: "blur(0px)",
-      duration,
-      ease,
-      clearProps: "transform,opacity,filter",
-      // Refreshed after the pinned sections above, which rebuild at other breakpoints and shift this one
-      scrollTrigger: { trigger: footer, start, once: true, refreshPriority: -1 },
-    });
+    gsap.fromTo(
+      content,
+      { y, opacity: 0, filter: `blur(${blur}px)` },
+      {
+        y: 0,
+        opacity: 1,
+        filter: "blur(0px)",
+        duration,
+        ease,
+        clearProps: "transform,opacity,filter",
+        // Refreshed after the pinned sections above, which rebuild at other breakpoints and shift this one
+        scrollTrigger: {
+          trigger: footer,
+          start,
+          once: true,
+          refreshPriority: -1,
+        },
+      },
+    );
   }
 
   function init() {
-    if (typeof window.gsap === "undefined" || typeof window.ScrollTrigger === "undefined") {
+    if (
+      typeof window.gsap === "undefined" ||
+      typeof window.ScrollTrigger === "undefined"
+    ) {
       initNavbarScrollState();
       initSection4PinnedSlider();
       return;
