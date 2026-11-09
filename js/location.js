@@ -73,7 +73,6 @@
       item.type = "button";
       item.className = "location__item";
       item.setAttribute("aria-pressed", "false");
-      item.setAttribute("aria-controls", "location-details");
       item.dataset.locationId = d.id;
       var name = document.createElement("span");
       name.className = "location__item-name";
@@ -462,8 +461,7 @@
         .from(canvasHost, { autoAlpha: 0, scale: 1.035, duration: 1.3 }, 0.1)
         .from(siteEl, { autoAlpha: 0, y: 8, duration: 0.6 }, 0.5)
         .from(bodies, { autoAlpha: 0, y: 10, duration: 0.6, stagger: 0.08 }, 0.6)
-        .from(preview, { autoAlpha: 0, duration: 0.7 }, 1)
-        .from(section.querySelector("[data-location-details]"), { autoAlpha: 0, y: 12, duration: 0.7 }, 0.75);
+        .from(preview, { autoAlpha: 0, duration: 0.7 }, 1);
     }
   }
 

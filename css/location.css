@@ -1,8 +1,8 @@
 /* ==========================================================================
    Vedvan — home section 3: location & connectivity
-   Desktop (≥1024px): copy + destination list + details on the left, the
+   Desktop (≥1024px): copy + destination list on the left, the
    schematic map filling the right. Below 1024px everything stacks: intro,
-   list, map, (phone: image preview), details.
+   list, map, (phone: image preview).
    Gold text values are darkened from the reference gold for contrast on
    ivory: names ≥3:1 (large text), small labels ≥4.5:1.
    Typography: Inter for body/paragraph text, Marcellus for titles.
@@ -97,7 +97,7 @@
     position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "intro" "list" "map" "details";
+    grid-template-areas: "intro" "list" "map";
     width: 100%;
     overflow: hidden;
     padding:
@@ -403,51 +403,6 @@
     object-fit: cover;
   }
   
-  /* Details ---------------------------------------------------------------- */
-  .location__details {
-    grid-area: details;
-    margin-top: clamp(1.75rem, 4vh, 2.5rem);
-    padding-top: clamp(1.25rem, 3vh, 2rem);
-    border-top: 1px solid var(--loc-rule);
-  }
-  
-  .location__details-name {
-    margin: 0;
-    font-family: var(--loc-font-title);
-    font-size: clamp(0.9375rem, 0.3vw + 0.85rem, 1.125rem);
-    font-weight: 400;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-  
-  .location__details-time {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin: clamp(0.875rem, 2vh, 1.25rem) 0 0;
-    font-family: var(--loc-font-body);
-    font-size: 1rem;
-  }
-  
-  .location__icon {
-    flex: none;
-    color: var(--loc-gold-text);
-  }
-  
-  .location__details-label {
-    font-family: var(--loc-font-body);
-    font-size: 0.8125rem;
-    color: var(--loc-muted);
-  }
-  
-  .location__details-text {
-    max-width: 32rem;
-    margin: clamp(0.875rem, 2vh, 1.25rem) 0 0;
-    font-family: var(--loc-font-body);
-    font-size: 0.9375rem;
-    line-height: 1.6;
-    color: var(--loc-muted);
-  }
   
   /* Phone: preview in flow under the map ---------------------------------- */
   @media (max-width: 47.99rem) {
@@ -483,7 +438,7 @@
     .location {
       grid-template-columns: minmax(0, 34fr) minmax(0, 66fr);
       grid-template-rows: auto auto 1fr;
-      grid-template-areas: "intro map" "list map" "details map";
+      grid-template-areas: "intro map" "list map" ". map";
       column-gap: clamp(1.5rem, 3vw, 3rem);
       min-height: 100vh;
       min-height: 100svh;
@@ -500,9 +455,6 @@
       height: auto;
     }
   
-    .location__details {
-      align-self: end;
-    }
   
     .location__note {
       right: var(--vv-gutter);
