@@ -53,6 +53,8 @@
       scrub: 1.2,
       duration: 0.4,
       gap: 0.08,
+      // Below 768px the section isn't pinned or scrubbed: the lines play once, in seconds, as the section enters.
+      mobile: { start: "top 80%", duration: 0.9, stagger: 0.22 },
     },
     butterfly: {
       start: "top 80%",
@@ -81,7 +83,7 @@
           fade: 2.4,
           climb: 0.4,
         },
-        "(max-width: 767.98px)": { fade: 2.2, climb: 0.35 },
+        // No mobile entry: below 768px the intro scrolls normally, without the pin (see initIntroReveal)
       },
     },
     visionMission: {
@@ -108,10 +110,19 @@
           distance: 2.5,
           thresholds: [0.20, 0.40, 0.60, 0.80, 1.0],
         },
-        "(max-width: 1023.98px)": {
+        "(min-width: 768px) and (max-width: 1023.98px)": {
           distance: 2,
           thresholds: [0.20, 0.40, 0.60, 0.80, 1.0],
         },
+        // Below 768px there is no pin: the slider is swiped by hand (see `swipe`)
+      },
+      // Mobile swipe: px a horizontal drag must travel to change slide (and must be more horizontal than vertical)
+      // On mobile the slides move sideways (no water spread) over `duration` seconds.
+      swipe: {
+        query: "(max-width: 767.98px)",
+        threshold: 40,
+        duration: 0.6,
+        ease: "power2.inOut",
       },
       // Seconds, px for `y` and `blur`. The current card's text blurs away (`out`) while the incoming card fades in
       // over it; the incoming text then comes into focus from `text.at`. Steps run `catchUp` times faster while more
@@ -516,10 +527,24 @@
     if (!lines.length) return;
     section.dataset.introReady = "true";
 
-    const { line, scrub, duration, gap } = CONFIG.intro;
+    const { line, scrub, duration, gap, mobile } = CONFIG.intro;
     const mm = gsap.matchMedia();
 
-    ["(min-width: 768px)", "(max-width: 767.98px)"].forEach((query) => {
+    // Mobile: a simple timed reveal that plays once when the section scrolls into view
+    mm.add("(max-width: 767.98px)", () => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: mobile.start,
+          toggleActions: "play none none none",
+        },
+      });
+      lines.forEach((el, i) =>
+        addTextReveal(tl, el, i * mobile.stagger, mobile.duration),
+      );
+    });
+
+    ["(min-width: 768px)"].forEach((query) => {
       mm.add(query, () => {
         const sectionBox = section.getBoundingClientRect();
         const at = (el) =>
@@ -1086,6 +1111,11 @@
       el.textContent = slide.title;
     });
 
+    // Icons live in assets/icns, named after the slide (earth-icn.png, water-icn.png, ...)
+    set(".js-element-icon", (el) => {
+      el.src = `assets/icns/${slide.title.toLowerCase()}-icn.png`;
+    });
+
     set(".js-element-tagline", (el) => {
       el.textContent = slide.tagline;
     });
@@ -1300,6 +1330,7 @@
     let current = 0; // settled slide
     let target = 0; // slide picked by the scroll position
     let active = null; // running transition: { tl, to }
+    let swipeMode = false; // mobile: slides move sideways instead of spreading
 
     const setHidden = (el, hidden) =>
       hidden
@@ -1320,6 +1351,7 @@
           el === cards[index] || el === images[index] ? "none" : HIDDEN,
       });
       gsap.set(cards, { x: 0, y: 0 });
+      gsap.set([...cards, ...images], { xPercent: 0 });
       gsap.set(cardText, { clearProps: "opacity,filter,transform" });
       dots.forEach((dot, k) => gsap.set(dot, dotState(k === index)));
       markActive(index);
@@ -1335,7 +1367,7 @@
 
       const tl = gsap.timeline({
         onComplete: () => {
-          gsap.set(outgoing, { clipPath: HIDDEN });
+          gsap.set(outgoing, { clipPath: HIDDEN, xPercent: 0 });
           gsap.set(
             cardText.filter((el) => cards[from].contains(el)),
             { clearProps: "opacity,filter,transform" },
@@ -1360,6 +1392,19 @@
             0,
           )
           .to(dots[to], { ...dotState(true), duration: transition.reduced }, 0);
+      } else if (swipeMode) {
+        // Plain slider: the incoming card and image push the current ones out sideways
+        const { duration, ease } = CONFIG.elements.swipe;
+        const dir = to > from ? 1 : -1;
+        tl.fromTo(
+          incoming,
+          { clipPath: "none", opacity: 1, xPercent: 100 * dir },
+          { xPercent: 0, duration, ease },
+          0,
+        )
+          .to(outgoing, { xPercent: -100 * dir, duration, ease }, 0)
+          .to(dots[from], { ...dotState(false), duration }, 0)
+          .to(dots[to], { ...dotState(true), duration }, 0);
       } else {
         const { out } = transition;
         tl.add(spreadOver(images[to], transition.image, to * 2.1), 0)
@@ -1473,6 +1518,63 @@
           section.classList.remove("is-slider");
         };
       });
+    });
+
+    // Mobile: a plain touch slider. Swiping left shows the next slide, swiping right the previous one; vertical
+    // drags are left to the browser so the page keeps scrolling normally past the section.
+    mm.add(CONFIG.elements.swipe.query, () => {
+      section.classList.add("is-slider");
+      swipeMode = true;
+      const { threshold } = CONFIG.elements.swipe;
+      const previousTouchAction = section.style.touchAction;
+      section.style.touchAction = "pan-y";
+
+      let startX = 0;
+      let startY = 0;
+      let tracking = false;
+
+      const onDown = (e) => {
+        if (e.pointerType === "mouse" && e.button !== 0) return;
+        tracking = true;
+        startX = e.clientX;
+        startY = e.clientY;
+      };
+      const onUp = (e) => {
+        if (!tracking) return;
+        tracking = false;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        if (Math.abs(dx) < threshold || Math.abs(dx) < Math.abs(dy)) return;
+        target = gsap.utils.clamp(
+          0,
+          ELEMENT_SLIDES.length - 1,
+          target + (dx < 0 ? 1 : -1),
+        );
+        advance();
+      };
+      const onCancel = () => {
+        tracking = false;
+      };
+      const blockImageDrag = (e) => e.preventDefault();
+
+      section.addEventListener("pointerdown", onDown);
+      section.addEventListener("pointerup", onUp);
+      section.addEventListener("pointercancel", onCancel);
+      section.addEventListener("dragstart", blockImageDrag);
+
+      return () => {
+        section.removeEventListener("pointerdown", onDown);
+        section.removeEventListener("pointerup", onUp);
+        section.removeEventListener("pointercancel", onCancel);
+        section.removeEventListener("dragstart", blockImageDrag);
+        section.style.touchAction = previousTouchAction;
+        swipeMode = false;
+        active?.tl.kill();
+        active = null;
+        target = current;
+        showSlide(current);
+        section.classList.remove("is-slider");
+      };
     });
   }
 
