@@ -129,7 +129,7 @@
   .location__title {
     margin: clamp(0.75rem, 1.8vh, 1.25rem) 0 0;
     font-family: var(--loc-font-title);
-    font-size: clamp(2.125rem, 1.6vw + 1rem, 3.5rem);
+    font-size: 27px;
     font-weight: 400;
     line-height: 1.05;
     letter-spacing: -0.01em;
@@ -153,7 +153,8 @@
     border: 0;
     background: none;
     font-family: var(--loc-font-body);
-    font-size:clamp(1.8rem, 0.5vw + 1.1rem, 3.25rem);
+    /* Kept below the section heading: 20px phone, 24px tablet, original size from lg (see media queries) */
+    font-size: 20px;
     font-weight: 400;
     line-height: 1.12;
     text-align: left;
@@ -459,8 +460,26 @@
     }
   }
   
+  @media (min-width: 48rem) {
+    .location__title {
+      font-size: 30px;
+    }
+
+    .location__item {
+      font-size: 24px;
+    }
+  }
+
   /* Desktop: two columns, map fills the right ------------------------------ */
   @media (min-width: 64rem) {
+    .location__title {
+      font-size: 36px;
+    }
+
+    .location__item {
+      font-size: clamp(1.8rem, 0.5vw + 1.1rem, 3.25rem);
+    }
+
     .location {
       grid-template-columns: minmax(0, 34fr) minmax(0, 66fr);
       grid-template-rows: auto auto 1fr;

@@ -155,7 +155,14 @@
       text: { at: 0.25, step: 0.1, duration: 0.45 },
       breakpoints: {
         "(min-width: 1024px)": { distance: 1.1, y: 110 },
-        "(max-width: 1023.98px)": { distance: 0.85, y: 80 },
+        "(max-width: 1023.98px)": { distance: 0.85, y: 80, stacked: true },
+      },
+      // Tablet/phone (card stacked under the image): each piece reveals on its own as it enters the viewport,
+      // from its top reaching `start` to reaching `end`, instead of one timeline spread over the whole stage.
+      stacked: {
+        image: { start: "top 95%", end: "top 45%" },
+        card: { start: "top 95%", end: "top 70%" },
+        text: { start: "top 92%", end: "top 68%" },
       },
     },
     experience: {
@@ -1538,6 +1545,26 @@
                 text.duration,
               ),
             );
+
+          if (!pinned && bp.stacked) {
+            const { stacked } = CONFIG.philosophy;
+            const scrubbed = (trigger, range) =>
+              gsap.timeline({
+                defaults: { ease: "none" },
+                scrollTrigger: {
+                  trigger,
+                  ...range,
+                  scrub,
+                  invalidateOnRefresh: true,
+                },
+              });
+            addImageReveal(scrubbed(image, stacked.image), image, 0, 1);
+            scrubbed(card, stacked.card).fromTo(card, hidden, shown, 0);
+            cardText.forEach((el) =>
+              addTextReveal(scrubbed(el, stacked.text), el, 0, 1),
+            );
+            return;
+          }
 
           if (!pinned) {
             const tl = gsap.timeline({
