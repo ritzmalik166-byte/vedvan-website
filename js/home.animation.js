@@ -98,16 +98,12 @@
           distance: 2.5,
           thresholds: [0.20, 0.40, 0.60, 0.80, 1.0],
         },
-        "(min-width: 768px) and (max-width: 1023.98px)": {
-          distance: 2,
-          thresholds: [0.20, 0.40, 0.60, 0.80, 1.0],
-        },
-        // Below 768px there is no pin: the slider is swiped by hand (see `swipe`)
+        // Below 1024px (mobile + tablet) there is no pin: the slider is swiped by hand (see `swipe`)
       },
-      // Mobile swipe: px a horizontal drag must travel to change slide (and must be more horizontal than vertical)
-      // On mobile the slides move sideways (no water spread) over `duration` seconds.
+      // Mobile/tablet swipe: px a horizontal drag must travel to change slide (and must be more horizontal than vertical)
+      // Below lg the slides move sideways (no water spread) over `duration` seconds.
       swipe: {
-        query: "(max-width: 767.98px)",
+        query: "(max-width: 1023.98px)",
         threshold: 40,
         duration: 0.6,
         ease: "power2.inOut",
@@ -1206,7 +1202,7 @@
     let current = 0; // settled slide
     let target = 0; // slide picked by the scroll position
     let active = null; // running transition: { tl, to }
-    let swipeMode = false; // mobile: slides move sideways instead of spreading
+    let swipeMode = false; // below lg: slides move sideways instead of spreading
 
     const setHidden = (el, hidden) =>
       hidden
@@ -1396,7 +1392,7 @@
       });
     });
 
-    // Mobile: a plain touch slider. Swiping left shows the next slide, swiping right the previous one; vertical
+    // Mobile + tablet: a plain touch slider. Swiping left shows the next slide, swiping right the previous one; vertical
     // drags are left to the browser so the page keeps scrolling normally past the section.
     mm.add(CONFIG.elements.swipe.query, () => {
       section.classList.add("is-slider");

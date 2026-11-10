@@ -276,12 +276,9 @@ main {
   will-change: clip-path;
 }
 
-/* While pinned, the slider fills the viewport below the fixed header */
-#elements.is-slider {
-  height: calc(100svh - 74px);
-}
-
-@media (min-width: 48rem) {
+/* Desktop: while pinned, the slider fills the viewport below the fixed header.
+   Below lg the section has no fixed height: it is as tall as the panel plus the image (sized by aspect ratio). */
+@media (min-width: 64rem) {
   #elements.is-slider {
     height: calc(100svh - 87px);
   }
@@ -291,32 +288,6 @@ main {
   #elements.is-slider .js-element-panel {
     position: relative;
     flex-shrink: 0;
-  }
-
-  #elements.is-slider .js-element-media {
-    flex: 1 1 auto;
-    height: auto;
-    min-height: 250px;
-  }
-}
-
-/* Short stacked screens: compact the panel so the image keeps a usable height while pinned */
-@media (max-width: 63.99rem) and (max-height: 700px) {
-  #elements.is-slider .js-element-panel {
-    padding-block: 2rem;
-  }
-
-  #elements.is-slider .js-element-title {
-    scale: 0.8;
-    margin-block: -21px;
-  }
-
-  #elements.is-slider .js-section-content {
-    margin-top: 1.5rem;
-  }
-
-  #elements.is-slider .js-element-dots {
-    margin-top: 1.25rem;
   }
 }
 
