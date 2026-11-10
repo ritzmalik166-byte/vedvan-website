@@ -53,7 +53,8 @@
       scrub: 1.2,
       duration: 0.4,
       gap: 0.08,
-      // Below 768px the section isn't pinned or scrubbed: the lines play once, in seconds, as the section enters.
+      // Below 1024px (mobile + tablet) the section isn't pinned or scrubbed: the lines play once, in seconds, as the
+      // section enters.
       mobile: { start: "top 80%", duration: 0.9, stagger: 0.22 },
     },
     introStack: {
@@ -67,11 +68,8 @@
       steps: { duration: 1, overlap: 0.4, blur: 14, ease: "sine.in" },
       breakpoints: {
         "(min-width: 1024px)": { fade: 2.6, climb: 0.45 },
-        "(min-width: 768px) and (max-width: 1023.98px)": {
-          fade: 2.4,
-          climb: 0.4,
-        },
-        // No mobile entry: below 768px the intro scrolls normally, without the pin (see initIntroReveal)
+        // No mobile/tablet entry: below 1024px the intro scrolls normally, without the pin or the blur-out
+        // (see initIntroReveal)
       },
     },
     visionMission: {
@@ -513,8 +511,8 @@
     const { line, scrub, duration, gap, mobile } = CONFIG.intro;
     const mm = gsap.matchMedia();
 
-    // Mobile: a simple timed reveal that plays once when the section scrolls into view
-    mm.add("(max-width: 767.98px)", () => {
+    // Mobile + tablet: a simple timed reveal that plays once when the section scrolls into view
+    mm.add("(max-width: 1023.98px)", () => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
@@ -527,7 +525,7 @@
       );
     });
 
-    ["(min-width: 768px)"].forEach((query) => {
+    ["(min-width: 1024px)"].forEach((query) => {
       mm.add(query, () => {
         const sectionBox = section.getBoundingClientRect();
         const at = (el) =>
