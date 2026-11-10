@@ -56,18 +56,6 @@
       // Below 768px the section isn't pinned or scrubbed: the lines play once, in seconds, as the section enters.
       mobile: { start: "top 80%", duration: 0.9, stagger: 0.22 },
     },
-    butterfly: {
-      start: "top 80%",
-      duration: 2.2,
-      arc: 36, // px the flight path dips below and rises above the resting point
-      tilt: 14,
-      flap: {
-        duration: 0.16,
-        near: { rotation: -8, scaleX: 0.86 },
-        far: { rotation: 14, scaleX: 0.7 },
-      },
-      hover: { y: 4, rotation: 2, duration: 2.4 },
-    },
     introStack: {
       // The intro pins with its middle at the viewport's middle (never under the header) while its text blurs away
       // over `fade` viewport heights. Vision & Mission holds still for `hold` of that distance, then eases into
@@ -512,8 +500,7 @@
   }
 
   // Each text line reveals word by word (addTextReveal) on one scrubbed timeline, placed at its position within the
-  // section. The lotus watermark rises in ahead of the heading; the butterfly flies in and lands on the emblem
-  // (see initButterflyAnimation).
+  // section. The lotus watermark rises in ahead of the heading; the butterfly stays static on the emblem.
   function initIntroReveal() {
     const section = document.getElementById("intro");
     if (!section || prefersReducedMotion || section.dataset.introReady) return;
@@ -566,117 +553,6 @@
           addTextReveal(tl, el, previous, duration);
         });
       });
-    });
-  }
-
-  function initButterflyFlap(near, far) {
-    const { duration, near: nearPose, far: farPose } = CONFIG.butterfly.flap;
-
-    return gsap
-      .timeline({
-        repeat: -1,
-        yoyo: true,
-        paused: true,
-        defaults: { duration, ease: "sine.inOut" },
-      })
-      .to(near, nearPose, 0)
-      .to(far, farPose, 0);
-  }
-
-  function initButterflyAnimation() {
-    const section = document.getElementById("intro");
-    const butterfly = section?.querySelector(".js-butterfly");
-    if (!butterfly || prefersReducedMotion) return;
-
-    const emblem = butterfly.offsetParent || butterfly.parentElement;
-    const near = butterfly.querySelector(".js-butterfly-wing-near");
-    const far = butterfly.querySelector(".js-butterfly-wing-far");
-    const { start, duration, arc, tilt, hover } = CONFIG.butterfly;
-
-    const flap = near && far ? initButterflyFlap(near, far) : null;
-    const float = gsap
-      .timeline({
-        repeat: -1,
-        yoyo: true,
-        paused: true,
-        defaults: { duration: hover.duration, ease: "sine.inOut" },
-      })
-      .fromTo(
-        butterfly,
-        { y: -hover.y, rotation: -hover.rotation },
-        { y: hover.y, rotation: hover.rotation, immediateRender: false },
-      );
-
-    // Distance from the butterfly's resting spot to just past the left edge of the viewport
-    const offscreenX = () =>
-      -(
-        emblem.getBoundingClientRect().left +
-        butterfly.offsetLeft +
-        butterfly.offsetWidth +
-        24
-      );
-
-    let entered = false;
-
-    const visibility = ScrollTrigger.create({
-      trigger: section,
-      start: "top bottom",
-      end: "bottom top",
-      onToggle: ({ isActive }) => {
-        if (!entered) return;
-        flap?.paused(!isActive);
-        float.paused(!isActive);
-      },
-    });
-
-    const entrance = gsap
-      .timeline({
-        paused: true,
-        onComplete: () => {
-          entered = true;
-          float.progress(0.5);
-          if (visibility.isActive) float.play();
-          else flap?.pause();
-        },
-      })
-      .fromTo(
-        butterfly,
-        { x: offscreenX },
-        { x: 0, duration, ease: "power2.out" },
-        0,
-      )
-      .fromTo(
-        butterfly,
-        { y: arc, rotation: tilt },
-        {
-          y: -arc * 0.5,
-          rotation: -tilt * 0.4,
-          duration: duration * 0.55,
-          ease: "sine.out",
-        },
-        0,
-      )
-      .to(
-        butterfly,
-        { y: 0, rotation: 0, duration: duration * 0.45, ease: "sine.inOut" },
-        duration * 0.55,
-      );
-
-    const resetStartPosition = () => {
-      if (entrance.progress() === 0 && !entrance.isActive())
-        entrance.invalidate().progress(0).pause();
-    };
-    ScrollTrigger.addEventListener("refresh", resetStartPosition);
-    entrance.eventCallback("onStart", () => {
-      ScrollTrigger.removeEventListener("refresh", resetStartPosition);
-      flap?.play();
-    });
-
-    ScrollTrigger.create({
-      trigger: section,
-      start,
-      once: true,
-      onEnter: () => entrance.play(),
     });
   }
 
@@ -2417,7 +2293,6 @@
     initNavbarScrollState();
     initHeroStackAnimation();
     initIntroReveal();
-    initButterflyAnimation();
     initIntroBlurStack();
     initVisionMissionReveal();
     initVisionMissionWatermark();

@@ -101,6 +101,87 @@ html.lenis body {
   background-color: #02391A;
 }
 
+/* Mobile menu ---------------------------------------------------------------
+   The panel grows from 0 to its content height (grid row 0fr → 1fr), the links fade/slide in one after another,
+   and the hamburger's three bars morph into an X. State comes from home.nav.js (`is-open`, aria-expanded). */
+.js-nav-toggle > span {
+  transform-origin: center;
+  transition:
+    transform 0.4s cubic-bezier(0.65, 0, 0.35, 1),
+    opacity 0.25s ease;
+}
+
+/* Bars are 2px tall with a 5px gap, so the outer bars sit 7px from the middle */
+.js-nav-toggle[aria-expanded="true"] > span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.js-nav-toggle[aria-expanded="true"] > span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.js-nav-toggle[aria-expanded="true"] > span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (max-width: 1023.98px) {
+  #mobile-menu {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      grid-template-rows 0.45s cubic-bezier(0.65, 0, 0.35, 1),
+      opacity 0.35s ease,
+      visibility 0s linear 0.45s;
+  }
+
+  #mobile-menu.is-open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    visibility: visible;
+    transition:
+      grid-template-rows 0.45s cubic-bezier(0.65, 0, 0.35, 1),
+      opacity 0.3s ease,
+      visibility 0s;
+  }
+
+  #mobile-menu .mobile-menu-inner {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  #mobile-menu nav > a {
+    opacity: 0;
+    transform: translateY(-8px);
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  #mobile-menu.is-open nav > a {
+    opacity: 1;
+    transform: none;
+    transition-duration: 0.4s;
+  }
+
+  #mobile-menu.is-open nav > a:nth-child(1) { transition-delay: 0.08s; }
+  #mobile-menu.is-open nav > a:nth-child(2) { transition-delay: 0.13s; }
+  #mobile-menu.is-open nav > a:nth-child(3) { transition-delay: 0.18s; }
+  #mobile-menu.is-open nav > a:nth-child(4) { transition-delay: 0.23s; }
+  #mobile-menu.is-open nav > a:nth-child(5) { transition-delay: 0.28s; }
+  #mobile-menu.is-open nav > a:nth-child(6) { transition-delay: 0.33s; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js-nav-toggle > span,
+  #mobile-menu,
+  #mobile-menu nav > a {
+    transition: none !important;
+  }
+}
+
 /* Intro: silk texture is intentionally stretched and offset as in the design */
 .intro-bg {
   background: #f4f4f4 url("../assets/images/intro-silk-bg.jpg") 50% 45.3% / 114.17% 233.82% no-repeat;
@@ -130,20 +211,22 @@ main {
 
 /* Lotus watermark — tinted by the element's background colour */
 .mask-lotus {
-  -webkit-mask: url("../assets/images/mask-lotus.png") center / 100% 100% no-repeat;
-  mask: url("../assets/images/mask-lotus.png") center / 100% 100% no-repeat;
+  -webkit-mask: url("../assets/updates/lotus-white.png") center / 100% 100% no-repeat;
+  mask: url("../assets/updates/lotus-white.png") center / 100% 100% no-repeat;
 }
 
 /* Intro butterfly: the same artwork split into near and far wing layers that
    recombine into the original image; each layer hinges at the wing root */
 #intro .intro-butterfly-near {
-  clip-path: polygon(0 0, 60.61% 0, 60.61% 36.36%, 58.79% 42.42%, 57.88% 48.48%, 57.88% 64.24%, 62.42% 70.3%, 67.27% 75.15%, 69.7% 100%, 0 100%);
-  transform-origin: 58% 70%;
+  /* Big forewing + hindwing + body (right / lower part of the artwork) */
+  clip-path: polygon(60% 0, 100% 0, 100% 100%, 0 100%, 0 58%, 28% 66%, 38% 64%, 37% 58%, 37.5% 50%, 41% 40%, 50% 20%);
+  transform-origin: 38% 64%;
 }
 
 #intro .intro-butterfly-far {
-  clip-path: polygon(60.61% 0, 100% 0, 100% 100%, 66.06% 100%, 63.64% 75.15%, 58.79% 70.3%, 57.88% 64.24%, 57.88% 48.48%, 58.79% 42.42%, 60.61% 36.36%);
-  transform-origin: 63% 68%;
+  /* Narrow far wing peeking out behind (upper-left part of the artwork) */
+  clip-path: polygon(0 0, 60% 0, 50% 20%, 41% 40%, 37.5% 50%, 37% 58%, 38% 64%, 28% 66%, 0 58%);
+  transform-origin: 38% 64%;
 }
 
 /* Elements slider ---------------------------------------------------------- */

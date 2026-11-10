@@ -154,7 +154,7 @@
           </ul>
           <a
             href="#private-visit"
-            class="js-header-cta bg-gold px-7 py-[10.5px] text-base font-semibold leading-[normal] text-white"
+            class="js-header-cta cursor-pointer border border-gold bg-gold px-[27px] py-[9.5px] text-base font-semibold leading-[normal] text-white transition-colors duration-300 ease-out hover:bg-transparent focus-visible:bg-transparent"
           >
             PRIVATE VISIT
           </a>
@@ -162,7 +162,7 @@
 
         <button
           type="button"
-          class="js-nav-toggle flex size-11 flex-col items-center justify-center gap-[5px] lg:hidden focus-visible:outline-2 focus-visible:outline-white"
+          class="js-nav-toggle flex size-11 cursor-pointer flex-col items-center justify-center gap-[5px] lg:hidden focus-visible:outline-2 focus-visible:outline-white"
           aria-expanded="false"
           aria-controls="mobile-menu"
           aria-label="Open menu"
@@ -173,26 +173,28 @@
         </button>
       </div>
 
-      <div id="mobile-menu" class="bg-[#0c1611]/95 lg:hidden" hidden>
-        <nav
-          aria-label="Mobile"
-          class="site-container flex flex-col gap-1 pb-6 pt-2"
-        >
-          <a href="#experience" class="py-3 text-base text-white">EXPERIENCE</a>
-          <a href="#wellness-community" class="py-3 text-base text-white"
-            >WELLNESS</a
+      <div id="mobile-menu" class="bg-[#0c1611]/95 lg:hidden">
+        <div class="mobile-menu-inner">
+          <nav
+            aria-label="Mobile"
+            class="site-container flex flex-col gap-1 pb-6 pt-2"
           >
-          <a href="#community" class="py-3 text-base text-white">RESIDENCES</a>
-          <a href="#vision-mission" class="py-3 text-base text-white"
-            >OUR STORY</a
-          >
-          <a href="#" class="py-3 text-base text-white">LEADERSHIP</a>
-          <a
-            href="#private-visit"
-            class="mt-3 bg-gold px-7 py-3 text-center text-base font-semibold text-white"
-            >PRIVATE VISIT</a
-          >
-        </nav>
+            <a href="#experience" class="py-3 text-base text-white">EXPERIENCE</a>
+            <a href="#wellness-community" class="py-3 text-base text-white"
+              >WELLNESS</a
+            >
+            <a href="#community" class="py-3 text-base text-white">RESIDENCES</a>
+            <a href="#vision-mission" class="py-3 text-base text-white"
+              >OUR STORY</a
+            >
+            <a href="#" class="py-3 text-base text-white">LEADERSHIP</a>
+            <a
+              href="#private-visit"
+              class="mt-3 bg-gold px-7 py-3 text-center text-base font-semibold text-white"
+              >PRIVATE VISIT</a
+            >
+          </nav>
+        </div>
       </div>
     </header>
 
@@ -299,7 +301,7 @@
                   class="mask-lotus absolute left-[14.62px] top-0 h-[116.945px] w-[139.18px] bg-[rgba(201,168,106,0.07)]"
                 ></span>
                 <img
-                  src="assets/icons/lotus-gold.png"
+                  src="assets/updates/lotus-green.png"
                   alt=""
                   width="106"
                   height="82"
@@ -307,20 +309,25 @@
                 />
               </div>
               <span class="js-butterfly absolute left-0 top-0 size-[73px]">
-                <img
-                  src="assets/images/butterfly.png"
-                  alt=""
-                  width="73"
-                  height="73"
-                  class="js-butterfly-wing-far intro-butterfly-far absolute inset-0 size-full object-cover"
-                />
-                <img
-                  src="assets/images/butterfly.png"
-                  alt=""
-                  width="73"
-                  height="73"
-                  class="js-butterfly-wing-near intro-butterfly-near absolute inset-0 size-full object-cover"
-                />
+                <span class="js-butterfly-bob absolute inset-0">
+                  <!-- The artwork faces left; mirrored so the butterfly faces right -->
+                  <span class="absolute inset-0 -scale-x-100">
+                    <img
+                      src="assets/updates/green-butterfly.png"
+                      alt=""
+                      width="73"
+                      height="73"
+                      class="js-butterfly-wing-far intro-butterfly-far absolute inset-0 size-full object-cover"
+                    />
+                    <img
+                      src="assets/updates/green-butterfly.png"
+                      alt=""
+                      width="73"
+                      height="73"
+                      class="js-butterfly-wing-near intro-butterfly-near absolute inset-0 size-full object-cover"
+                    />
+                  </span>
+                </span>
               </span>
             </div>
 
@@ -362,20 +369,30 @@
         class="relative isolate overflow-hidden px-5 pb-16 pt-16 md:px-10 lg:pb-[86px] lg:pt-[100px]"
       >
         <div
-          class="js-vision-watermark mask-lotus absolute left-1/2 top-[17px] -z-10 aspect-[1104/944] w-full max-w-[1104px] -translate-x-1/2 bg-[rgba(201,168,106,0.04)]"
+          class="js-vision-watermark pointer-events-none absolute left-1/2 top-[17px] -z-10 aspect-[1104/944] w-full max-w-[1104px] -translate-x-1/2 opacity-[0.05]"
           aria-hidden="true"
-        ></div>
+        >
+          <!-- Oversized/offset to compensate for the PNG's transparent padding, so the lotus fills this box -->
+          <img
+            src="assets/updates/lotus-green.png"
+            alt=""
+            width="2084"
+            height="2084"
+            loading="lazy"
+            class="absolute -left-[3.06%] top-0 -mt-[10.4%] aspect-square h-auto w-[106.2%] max-w-none"
+          />
+        </div>
 
         <div class="mx-auto max-w-[1259px] lg:pl-[7px]">
           <div
             class="relative inline-block pr-[34px] pt-[46px] md:pr-[43px] md:pt-[57px]"
           >
             <img
-              src="assets/images/butterfly.png"
+              src="assets/updates/green-butterfly.png"
               alt=""
               width="73"
               height="73"
-              class="js-butterfly absolute right-0 top-0 size-14 -scale-x-100 object-cover md:size-[73px]"
+              class="js-butterfly absolute right-0 top-0 size-14 object-cover md:size-[73px]"
             />
             <h2
               class="js-section-heading font-display text-[27px] leading-[1.05] text-[#333] md:text-[30px] lg:text-[36px] text-forest"
@@ -862,10 +879,16 @@
               class="absolute inset-0 -z-10 bg-[#111914] opacity-40"
               aria-hidden="true"
             ></span>
-            <span
-              class="mask-lotus absolute left-[39.73%] top-[26.1%] aspect-[274.34/234.475] w-[20.8%] bg-[rgba(168,133,68,0.57)]"
+            <!-- Sized/offset to compensate for the PNG's transparent padding, so the lotus sits where the old mask did -->
+            <img
+              src="assets/updates/lotus-white.png"
+              alt=""
+              width="2084"
+              height="2084"
+              loading="lazy"
               aria-hidden="true"
-            ></span>
+              class="pointer-events-none absolute left-[39.09%] top-[26.1%] -mt-[2.58%] aspect-square h-auto w-[22.08%] object-contain"
+            />
             <figcaption
               class="absolute bottom-4 left-4 right-4 text-[10px] font-semibold uppercase leading-[normal] tracking-[0.756px] text-[#dce3d9] sm:bottom-auto sm:left-[28.81%] sm:right-auto sm:top-[87.15%] sm:text-[11.344px]"
             >
@@ -1474,7 +1497,7 @@
 
           <button
             type="submit"
-            class="js-cta w-full bg-white px-7 py-[14.5px] text-base font-semibold leading-[normal] text-black hover:bg-linen focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+            class="js-cta w-full cursor-pointer bg-white px-7 py-[14.5px] text-base font-semibold leading-[normal] text-black transition-colors duration-300 ease-out hover:bg-forest hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
           >
             PRIVATE VISIT
           </button>
