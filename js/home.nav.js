@@ -50,3 +50,20 @@ if (navToggle && mobileMenu) {
     }
   });
 }
+
+// Bubble buttons: the gold drains away from (and refills towards) the point where the pointer enters / leaves
+document.querySelectorAll(".bubble-btn").forEach((btn) => {
+  const setOrigin = (event) => {
+    const rect = btn.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    btn.style.setProperty("--bubble-x", `${x}px`);
+    btn.style.setProperty("--bubble-y", `${y}px`);
+    // Just large enough to reach the farthest corner, so the whole animation is visible
+    const maxX = Math.max(x, rect.width - x);
+    const maxY = Math.max(y, rect.height - y);
+    btn.style.setProperty("--bubble-max", `${Math.ceil(Math.hypot(maxX, maxY)) + 2}px`);
+  };
+  btn.addEventListener("pointerenter", setOrigin);
+  btn.addEventListener("pointerleave", setOrigin);
+});

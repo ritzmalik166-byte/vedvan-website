@@ -115,6 +115,54 @@ html.lenis body {
   background-color: #02391A;
 }
 
+/* Bubble hover: the button's gold background is a layer with a round hole in it. On hover the hole grows from
+   where the pointer enters until the gold is gone (transparent button, gold border); on leave it closes again
+   towards where the pointer left. js/home.nav.js sets --bubble-x / --bubble-y; without JS it grows from the centre. */
+@property --bubble-r {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+.bubble-btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+.bubble-btn::before {
+  --bubble-r: 0px;
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--bubble-fill, #b6a96e);
+  -webkit-mask-image: radial-gradient(
+    circle at var(--bubble-x, 50%) var(--bubble-y, 50%),
+    transparent var(--bubble-r),
+    #000 calc(var(--bubble-r) + 1px)
+  );
+  mask-image: radial-gradient(
+    circle at var(--bubble-x, 50%) var(--bubble-y, 50%),
+    transparent var(--bubble-r),
+    #000 calc(var(--bubble-r) + 1px)
+  );
+  transition: --bubble-r 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.bubble-btn:hover::before,
+.bubble-btn:focus-visible::before {
+  --bubble-r: var(--bubble-max, 200px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bubble-btn::before {
+    transition-duration: 0.01s;
+  }
+}
+
 /* "*Artistic Image" disclaimer, pinned to the top-right corner of each render / photo */
 .artistic-tag {
   position: absolute;
