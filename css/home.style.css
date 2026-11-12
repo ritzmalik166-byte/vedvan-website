@@ -369,3 +369,49 @@ main {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* Private visit date field: same box on every phone.
+   iOS Safari ignores width:100% on a native date input and Android Chrome
+   gives it an intrinsic min-width, so reset the native look and sizing. */
+.visit-date {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  line-height: normal;
+}
+
+.visit-date::-webkit-date-and-time-value {
+  margin: 0;
+  text-align: left;
+}
+
+.visit-date::-webkit-datetime-edit {
+  padding: 0;
+}
+
+/* Date inputs have no placeholder (mobile shows a blank box), so js/home.nav.js
+   marks the empty field and this label stands in for one */
+.visit-date-placeholder {
+  display: none;
+  position: absolute;
+  inset: 0 auto 0 1rem;
+  align-items: center;
+  font-size: 0.875rem;
+  color: var(--color-ink);
+  pointer-events: none;
+}
+
+.visit-date.is-empty:not(:focus) {
+  color: transparent;
+}
+
+.visit-date.is-empty:not(:focus)::-webkit-datetime-edit {
+  color: transparent;
+}
+
+.visit-date.is-empty:not(:focus) + .visit-date-placeholder {
+  display: flex;
+}

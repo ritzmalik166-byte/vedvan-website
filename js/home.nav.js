@@ -6,6 +6,14 @@ if (visitDate) {
   now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
   visitDate.min = now.toISOString().slice(0, 10);
 
+  // Date inputs have no placeholder: flag the empty state so CSS shows a stand-in label
+  const syncEmpty = () => visitDate.classList.toggle("is-empty", !visitDate.value);
+  syncEmpty();
+  visitDate.addEventListener("input", syncEmpty);
+  visitDate.addEventListener("change", syncEmpty);
+  visitDate.addEventListener("blur", syncEmpty);
+  visitDate.form?.addEventListener("reset", () => setTimeout(syncEmpty));
+
   visitDate.addEventListener("click", () => {
     try {
       visitDate.showPicker();
