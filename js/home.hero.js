@@ -125,7 +125,7 @@
 
   const videoSources = {
     desktop:
-      "https://contenaissance.blob.core.windows.net/ct-assets/VEDVAN_Walkthrough_compressed%20(1).mp4",
+      "https://contenaissance.blob.core.windows.net/ct-assets/VEDVAN%20%20Walkthrough%20Final%201440%20x%20797%2001%20(2).mp4",
 
     tablet:
       "https://contenaissance.blob.core.windows.net/ct-assets/Vedvan_12sep_Video_768px_compressed.mp4",
