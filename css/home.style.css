@@ -115,6 +115,39 @@ html.lenis body {
   background-color: #02391A;
 }
 
+/* "*Artistic Image" disclaimer, pinned to the top-right corner of each render / photo */
+.artistic-tag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  pointer-events: none;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65);
+  white-space: nowrap;
+}
+
+/* Clears the round "Explore more" button in the image's top-right corner */
+.artistic-tag--beside-cta {
+  right: 72px;
+}
+
+@media (min-width: 48rem) {
+  .artistic-tag {
+    top: 14px;
+    right: 14px;
+    font-size: 11px;
+  }
+
+  .artistic-tag--beside-cta {
+    right: 17px;
+  }
+}
+
 /* Mobile menu ---------------------------------------------------------------
    The panel grows from 0 to its content height (grid row 0fr → 1fr), the links fade/slide in one after another,
    and the hamburger's three bars morph into an X. State comes from home.nav.js (`is-open`, aria-expanded). */

@@ -15,6 +15,7 @@
       hiddenClass: "is-hidden",
       hideAfter: 120, // px scrolled before scrolling down may hide the navbar
       delta: 6, // px of movement in one direction before it hides / shows (ignores jitter)
+      pinLead: 0.3, // share of the viewport before a pinned section where the navbar is already forced back in
     },
     hero: {
       scrub: 1,
@@ -413,12 +414,25 @@
     const header = document.getElementById("site-header");
     if (!header) return;
 
-    const { scrolledClass, threshold, hiddenClass, hideAfter, delta } =
+    const { scrolledClass, threshold, hiddenClass, hideAfter, delta, pinLead } =
       CONFIG.navbar;
     const mobileMenu = document.getElementById("mobile-menu");
     let isScrolled = null;
     let isHidden = false;
     let lastY = window.scrollY;
+
+    // Every pinning ScrollTrigger (they can be created or rebuilt later, e.g. by matchMedia), checked live
+    const isNearPin = (scrollY) => {
+      if (typeof window.ScrollTrigger === "undefined") return false;
+      const lead = window.innerHeight * pinLead;
+      return ScrollTrigger.getAll().some(
+        (t) =>
+          t.pin &&
+          t.enabled !== false &&
+          scrollY >= t.start - lead &&
+          scrollY <= t.end,
+      );
+    };
 
     const setHidden = (hidden) => {
       if (hidden === isHidden) return;
@@ -431,6 +445,14 @@
       if (next !== isScrolled) {
         isScrolled = next;
         header.classList.toggle(scrolledClass, next);
+      }
+
+      // Pinned sections sit just below the navbar, so hiding it would leave an empty band above them:
+      // keep it shown while any pin is active (and slightly before, so it has time to slide back in)
+      if (isNearPin(scrollY)) {
+        lastY = scrollY;
+        setHidden(false);
+        return;
       }
 
       // Scrolling down hides the navbar, scrolling up brings it back (always shown near the top,
@@ -1734,11 +1756,23 @@
 
   // Splits "40%" into an animated number and an unchanging screen-reader copy of the real value
   function createStatCounter(dd) {
-    const match = dd.textContent.trim().match(/^(\D*)(\d+(?:\.\d+)?)(\D*)$/);
+    const match = dd.textContent
+      .trim()
+      .match(/^(\D*)(\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?(\D*)$/);
     if (!match) return null;
 
-    const [text, prefix, number, suffix] = match;
-    const decimals = (number.split(".")[1] || "").length;
+    const [text, prefix, whole, fraction = "", suffix] = match;
+    const number = whole.replace(/,/g, "") + fraction;
+    const decimals = Math.max(0, fraction.length - 1);
+    // Keep thousands separators (e.g. "10,000+") while the digits count up
+    const grouped = whole.includes(",");
+    const format = (value) =>
+      grouped
+        ? value.toLocaleString("en-US", {
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals,
+          })
+        : value.toFixed(decimals);
     const visual = document.createElement("span");
     const label = document.createElement("span");
     visual.setAttribute("aria-hidden", "true");
@@ -1749,7 +1783,7 @@
 
     const counter = { value: 0 };
     const render = () => {
-      visual.textContent = `${prefix}${counter.value.toFixed(decimals)}${suffix}`;
+      visual.textContent = `${prefix}${format(counter.value)}${suffix}`;
     };
     // Reserve the final width so the strip's layout does not shift while digits change
     const reserveWidth = () => {

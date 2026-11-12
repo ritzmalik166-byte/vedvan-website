@@ -1,3 +1,20 @@
+// Private visit form: no past dates, and the whole field opens the calendar
+const visitDate = document.getElementById("visit-date");
+
+if (visitDate) {
+  const now = new Date();
+  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  visitDate.min = now.toISOString().slice(0, 10);
+
+  visitDate.addEventListener("click", () => {
+    try {
+      visitDate.showPicker();
+    } catch (e) {
+      // showPicker unsupported: the native icon still opens the calendar
+    }
+  });
+}
+
 // Mobile navigation toggle
 const navToggle = document.querySelector(".js-nav-toggle");
 const mobileMenu = document.getElementById("mobile-menu");
