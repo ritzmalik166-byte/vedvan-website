@@ -7,7 +7,11 @@
     lenis: {
       lerp: 0.1,
       wheelMultiplier: 1,
-      anchors: true,
+      // In-page links are handled by initAnchorLinks, so they can scroll straight through pinned sections
+      anchors: false,
+    },
+    anchors: {
+      maxDuration: 5000, // ms; safety net that ends navigation mode if Lenis never reports completion
     },
     navbar: {
       scrolledClass: "is-scrolled",
@@ -400,6 +404,8 @@
   ).matches;
   let lenis = null;
   let introPinEnd = null; // scroll position where the intro's pin ends, set by initIntroBlurStack
+  // True while an in-page link is scrolling to its target: pinned sections must let the scroll pass through
+  let isNavigating = false;
 
   function initSmoothScroll() {
     if (prefersReducedMotion || typeof window.Lenis !== "function") return;
@@ -408,6 +414,46 @@
     lenis.on("scroll", ScrollTrigger.update);
     gsap.ticker.add((time) => lenis.raf(time * 1000));
     gsap.ticker.lagSmoothing(0);
+  }
+
+  // Nav / footer links to "#section" scroll smoothly all the way to their target. While that scroll runs,
+  // `isNavigating` tells pinned sections (e.g. the elements slider) not to hold the page inside their pin.
+  function initAnchorLinks() {
+    if (!lenis) return;
+    let safety = null;
+
+    const finish = () => {
+      clearTimeout(safety);
+      isNavigating = false;
+    };
+
+    document.addEventListener("click", (e) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const link = e.target.closest?.('a[href^="#"]');
+      if (!link) return;
+      const hash = link.getAttribute("href");
+      if (hash === "#") return;
+
+      const el =
+        hash === "#top" ? null : document.getElementById(decodeURIComponent(hash.slice(1)));
+      if (hash !== "#top" && !el) return;
+
+      // Measured without the section's own GSAP translation (e.g. Vision & Mission is shifted up while the intro
+      // stack is still ahead), so the scroll lands where the section settles, not where it is drawn right now
+      const target = el
+        ? el.getBoundingClientRect().top +
+          window.scrollY -
+          (Number(gsap.getProperty(el, "y")) || 0) -
+          (parseFloat(getComputedStyle(el).scrollMarginTop) || 0) -
+          (document.getElementById("site-header")?.offsetHeight || 0)
+        : 0;
+
+      e.preventDefault();
+      clearTimeout(safety);
+      isNavigating = true;
+      safety = setTimeout(finish, CONFIG.anchors.maxDuration);
+      lenis.scrollTo(target, { lock: true, force: true, onComplete: finish });
+    });
   }
 
   function initNavbarScrollState() {
@@ -1394,7 +1440,7 @@
     let pin = null;
     let holding = false;
     function holdInPin() {
-      if (!active || !pin || holding) return;
+      if (!active || !pin || holding || isNavigating) return;
       const y = pin.scroll();
       const to = gsap.utils.clamp(pin.start + 1, pin.end - 1, y);
       if (to === y) return;
@@ -1411,7 +1457,10 @@
       mm.add(query, () => {
         section.classList.add("is-slider");
         const targetFor = (progress) =>
-          bp.thresholds.filter((t) => progress >= t).length;
+          Math.min(
+            bp.thresholds.filter((t) => progress >= t).length,
+            ELEMENT_SLIDES.length - 1,
+          );
 
         pin = ScrollTrigger.create({
           trigger: section,
@@ -1421,6 +1470,13 @@
           invalidateOnRefresh: true,
           onUpdate: (self) => {
             target = targetFor(self.progress);
+            // Passing through on a nav-link scroll: jump to the matching slide instead of animating each one
+            if (isNavigating) {
+              active?.tl.kill();
+              active = null;
+              showSlide(target);
+              return;
+            }
             advance();
             holdInPin();
           },
@@ -2346,6 +2402,7 @@
     ScrollTrigger.config({ ignoreMobileResize: true });
 
     initSmoothScroll();
+    initAnchorLinks();
     initNavbarScrollState();
     initHeroStackAnimation();
     initIntroReveal();
