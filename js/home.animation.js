@@ -422,6 +422,14 @@
     if (!lenis) return;
     let safety = null;
 
+    // Height of the navbar's bar alone: the open mobile menu (still closing when a link in it is clicked) is not counted
+    const header = document.getElementById("site-header");
+    const headerBarHeight = () => {
+      if (!header) return 0;
+      const menu = document.getElementById("mobile-menu");
+      return header.offsetHeight - (menu && header.contains(menu) ? menu.offsetHeight : 0);
+    };
+
     const finish = () => {
       clearTimeout(safety);
       isNavigating = false;
@@ -445,7 +453,7 @@
           window.scrollY -
           (Number(gsap.getProperty(el, "y")) || 0) -
           (parseFloat(getComputedStyle(el).scrollMarginTop) || 0) -
-          (document.getElementById("site-header")?.offsetHeight || 0)
+          headerBarHeight()
         : 0;
 
       e.preventDefault();
