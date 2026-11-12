@@ -94,7 +94,21 @@ html.lenis body {
 
 /* Fixed header: transparent over the hero, solid once the page scrolls */
 #site-header {
-  transition: background-color 0.35s ease;
+  transition:
+    background-color 0.35s ease,
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+/* Hidden while scrolling down, slides back in on scroll up (toggled in home.animation.js) */
+#site-header.is-hidden {
+  transform: translateY(-100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #site-header {
+    transition: background-color 0.35s ease;
+  }
 }
 
 #site-header.is-scrolled {

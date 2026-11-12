@@ -12,6 +12,9 @@
     navbar: {
       scrolledClass: "is-scrolled",
       threshold: 12, // px scrolled before the navbar turns solid
+      hiddenClass: "is-hidden",
+      hideAfter: 120, // px scrolled before scrolling down may hide the navbar
+      delta: 6, // px of movement in one direction before it hides / shows (ignores jitter)
     },
     hero: {
       scrub: 1,
@@ -410,15 +413,40 @@
     const header = document.getElementById("site-header");
     if (!header) return;
 
-    const { scrolledClass, threshold } = CONFIG.navbar;
+    const { scrolledClass, threshold, hiddenClass, hideAfter, delta } =
+      CONFIG.navbar;
+    const mobileMenu = document.getElementById("mobile-menu");
     let isScrolled = null;
+    let isHidden = false;
+    let lastY = window.scrollY;
+
+    const setHidden = (hidden) => {
+      if (hidden === isHidden) return;
+      isHidden = hidden;
+      header.classList.toggle(hiddenClass, hidden);
+    };
 
     const update = (scrollY) => {
       const next = scrollY > threshold;
-      if (next === isScrolled) return;
-      isScrolled = next;
-      header.classList.toggle(scrolledClass, next);
+      if (next !== isScrolled) {
+        isScrolled = next;
+        header.classList.toggle(scrolledClass, next);
+      }
+
+      // Scrolling down hides the navbar, scrolling up brings it back (always shown near the top,
+      // while the mobile menu is open, or while keyboard focus is inside it)
+      const diff = scrollY - lastY;
+      if (Math.abs(diff) < delta) return;
+      lastY = scrollY;
+
+      const keepVisible =
+        scrollY <= hideAfter ||
+        mobileMenu?.classList.contains("is-open") ||
+        header.contains(document.activeElement);
+      setHidden(!keepVisible && diff > 0);
     };
+
+    header.addEventListener("focusin", () => setHidden(false));
 
     update(window.scrollY);
 
