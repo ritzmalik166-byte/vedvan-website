@@ -157,6 +157,19 @@ html.lenis body {
   --bubble-r: var(--bubble-max, 200px);
 }
 
+/* Pill variant: the light pill fill drains away to reveal forest green underneath, text turns white */
+.bubble-btn.bubble-btn--pill {
+  --bubble-fill: #f7f9f6;
+  background-color: #02391a;
+  color: #000;
+  transition: color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bubble-btn.bubble-btn--pill:hover,
+.bubble-btn.bubble-btn--pill:focus-visible {
+  color: #fff;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .bubble-btn::before {
     transition-duration: 0.01s;
