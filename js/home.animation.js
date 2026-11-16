@@ -66,17 +66,14 @@
       mobile: { start: "top 80%", duration: 0.9, stagger: 0.22 },
     },
     introStack: {
-      // The intro pins with its middle at the viewport's middle (never under the header) while its text blurs away
-      // over `fade` viewport heights. Vision & Mission holds still for `hold` of that distance, then eases into
-      // climbing over the pinned intro across `climb` viewport heights. The pin releases once the intro is fully covered.
+      // No pin: the intro's text blurs away (scrubbed) as the section scrolls from mid-viewport out through the top.
       scrub: 1.2,
-      hold: 0.85,
       // Timeline units: each step (heading → paragraphs → tagline) blurs to `blur` px while fading out over `duration`;
       // the next starts `overlap` before it ends.
       steps: { duration: 1, overlap: 0.4, blur: 14, ease: "sine.in" },
       breakpoints: {
-        "(min-width: 1024px)": { fade: 2.6, climb: 0.45 },
-        // No mobile/tablet entry: below 1024px the intro scrolls normally, without the pin or the blur-out
+        "(min-width: 1024px)": {},
+        // No mobile/tablet entry: below 1024px the intro scrolls normally, without the blur-out
         // (see initIntroReveal)
       },
     },
@@ -97,52 +94,17 @@
       watermark: { x: 16, y: 12, rotation: 1.5, durationX: 11, durationY: 8 },
     },
     elements: {
-      // The pin's progress picks the slide: slide i + 1 becomes the target once progress passes thresholds[i].
-      // `distance` is the pin length as a multiple of the viewport height.
-      breakpoints: {
-        "(min-width: 1024px)":  {
-          distance: 2.5,
-          thresholds: [0.20, 0.40, 0.60, 0.80, 1.0],
-        },
-        // Below 1024px (mobile + tablet) there is no pin: the slider is swiped by hand (see `swipe`)
-      },
-      // Mobile/tablet swipe: px a horizontal drag must travel to change slide (and must be more horizontal than vertical)
-      // Below lg the slides move sideways (no water spread) over `duration` seconds.
-      swipe: {
-        query: "(max-width: 1023.98px)",
+      // Seconds between automatic slide changes (restarts after every change, manual or automatic)
+      autoplay: { interval: 5 },
+      // Drag / swipe: px a horizontal drag must travel to change slide (and must be more horizontal than vertical).
+      // Each change slides the incoming card + image in sideways over `duration` seconds (crossfade over `reduced`
+      // with reduced motion).
+      slide: {
         threshold: 40,
-        duration: 0.6,
+        duration: 0.9,
         ease: "power2.inOut",
+        reduced: 0.3,
       },
-      // Seconds, px for `y` and `blur`. The current card's text blurs away (`out`) while the incoming card fades in
-      // over it; the incoming text then comes into focus from `text.at`. Steps run `catchUp` times faster while more
-      // are queued. With reduced motion the slides crossfade over `reduced`.
-      transition: {
-        image: 2.8,
-        ease: "sine.inOut",
-        out: {
-          duration: 0.8,
-          stagger: 0.08,
-          y: 12,
-          blur: 10,
-          ease: "power2.in",
-        },
-        text: {
-          at: 0.9,
-          duration: 1.6,
-          stagger: 0.15,
-          y: -16,
-          blur: 6,
-          ease: "power2.out",
-        },
-        dot: 0.5,
-        dotAt: 1.3,
-        catchUp: 2.2,
-        reduced: 0.35,
-      },
-      // Water-spread edge: `reach` is the final radius (box-normalised, past the far corner), `lead` pushes the
-      // diagonal ahead of the sides, `ripple` is the wave height as a share of the box's shorter side.
-      spread: { reach: 1.36, lead: 0.08, ripple: 0.04, points: 72 },
     },
     philosophy: {
       scrub: 0.8,
@@ -403,7 +365,6 @@
     "(prefers-reduced-motion: reduce)",
   ).matches;
   let lenis = null;
-  let introPinEnd = null; // scroll position where the intro's pin ends, set by initIntroBlurStack
   // True while an in-page link is scrolling to its target: pinned sections must let the scroll pass through
   let isNavigating = false;
 
@@ -538,8 +499,7 @@
   // The hero scrolls a little, then pins at full size while the intro section scrolls up over it (no pin
   // spacing, so the intro keeps its natural position and its own triggers). Meanwhile the centred hero
   // content blurs, lifts and fades. Once the intro covers its share of the viewport the pin ends and the
-  // hero carries on from where it was held, so both scroll on together. While the intro is itself pinned
-  // (initIntroBlurStack), the hero stays pinned too, so it keeps filling the space above the intro.
+  // hero carries on from where it was held, so both scroll on together.
   function initHeroStackAnimation() {
     const hero = document.querySelector(".js-hero");
     const content = hero?.querySelector(".js-hero-content");
@@ -568,8 +528,7 @@
         ScrollTrigger.create({
           trigger: hero,
           start,
-          end: (self) =>
-            Math.max(self.start + distance(), introPinEnd?.() ?? 0),
+          end: () => `+=${distance()}`,
           pin: true,
           pinSpacing: false,
           invalidateOnRefresh: true,
@@ -826,14 +785,11 @@
     );
   }
 
-  // The intro pins mid-viewport and its text blurs away in three scrubbed steps. Vision & Mission is pushed down by a
-  // margin and translated back up by the same amount, so it holds still below the intro, then eases into scrolling
-  // over it (translation reaches 0 with zero slope, so its speed never jumps). The pin has no spacing and lasts until
-  // Vision & Mission covers the intro, so the intro stays underneath, as with the hero.
+  // Simple scroll-out for the intro (no pin): as the section scrolls up past the top of the viewport its text
+  // blurs away in three scrubbed steps (heading → paragraphs → tagline). Vision & Mission follows in normal flow.
   function initIntroBlurStack() {
     const section = document.getElementById("intro");
-    const next = document.getElementById("vision-mission");
-    if (!section || !next || prefersReducedMotion) return;
+    if (!section || prefersReducedMotion) return;
 
     const groups = [
       [
@@ -848,94 +804,19 @@
       .filter((group) => group.length);
     if (!groups.length) return;
 
-    const header = document.getElementById("site-header");
-    const { scrub, hold, steps, breakpoints } = CONFIG.introStack;
+    const { scrub, steps, breakpoints } = CONFIG.introStack;
     const mm = gsap.matchMedia();
 
-    Object.entries(breakpoints).forEach(([query, bp]) => {
+    Object.keys(breakpoints).forEach((query) => {
       mm.add(query, () => {
-        const fadeFor = () => window.innerHeight * bp.fade;
-        const holdFor = () => Math.round(fadeFor() * hold);
-        const climbFor = () => Math.round(window.innerHeight * bp.climb);
-        // Extra scroll the stack adds to the page: the hold plus half the climb (it eases from rest to scroll speed)
-        const liftBy = () => holdFor() + Math.round(climbFor() / 2);
-        const pinTop = () => {
-          const vh = window.innerHeight;
-          const height = section.offsetHeight;
-          const headerHeight = header?.offsetHeight || 0;
-          // Too tall to sit below the header: align its bottom with the viewport's instead
-          return Math.round(
-            height > vh - headerHeight
-              ? vh - height
-              : Math.max(headerHeight, (vh - height) / 2),
-          );
-        };
-        const start = () => `top ${pinTop()}px`;
-
-        // Before every refresh, so triggers further down measure the final layout
-        const applyOffset = () => {
-          next.style.marginTop = `${liftBy()}px`;
-          gsap.set(next, { y: 0 });
-        };
-        applyOffset();
-        ScrollTrigger.addEventListener("refreshInit", applyOffset);
-
-        const pinLength = () => liftBy() + section.offsetHeight;
-        // Measured on the pin spacer, which stays in the flow while the intro itself is fixed
-        introPinEnd = () => {
-          const flow = section.parentElement?.classList.contains("pin-spacer")
-            ? section.parentElement
-            : section;
-          return Math.round(
-            flow.getBoundingClientRect().top +
-              window.scrollY -
-              pinTop() +
-              pinLength(),
-          );
-        };
-
-        ScrollTrigger.create({
-          trigger: section,
-          start,
-          end: () => `+=${pinLength()}`,
-          pin: true,
-          pinSpacing: false,
-          invalidateOnRefresh: true,
-        });
-
-        // Hold: translation cancels the scroll. Ease: power1.out over twice the remaining offset starts at the
-        // scroll's speed and ends at rest, so the section accelerates smoothly into its normal scroll.
-        gsap
-          .timeline({
-            scrollTrigger: {
-              trigger: section,
-              start,
-              end: () => `+=${holdFor() + climbFor()}`,
-              scrub: true,
-              invalidateOnRefresh: true,
-            },
-          })
-          .fromTo(
-            next,
-            { y: () => -liftBy() },
-            {
-              y: () => holdFor() - liftBy(),
-              ease: "none",
-              duration: bp.fade * hold,
-            },
-          )
-          .to(next, { y: 0, ease: "power1.out", duration: bp.climb });
-
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: section,
-            start,
-            end: () => `+=${fadeFor()}`,
+            start: "center center",
+            end: "bottom top",
             scrub,
-            invalidateOnRefresh: true,
           },
         });
-        // Each step softens into a blur while it fades out, in place
         groups.forEach((group, g) => {
           tl.fromTo(
             group,
@@ -950,12 +831,6 @@
             g * (steps.duration - steps.overlap),
           );
         });
-
-        return () => {
-          ScrollTrigger.removeEventListener("refreshInit", applyOffset);
-          next.style.marginTop = "";
-          introPinEnd = null;
-        };
       });
     });
   }
@@ -1131,20 +1006,15 @@
     });
   }
 
-  // Pinned Earth → Water → Air slider. The pin's progress only picks the target slide; each change then plays as
-  // a timed (not scrubbed) transition to the neighbouring slide, in either scroll direction: the incoming image
-  // spreads over the current one like water from its bottom-left corner, while the current card's text blurs away
-  // and the incoming card's text comes into focus. Transitions run one at a time until the target is reached;
-  // a running one always completes.
+  // Earth → Water → Fire → Space → Air slider (no pin). Slides change by dragging (grab cursor) / swiping, and
+  // automatically every few seconds. Each change slides the incoming card + image in sideways; a running slide
+  // always completes before the next one starts.
   function initSection4PinnedSlider() {
     const section = document.getElementById("elements");
     if (!section || section.dataset.sliderReady) return;
     section.dataset.sliderReady = "true";
 
-    if (
-      typeof window.gsap === "undefined" ||
-      typeof window.ScrollTrigger === "undefined"
-    ) {
+    if (typeof window.gsap === "undefined") {
       renderStaticElementSlides(section);
       return;
     }
@@ -1193,7 +1063,7 @@
 
       layer.removeAttribute("srcset");
       layer.removeAttribute("sizes");
-      layer.loading = "eager"; // hidden layers must still load before they spread in
+      layer.loading = "eager"; // hidden layers must still load before they slide in
       layer.src = responsiveImage.src;
       layer.alt = slide.image.alt;
 
@@ -1241,15 +1111,11 @@
     new ResizeObserver(syncCardPadding).observe(panel);
 
     const dots = [...sharedDots.querySelectorAll(".element-dot")];
-    const header = document.getElementById("site-header");
-    const { transition, spread, breakpoints } = CONFIG.elements;
-    const { text } = transition;
     const cardText = cards.flatMap((card) => [
       ...card.querySelectorAll(
         ":scope > .js-element-title, :scope > .js-section-content",
       ),
     ]);
-    const mm = gsap.matchMedia();
     const HIDDEN = "polygon(0% 100%, 0% 100%, 0% 100%)";
     const dotState = (active) =>
       active
@@ -1262,49 +1128,8 @@
             borderColor: "rgba(192, 207, 221, 1)",
           };
 
-    // Boundary of a reveal spreading from the bottom-left corner of a w × h box at progress p (0–1): a quarter
-    // ellipse (box-normalised, so it sweeps along the diagonal) that bulges towards the top-right corner, with
-    // two slow waves travelling along its edge. The waves fade out at both ends so it starts and ends cleanly.
-    const spreadClip = (w, h, p, seed) => {
-      if (p <= 0) return HIDDEN;
-      if (p >= 1) return "none";
-      const r = spread.reach * p;
-      const ref = Math.min(w, h);
-      const amp = ref * spread.ripple * Math.sin(Math.PI * p);
-      const points = [`0px ${h}px`];
-      for (let i = 0; i <= spread.points; i++) {
-        const a = (i / spread.points) * (Math.PI / 2);
-        const s = (a * r * (w + h)) / 2; // ≈ distance along the edge, so wave sizes don't depend on the angle
-        const wave =
-          0.7 * Math.sin(s / (ref * 0.3) + p * 3.5 + seed) +
-          0.3 * Math.sin(s / (ref * 0.14) - p * 5 + seed * 1.7);
-        const k = r * (1 + spread.lead * Math.sin(2 * a));
-        const d = amp * wave;
-        points.push(
-          `${((k * w + d) * Math.cos(a)).toFixed(1)}px ${(h - (k * h + d) * Math.sin(a)).toFixed(1)}px`,
-        );
-      }
-      return `polygon(${points.join(", ")})`;
-    };
-
-    const spreadOver = (el, duration, seed) => {
-      const state = { p: 0 };
-      const w = el.offsetWidth;
-      const h = el.offsetHeight;
-      return gsap.to(state, {
-        p: 1,
-        duration,
-        ease: transition.ease,
-        onUpdate: () => {
-          el.style.clipPath = spreadClip(w, h, state.p, seed);
-        },
-      });
-    };
-
     let current = 0; // settled slide
-    let target = 0; // slide picked by the scroll position
     let active = null; // running transition: { tl, to }
-    let swipeMode = false; // below lg: slides move sideways instead of spreading
 
     const setHidden = (el, hidden) =>
       hidden
@@ -1316,7 +1141,7 @@
       images.forEach((img, k) => setHidden(img, k !== index));
     };
 
-    // Shows a slide immediately (layout changes, restored scroll positions)
+    // Shows a slide immediately (layout changes)
     const showSlide = (index) => {
       gsap.set([...cards, ...images], {
         zIndex: 1,
@@ -1331,8 +1156,9 @@
       markActive(index);
     };
 
-    // Plays the neighbouring slide `to` over the current one; the outgoing layers stay visible underneath until it ends
-    function transitionToSlide(to) {
+    // Plays slide `to` over the current one (`dir` 1 = forward, -1 = back); the outgoing layers stay visible
+    // underneath until it ends
+    function transitionToSlide(to, dir) {
       const from = current;
       const incoming = [cards[to], images[to]];
       const outgoing = [cards[from], images[from]];
@@ -1349,27 +1175,22 @@
           gsap.set(incoming, { zIndex: 1 });
           active = null;
           markActive(to);
-          advance();
+          scheduleAutoplay();
         },
       });
 
+      const { duration, ease, reduced } = CONFIG.elements.slide;
       if (prefersReducedMotion) {
         tl.fromTo(
           incoming,
           { clipPath: "none", opacity: 0 },
-          { opacity: 1, duration: transition.reduced, ease: "none" },
+          { opacity: 1, duration: reduced, ease: "none" },
           0,
         )
-          .to(
-            dots[from],
-            { ...dotState(false), duration: transition.reduced },
-            0,
-          )
-          .to(dots[to], { ...dotState(true), duration: transition.reduced }, 0);
-      } else if (swipeMode) {
-        // Plain slider: the incoming card and image push the current ones out sideways
-        const { duration, ease } = CONFIG.elements.swipe;
-        const dir = to > from ? 1 : -1;
+          .to(dots[from], { ...dotState(false), duration: reduced }, 0)
+          .to(dots[to], { ...dotState(true), duration: reduced }, 0);
+      } else {
+        // The incoming card and image push the current ones out sideways
         tl.fromTo(
           incoming,
           { clipPath: "none", opacity: 1, xPercent: 100 * dir },
@@ -1379,187 +1200,99 @@
           .to(outgoing, { xPercent: -100 * dir, duration, ease }, 0)
           .to(dots[from], { ...dotState(false), duration }, 0)
           .to(dots[to], { ...dotState(true), duration }, 0);
-      } else {
-        const { out } = transition;
-        tl.add(spreadOver(images[to], transition.image, to * 2.1), 0)
-          .to(
-            cardText.filter((el) => cards[from].contains(el)),
-            {
-              y: out.y,
-              opacity: 0,
-              filter: `blur(${out.blur}px)`,
-              duration: out.duration,
-              stagger: out.stagger,
-              ease: out.ease,
-            },
-            0,
-          )
-          .fromTo(
-            cards[to],
-            { clipPath: "none", opacity: 0 },
-            { opacity: 1, duration: out.duration, ease: "none" },
-            0,
-          )
-          .fromTo(
-            cardText.filter((el) => cards[to].contains(el)),
-            { y: text.y, opacity: 0, filter: `blur(${text.blur}px)` },
-            {
-              y: 0,
-              opacity: 1,
-              filter: "blur(0px)",
-              duration: text.duration,
-              stagger: text.stagger,
-              ease: text.ease,
-              clearProps: "filter",
-            },
-            text.at,
-          )
-          .to(
-            dots[from],
-            { ...dotState(false), duration: transition.dot },
-            transition.dotAt,
-          )
-          .to(
-            dots[to],
-            { ...dotState(true), duration: transition.dot },
-            transition.dotAt,
-          );
       }
 
       active = { tl, to };
-      pace();
     }
 
-    // Runs faster while more transitions are queued behind the current one
-    const pace = () =>
-      active.tl.timeScale(target === active.to ? 1 : transition.catchUp);
+    // One step forward (1) or back (-1), wrapping around; ignored while a transition is still playing
+    const total = ELEMENT_SLIDES.length;
+    function go(dir) {
+      if (active) return;
+      transitionToSlide((current + dir + total) % total, dir);
+    }
 
-    function advance() {
-      if (active) {
-        pace();
+    // Straight to slide `index` (page navigator dots); a slide still playing is finished first
+    function goTo(index) {
+      if (active) active.tl.progress(1);
+      if (index === current) return;
+      transitionToSlide(index, index > current ? 1 : -1);
+    }
+    // Autoplay: the next slide every `interval` seconds while the section is on screen and the tab is visible.
+    // Every slide change (manual or automatic) restarts the countdown.
+    const { interval } = CONFIG.elements.autoplay;
+    let autoplay = null;
+    let inView = false;
+    let dragging = false;
+    function scheduleAutoplay() {
+      autoplay?.kill();
+      autoplay = null;
+      if (!inView || dragging || document.hidden) return;
+      autoplay = gsap.delayedCall(interval, () => {
+        autoplay = null;
+        go(1);
+      });
+    }
+    new IntersectionObserver(
+      ([entry]) => {
+        inView = entry.isIntersecting;
+        if (!active) scheduleAutoplay();
+      },
+      { threshold: 0.35 },
+    ).observe(section);
+    document.addEventListener("visibilitychange", () => {
+      if (!active) scheduleAutoplay();
+    });
+
+    // Manual slide: drag (mouse, with a grab cursor) or swipe left for the next slide, right for the previous one.
+    // Vertical drags are left to the browser so the page keeps scrolling normally past the section.
+    const { threshold } = CONFIG.elements.slide;
+    section.classList.add("is-slider", "is-draggable");
+    section.style.touchAction = "pan-y";
+    let startX = 0;
+    let startY = 0;
+
+    section.addEventListener("pointerdown", (e) => {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      if (e.target.closest("a, button, input, textarea, select, .element-dot"))
         return;
-      }
-      if (target !== current)
-        transitionToSlide(current + Math.sign(target - current));
-    }
+      dragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      section.classList.add("is-dragging");
+      autoplay?.kill();
+    });
+    const endDrag = (e, cancelled) => {
+      if (!dragging) return;
+      dragging = false;
+      section.classList.remove("is-dragging");
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (!cancelled && Math.abs(dx) >= threshold && Math.abs(dx) > Math.abs(dy))
+        go(dx < 0 ? 1 : -1);
+      if (!active) scheduleAutoplay();
+    };
+    window.addEventListener("pointerup", (e) => endDrag(e, false));
+    window.addEventListener("pointercancel", (e) => endDrag(e, true));
+    section.addEventListener("dragstart", (e) => e.preventDefault());
 
-    // While a transition runs (or more are queued), the page can scroll within the pin but not out of it, so a
-    // fast fling can't carry the section away before the slides it triggered have finished
-    let pin = null;
-    let holding = false;
-    function holdInPin() {
-      if (!active || !pin || holding || isNavigating) return;
-      const y = pin.scroll();
-      const to = gsap.utils.clamp(pin.start + 1, pin.end - 1, y);
-      if (to === y) return;
-      holding = true;
-      if (lenis) lenis.scrollTo(to, { immediate: true, force: true });
-      else window.scrollTo(0, to);
-      ScrollTrigger.update();
-      holding = false;
-    }
-
-    showSlide(0);
-
-    Object.entries(breakpoints).forEach(([query, bp]) => {
-      mm.add(query, () => {
-        section.classList.add("is-slider");
-        const targetFor = (progress) =>
-          Math.min(
-            bp.thresholds.filter((t) => progress >= t).length,
-            ELEMENT_SLIDES.length - 1,
-          );
-
-        pin = ScrollTrigger.create({
-          trigger: section,
-          start: () => `top ${header ? header.offsetHeight : 0}px`,
-          end: () => `+=${Math.round(window.innerHeight * bp.distance)}`,
-          pin: true,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            target = targetFor(self.progress);
-            // Passing through on a nav-link scroll: jump to the matching slide instead of animating each one
-            if (isNavigating) {
-              active?.tl.kill();
-              active = null;
-              showSlide(target);
-              return;
-            }
-            advance();
-            holdInPin();
-          },
-          onRefresh: (self) => {
-            target = targetFor(self.progress);
-            if (!active) showSlide(target);
-          },
-        });
-
-        return () => {
-          pin = null;
-          active?.tl.kill();
-          active = null;
-          showSlide(current);
-          section.classList.remove("is-slider");
-        };
+    // Page navigator: each dot is a button that shows its slide (click, Enter or Space)
+    sharedDots.removeAttribute("aria-hidden");
+    sharedDots.setAttribute("role", "group");
+    sharedDots.setAttribute("aria-label", "Choose an element");
+    dots.forEach((dot, k) => {
+      dot.setAttribute("role", "button");
+      dot.tabIndex = 0;
+      dot.setAttribute("aria-label", `Show ${ELEMENT_SLIDES[k].title}`);
+      dot.addEventListener("click", () => goTo(k));
+      dot.addEventListener("keydown", (e) => {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        e.preventDefault();
+        goTo(k);
       });
     });
 
-    // Mobile + tablet: a plain touch slider. Swiping left shows the next slide, swiping right the previous one; vertical
-    // drags are left to the browser so the page keeps scrolling normally past the section.
-    mm.add(CONFIG.elements.swipe.query, () => {
-      section.classList.add("is-slider");
-      swipeMode = true;
-      const { threshold } = CONFIG.elements.swipe;
-      const previousTouchAction = section.style.touchAction;
-      section.style.touchAction = "pan-y";
-
-      let startX = 0;
-      let startY = 0;
-      let tracking = false;
-
-      const onDown = (e) => {
-        if (e.pointerType === "mouse" && e.button !== 0) return;
-        tracking = true;
-        startX = e.clientX;
-        startY = e.clientY;
-      };
-      const onUp = (e) => {
-        if (!tracking) return;
-        tracking = false;
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-        if (Math.abs(dx) < threshold || Math.abs(dx) < Math.abs(dy)) return;
-        target = gsap.utils.clamp(
-          0,
-          ELEMENT_SLIDES.length - 1,
-          target + (dx < 0 ? 1 : -1),
-        );
-        advance();
-      };
-      const onCancel = () => {
-        tracking = false;
-      };
-      const blockImageDrag = (e) => e.preventDefault();
-
-      section.addEventListener("pointerdown", onDown);
-      section.addEventListener("pointerup", onUp);
-      section.addEventListener("pointercancel", onCancel);
-      section.addEventListener("dragstart", blockImageDrag);
-
-      return () => {
-        section.removeEventListener("pointerdown", onDown);
-        section.removeEventListener("pointerup", onUp);
-        section.removeEventListener("pointercancel", onCancel);
-        section.removeEventListener("dragstart", blockImageDrag);
-        section.style.touchAction = previousTouchAction;
-        swipeMode = false;
-        active?.tl.kill();
-        active = null;
-        target = current;
-        showSlide(current);
-        section.classList.remove("is-slider");
-      };
-    });
+    showSlide(0);
   }
 
   // As the image + card wrapper scrolls into view the image comes in (addImageReveal); the wrapper then pins while
