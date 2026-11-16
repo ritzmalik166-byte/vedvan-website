@@ -182,7 +182,33 @@ html.lenis body {
   }
 }
 
-/* Private visit form "Request Type" pills: selected one matches the header PRIVATE VISIT button */
+/* Private visit form "Request Type" pills: same type size and centred text as the header PRIVATE VISIT button,
+   and the selected one matches its colours */
+label:has(> input[name="request_type"]) {
+  justify-content: center;
+  text-align: center;
+  font-size: 16px;
+}
+
+/* Too narrow for three across at 16px below md: keep them stacked so PRIVATE PRESENTATION stays on one line */
+@media (min-width: 640px) and (max-width: 767.98px) {
+  div:has(> label > input[name="request_type"]) {
+    flex-direction: column;
+  }
+
+  /* sm:flex-1 would squash them below their 52px height in a column */
+  label:has(> input[name="request_type"]) {
+    flex: none;
+  }
+}
+
+/* md to lg: three across, tighter side padding so PRIVATE PRESENTATION fits */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  label:has(> input[name="request_type"]) {
+    padding-inline: 12px;
+  }
+}
+
 label:has(> input[name="request_type"]:checked) {
   border-color: #ffc94e;
   background-color: #ffc94e;
@@ -551,8 +577,14 @@ main {
   inset: 0 auto 0 1rem;
   align-items: center;
   font-size: 0.875rem;
-  color: var(--color-ink);
+  color: #333;
   pointer-events: none;
+}
+
+/* Private visit form: placeholders in plain #333, not forest green */
+#private-visit input::placeholder {
+  color: #333;
+  opacity: 1;
 }
 
 .visit-date.is-empty:not(:focus) {
