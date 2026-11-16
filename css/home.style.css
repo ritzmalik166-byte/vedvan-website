@@ -157,6 +157,58 @@ html.lenis body {
   --bubble-r: var(--bubble-max, 200px);
 }
 
+/* Philosophy pillars (Jal + Agni + ...): #333 text, 14px from tablet up, all five on one line from xl */
+.js-pillars {
+  color: #333;
+}
+
+@media (min-width: 768px) {
+  .js-pillars span.rounded-full {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .js-pillars,
+  .js-pillars > div {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .js-pillars span.rounded-full {
+    padding-inline: 10px;
+  }
+}
+
+/* Private visit form "Request Type" pills: selected one matches the header PRIVATE VISIT button */
+label:has(> input[name="request_type"]:checked) {
+  border-color: #ffc94e;
+  background-color: #ffc94e;
+  color: #02391a;
+}
+
+/* Header nav links: yellow on hover */
+.js-header-nav ul a:hover {
+  color: #ffc94e;
+}
+
+/* Header PRIVATE VISIT button: yellow default fill, yellow border on hover */
+.js-header-cta.bubble-btn {
+  --bubble-fill: #ffc94e;
+  color: #02391a;
+  transition:
+    color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.js-header-cta.bubble-btn:hover,
+.js-header-cta.bubble-btn:focus-visible {
+  color: #fff;
+  border-color: #ffc94e;
+}
+
 /* Pill variant: the light pill fill drains away to reveal forest green underneath, text turns white */
 .bubble-btn.bubble-btn--pill {
   --bubble-fill: #f7f9f6;

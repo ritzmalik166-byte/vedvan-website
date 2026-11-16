@@ -1297,8 +1297,9 @@
 
   // As the image + card wrapper scrolls into view the image comes in (addImageReveal); the wrapper then pins while
   // the card rises into its layout position, blurred to sharp, its lines revealing word by word.
-  // It pins with the image just below the header, or higher when that is needed to show the whole card;
+  // From lg up it pins with the image just below the header, or higher when that is needed to show the whole card;
   // when that would hide the card or most of the image, the reveal is scrubbed without a pin.
+  // Below lg (tablet/phone) it never pins: the image, card and lines each reveal as they scroll in.
   function initSection5PhilosophyAnimation() {
     const section = document.getElementById("philosophy");
     const stage = section?.querySelector(".js-philosophy-stage");
@@ -1365,7 +1366,8 @@
               ),
             );
 
-          if (!pinned && bp.stacked) {
+          // Tablet/phone never pin: each piece reveals on its own as it scrolls in
+          if (bp.stacked) {
             const { stacked } = CONFIG.philosophy;
             const scrubbed = (trigger, range) =>
               gsap.timeline({
