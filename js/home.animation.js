@@ -19,7 +19,6 @@
       hiddenClass: "is-hidden",
       hideAfter: 120, // px scrolled before scrolling down may hide the navbar
       delta: 6, // px of movement in one direction before it hides / shows (ignores jitter)
-      pinLead: 0.3, // share of the viewport before a pinned section where the navbar is already forced back in
     },
     hero: {
       scrub: 1,
@@ -109,18 +108,14 @@
     philosophy: {
       scrub: 0.8,
       blur: 8,
-      hold: 0.15, // share of the pin spent fully revealed before unpinning
-      minImageVisible: 0.5, // below this share of the image left under the header, reveal without pinning
-      // The image comes in (addImageReveal) while the stage scrolls in; the card then rises during the pin. Unpinned,
-      // both share one timeline: the image takes 1 unit and the card's 1-unit rise starts at `cardAt`.
+      // The image takes 1 unit of the timeline and the card's 1-unit rise starts at `cardAt`
       image: { cardAt: 0.8 },
       // Card lines, in units of the card's rise: the first starts at `at`, each next one `step` later
       text: { at: 0.25, step: 0.1, duration: 0.45 },
       breakpoints: {
-        "(min-width: 1280px)": { distance: 1.1, y: 110 },
-        // lg–xl: no pin, just one scrubbed ScrollTrigger as the stage scrolls through
-        "(min-width: 1024px) and (max-width: 1279.98px)": { y: 110, noPin: true },
-        "(max-width: 1023.98px)": { distance: 0.85, y: 80, stacked: true },
+        // lg up: one scrubbed ScrollTrigger (no pin) from the stage's top entering to its bottom reaching `end`
+        "(min-width: 1024px)": { y: 110, start: "top bottom", end: "bottom 85%" },
+        "(max-width: 1023.98px)": { y: 80, stacked: true },
       },
       // Tablet/phone (card stacked under the image): each piece reveals on its own as it enters the viewport,
       // from its top reaching `start` to reaching `end`, instead of one timeline spread over the whole stage.
@@ -431,25 +426,12 @@
     const header = document.getElementById("site-header");
     if (!header) return;
 
-    const { scrolledClass, threshold, hiddenClass, hideAfter, delta, pinLead } =
+    const { scrolledClass, threshold, hiddenClass, hideAfter, delta } =
       CONFIG.navbar;
     const mobileMenu = document.getElementById("mobile-menu");
     let isScrolled = null;
     let isHidden = false;
     let lastY = window.scrollY;
-
-    // Every pinning ScrollTrigger (they can be created or rebuilt later, e.g. by matchMedia), checked live
-    const isNearPin = (scrollY) => {
-      if (typeof window.ScrollTrigger === "undefined") return false;
-      const lead = window.innerHeight * pinLead;
-      return ScrollTrigger.getAll().some(
-        (t) =>
-          t.pin &&
-          t.enabled !== false &&
-          scrollY >= t.start - lead &&
-          scrollY <= t.end,
-      );
-    };
 
     const setHidden = (hidden) => {
       if (hidden === isHidden) return;
@@ -462,14 +444,6 @@
       if (next !== isScrolled) {
         isScrolled = next;
         header.classList.toggle(scrolledClass, next);
-      }
-
-      // Pinned sections sit just below the navbar, so hiding it would leave an empty band above them:
-      // keep it shown while any pin is active (and slightly before, so it has time to slide back in)
-      if (isNearPin(scrollY)) {
-        lastY = scrollY;
-        setHidden(false);
-        return;
       }
 
       // Scrolling down hides the navbar, scrolling up brings it back (always shown near the top,
@@ -1297,12 +1271,9 @@
     showSlide(0);
   }
 
-  // As the image + card wrapper scrolls into view the image comes in (addImageReveal); the wrapper then pins while
-  // the card rises into its layout position, blurred to sharp, its lines revealing word by word.
-  // From xl up it pins with the image just below the header, or higher when that is needed to show the whole card;
-  // when that would hide the card or most of the image, the reveal is scrubbed without a pin.
-  // Between lg and xl it never pins: the image and card reveal on one scrubbed ScrollTrigger.
-  // Below lg (tablet/phone) it never pins: the image, card and lines each reveal as they scroll in.
+  // No pin: from lg up the image comes in (addImageReveal) and the card rises into place, blurred to sharp, its lines
+  // revealing word by word, all on one scrubbed ScrollTrigger as the stage scrolls through the viewport.
+  // Below lg (tablet/phone) the image, card and lines each reveal as they scroll in.
   function initSection5PhilosophyAnimation() {
     const section = document.getElementById("philosophy");
     const stage = section?.querySelector(".js-philosophy-stage");
@@ -1317,146 +1288,62 @@
       return;
     section.dataset.philosophyReady = "true";
 
-    const header = document.getElementById("site-header");
-    const {
-      scrub,
-      blur,
-      hold,
-      minImageVisible,
-      image: reveal,
-      text,
-    } = CONFIG.philosophy;
+    const { scrub, blur, image: reveal, text, stacked } = CONFIG.philosophy;
     const cardText = [...card.querySelectorAll(":scope > p, :scope > h3")];
-    const headerHeight = () => (header ? header.offsetHeight : 0);
-    const cardOffset = () => card.offsetTop;
-    // Highest viewport position for the stage that keeps the whole card on screen
-    const fitTop = () => window.innerHeight - stage.offsetHeight;
-    // Pin only if the card's content (its top padding may tuck under the header) and at least half the image stay visible
-    const canPin = () => {
-      const top = Math.min(headerHeight(), fitTop());
-      const cardContentVisible =
-        top + cardOffset() + parseFloat(getComputedStyle(card).paddingTop) >=
-        headerHeight();
-      const imageVisible =
-        (top + image.offsetHeight - headerHeight()) / image.offsetHeight;
-      return cardContentVisible && imageVisible >= minImageVisible;
-    };
 
-    let mm = null;
-    let pinned = null;
+    const mm = gsap.matchMedia();
+    Object.entries(CONFIG.philosophy.breakpoints).forEach(([query, bp]) => {
+      mm.add(query, () => {
+        const hidden = { y: bp.y, opacity: 0, filter: `blur(${blur}px)` };
+        const shown = {
+          y: 0,
+          opacity: 1,
+          filter: "blur(0px)",
+          ease: "power2.out",
+          duration: 1,
+        };
 
-    const build = () => {
-      mm = gsap.matchMedia();
-      pinned = canPin();
-      Object.entries(CONFIG.philosophy.breakpoints).forEach(([query, bp]) => {
-        mm.add(query, () => {
-          const hidden = { y: bp.y, opacity: 0, filter: `blur(${blur}px)` };
-          const shown = {
-            y: 0,
-            opacity: 1,
-            filter: "blur(0px)",
-            ease: "power2.out",
-            duration: 1,
-          };
-          // The card's lines follow its rise, word by word, and settle as it does
-          const revealCardText = (tl, at) =>
-            cardText.forEach((el, i) =>
-              addTextReveal(
-                tl,
-                el,
-                at + text.at + i * text.step,
-                text.duration,
-              ),
-            );
-
-          // Tablet/phone never pin: each piece reveals on its own as it scrolls in
-          if (bp.stacked) {
-            const { stacked } = CONFIG.philosophy;
-            const scrubbed = (trigger, range) =>
-              gsap.timeline({
-                defaults: { ease: "none" },
-                scrollTrigger: {
-                  trigger,
-                  ...range,
-                  scrub,
-                  invalidateOnRefresh: true,
-                },
-              });
-            addImageReveal(scrubbed(image, stacked.image), image, 0, 1);
-            scrubbed(card, stacked.card).fromTo(card, hidden, shown, 0);
-            cardText.forEach((el) =>
-              addTextReveal(scrubbed(el, stacked.text), el, 0, 1),
-            );
-            return;
-          }
-
-          if (bp.noPin || !pinned) {
-            const tl = gsap.timeline({
+        // Tablet/phone: each piece reveals on its own as it scrolls in
+        if (bp.stacked) {
+          const scrubbed = (trigger, range) =>
+            gsap.timeline({
               defaults: { ease: "none" },
               scrollTrigger: {
-                trigger: stage,
-                start: "top bottom",
-                end: "bottom 85%",
+                trigger,
+                ...range,
                 scrub,
                 invalidateOnRefresh: true,
               },
             });
-            addImageReveal(tl, image, 0, 1);
-            tl.fromTo(card, hidden, shown, reveal.cardAt);
-            revealCardText(tl, reveal.cardAt);
-            return;
-          }
-
-          const pinTop = () => Math.min(headerHeight(), fitTop());
-          // The image comes in while the stage scrolls in, from its top entering the viewport until it pins
-          addImageReveal(
-            gsap.timeline({
-              scrollTrigger: {
-                trigger: stage,
-                start: "top bottom",
-                end: () => `top ${pinTop()}px`,
-                scrub,
-                invalidateOnRefresh: true,
-              },
-            }),
-            image,
-            0,
-            1,
+          addImageReveal(scrubbed(image, stacked.image), image, 0, 1);
+          scrubbed(card, stacked.card).fromTo(card, hidden, shown, 0);
+          cardText.forEach((el) =>
+            addTextReveal(scrubbed(el, stacked.text), el, 0, 1),
           );
+          return;
+        }
 
-          const tl = gsap
-            .timeline({
-              defaults: { ease: "none" },
-              scrollTrigger: {
-                trigger: stage,
-                start: () => `top ${pinTop()}px`,
-                end: () => `+=${Math.round(window.innerHeight * bp.distance)}`,
-                pin: true,
-                scrub,
-                invalidateOnRefresh: true,
-              },
-            })
-            .fromTo(card, hidden, shown, 0);
-          revealCardText(tl, 0);
-          tl.set({}, {}, 1 + hold);
+        const tl = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            trigger: stage,
+            start: bp.start,
+            end: bp.end,
+            scrub,
+            invalidateOnRefresh: true,
+          },
         });
+        addImageReveal(tl, image, 0, 1);
+        tl.fromTo(card, hidden, shown, reveal.cardAt);
+        cardText.forEach((el, i) =>
+          addTextReveal(
+            tl,
+            el,
+            reveal.cardAt + text.at + i * text.step,
+            text.duration,
+          ),
+        );
       });
-    };
-
-    build();
-
-    // Font loading and viewport changes can move the card across the fit threshold
-    const rebuildIfNeeded = () => {
-      if (canPin() === pinned) return;
-      mm.revert();
-      build();
-      ScrollTrigger.refresh();
-    };
-    document.fonts?.ready.then(rebuildIfNeeded);
-    let resizeTimer;
-    window.addEventListener("resize", () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(rebuildIfNeeded, 200);
     });
   }
 
