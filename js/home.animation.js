@@ -117,7 +117,9 @@
       // Card lines, in units of the card's rise: the first starts at `at`, each next one `step` later
       text: { at: 0.25, step: 0.1, duration: 0.45 },
       breakpoints: {
-        "(min-width: 1024px)": { distance: 1.1, y: 110 },
+        "(min-width: 1280px)": { distance: 1.1, y: 110 },
+        // lg–xl: no pin, just one scrubbed ScrollTrigger as the stage scrolls through
+        "(min-width: 1024px) and (max-width: 1279.98px)": { y: 110, noPin: true },
         "(max-width: 1023.98px)": { distance: 0.85, y: 80, stacked: true },
       },
       // Tablet/phone (card stacked under the image): each piece reveals on its own as it enters the viewport,
@@ -1297,8 +1299,9 @@
 
   // As the image + card wrapper scrolls into view the image comes in (addImageReveal); the wrapper then pins while
   // the card rises into its layout position, blurred to sharp, its lines revealing word by word.
-  // From lg up it pins with the image just below the header, or higher when that is needed to show the whole card;
+  // From xl up it pins with the image just below the header, or higher when that is needed to show the whole card;
   // when that would hide the card or most of the image, the reveal is scrubbed without a pin.
+  // Between lg and xl it never pins: the image and card reveal on one scrubbed ScrollTrigger.
   // Below lg (tablet/phone) it never pins: the image, card and lines each reveal as they scroll in.
   function initSection5PhilosophyAnimation() {
     const section = document.getElementById("philosophy");
@@ -1387,7 +1390,7 @@
             return;
           }
 
-          if (!pinned) {
+          if (bp.noPin || !pinned) {
             const tl = gsap.timeline({
               defaults: { ease: "none" },
               scrollTrigger: {

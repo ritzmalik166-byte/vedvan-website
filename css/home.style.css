@@ -238,14 +238,23 @@ label:has(> input[name="request_type"]:checked) {
 /* Pill variant: the light pill fill drains away to reveal forest green underneath, text turns white */
 .bubble-btn.bubble-btn--pill {
   --bubble-fill: #f7f9f6;
-  background-color: #02391a;
+  /* At rest the base matches the light fill, so no dark green can bleed through the
+     overlay's anti-aliased edges as a hairline border. It only turns green while hovered,
+     and on leave it waits for the bubble to close (0.7s) before switching back. */
+  background-color: #f7f9f6;
   color: #000;
-  transition: color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0s linear 0.7s;
 }
 
 .bubble-btn.bubble-btn--pill:hover,
 .bubble-btn.bubble-btn--pill:focus-visible {
+  background-color: #02391a;
   color: #fff;
+  transition:
+    color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0s;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -505,6 +514,41 @@ main {
 @media (min-width: 64rem) {
   #elements.is-slider {
     height: calc(100svh - 87px);
+  }
+}
+
+/* lg–xl: no fixed height. The two columns sit side by side in flow, the text panel sets the height and the
+   image column stretches to match it. From xl up the fixed / viewport height above applies again. */
+@media (min-width: 64rem) and (max-width: 79.99rem) {
+  #elements,
+  #elements.is-slider {
+    display: flex;
+    flex-direction: row;
+    height: auto;
+  }
+
+  #elements .elements-left {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  #elements .js-element-panel {
+    position: relative;
+    inset: auto;
+    flex: 1 0 auto;
+    padding-top: 96px;
+  }
+
+  #elements .elements-right {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  #elements .js-element-media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
   }
 }
 

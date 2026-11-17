@@ -441,8 +441,6 @@
       grid-template-rows: auto auto 1fr;
       grid-template-areas: "intro map" "list map" ". map";
       column-gap: clamp(1.5rem, 3vw, 3rem);
-      min-height: 100vh;
-      min-height: 100svh;
       padding-top: calc(var(--vv-header-top) + var(--vv-nav-height) + clamp(2rem, 6vh, 4rem));
     }
   
@@ -462,6 +460,14 @@
     }
   }
   
+  /* From xl up the section fills the viewport; between lg and xl it sizes to its content */
+  @media (min-width: 80rem) {
+    .location {
+      min-height: 100vh;
+      min-height: 100svh;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .location__item,
     .location__item::before,
