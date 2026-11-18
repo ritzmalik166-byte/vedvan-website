@@ -128,10 +128,10 @@
       "https://contenaissance.blob.core.windows.net/ct-assets/VEDVAN_Walkthrough_New_Nov_17_Logo_update_For_web_Resized.mp4",
 
     tablet:
-      "https://contenaissance.blob.core.windows.net/ct-assets/Vedvan_12sep_Video_768px_compressed.mp4",
+      "https://contenaissance.blob.core.windows.net/ct-assets/Vedvan%2012sep%20Video%20768px%20-%20797px%2002.mp4",
 
     mobile:
-      "https://contenaissance.blob.core.windows.net/ct-assets/Vedvan_12sep_Video_compressed.mp4",
+      "https://contenaissance.blob.core.windows.net/ct-assets/Vedvan%2012sep%20Video%20375px%20-%20797px%2002.mp4",
   };
 
   let currentSource = "";
