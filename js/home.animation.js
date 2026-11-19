@@ -302,19 +302,19 @@
         "A celebration of vitality, movement and the inner energy that inspires purposeful living.",
       image: {
         desktop: {
-          src: "assets/updates/fireD.jpg",
-          width: 0,
-          height: 0,
+          src: "assets/updates/Vedvan-Fire-Dekstop-818-797px.jpg",
+          width: 818,
+          height: 797,
         },
         tablet: {
-          src: "assets/updates/fireT.jpg",
-          width: 0,
-          height: 0,
+          src: "assets/updates/Vedvan-Fire-Tab-768-219px.jpg",
+          width: 768,
+          height: 219,
         },
         mobile: {
-          src: "assets/updates/fireM.jpg",
-          width: 0,
-          height: 0,
+          src: "assets/updates/Vedvan-Fire-Mobile-375-210px.jpg",
+          width: 375,
+          height: 210,
         },
         alt: "A warm natural landscape illuminated by the golden glow of fire",
       },
