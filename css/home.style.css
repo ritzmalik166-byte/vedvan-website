@@ -235,13 +235,13 @@ label:has(> input[name="request_type"]:checked) {
   border-color: #ffc94e;
 }
 
-/* Pill variant: the light pill fill drains away to reveal forest green underneath, text turns white */
+/* Pill variant: the gold pill fill drains away to reveal forest green underneath, text turns white */
 .bubble-btn.bubble-btn--pill {
-  --bubble-fill: #f7f9f6;
-  /* At rest the base matches the light fill, so no dark green can bleed through the
+  --bubble-fill: #b6a96e;
+  /* At rest the base matches the gold fill, so no dark green can bleed through the
      overlay's anti-aliased edges as a hairline border. It only turns green while hovered,
      and on leave it waits for the bubble to close (0.7s) before switching back. */
-  background-color: #f7f9f6;
+  background-color: #b6a96e;
   color: #000;
   transition:
     color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
