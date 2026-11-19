@@ -327,19 +327,19 @@
         "The freedom to pause, reflect and experience life without the constant rush of the outside world.",
       image: {
         desktop: {
-          src: "assets/updates/spaceD.jpg",
-          width: 0,
-          height: 0,
+          src: "assets/updates/Vedvan-Space-Dekstop-818-797px.jpg",
+          width: 818,
+          height: 797,
         },
         tablet: {
-          src: "assets/updates/spaceT.jpg",
-          width: 0,
-          height: 0,
+          src: "assets/updates/Vedvan-Space-Tab-768-219px.jpg",
+          width: 768,
+          height: 219,
         },
         mobile: {
-          src: "assets/updates/spaceM.jpg",
-          width: 0,
-          height: 0,
+          src: "assets/updates/Vedvan-Space-Mobile-375-210px.jpg",
+          width: 375,
+          height: 210,
         },
         alt: "An expansive tranquil landscape reflecting openness and stillness",
       },
