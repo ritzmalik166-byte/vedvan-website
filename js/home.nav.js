@@ -23,6 +23,53 @@ if (visitDate) {
   });
 }
 
+// Private visit form: the request type sets the submit label, and Brochure drops the date and puts the
+// other fields in one row. The change fades out, swaps, and fades back in.
+const visitForm = document.querySelector(".js-visit-form");
+
+if (visitForm) {
+  const fields = visitForm.querySelector(".js-visit-fields");
+  const submitLabel = visitForm.querySelector(".js-visit-submit-label");
+  const dateInput = visitForm.querySelector("#visit-date");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let swapTimer;
+
+  const apply = (radio) => {
+    const isBrochure = radio.value === "brochure";
+    fields?.classList.toggle("is-brochure", isBrochure);
+    // A hidden date shouldn't be submitted with a brochure request
+    if (dateInput) dateInput.disabled = isBrochure;
+    if (submitLabel) submitLabel.textContent = radio.dataset.submitLabel;
+  };
+
+  visitForm.addEventListener("change", (event) => {
+    const radio = event.target;
+    if (radio.name !== "request_type") return;
+
+    if (reduceMotion) {
+      apply(radio);
+      return;
+    }
+
+    // The fields only animate when the layout changes, i.e. switching to or from Brochure
+    const layoutChanges =
+      fields && fields.classList.contains("is-brochure") !== (radio.value === "brochure");
+    const animated = [layoutChanges && fields, submitLabel].filter(Boolean);
+
+    clearTimeout(swapTimer);
+    // A switch interrupted mid-fade may leave the fields faded out: always clear it on swap
+    const allAnimated = [fields, submitLabel].filter(Boolean);
+    animated.forEach((el) => el.classList.add("is-switching"));
+    swapTimer = setTimeout(() => {
+      apply(radio);
+      allAnimated.forEach((el) => el.classList.remove("is-switching"));
+    }, 220);
+  });
+
+  const initial = visitForm.querySelector('input[name="request_type"]:checked');
+  if (initial) apply(initial);
+}
+
 // Mobile navigation toggle
 const navToggle = document.querySelector(".js-nav-toggle");
 const mobileMenu = document.getElementById("mobile-menu");

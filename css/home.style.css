@@ -215,6 +215,42 @@ label:has(> input[name="request_type"]:checked) {
   color: #02391a;
 }
 
+/* Request type switch: fields and submit label fade out, the layout swaps, then they fade back in */
+.js-visit-fields,
+.visit-submit-label {
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease;
+}
+/* transform needs a box, not an inline run of text */
+.visit-submit-label {
+  display: inline-block;
+}
+.js-visit-fields.is-switching,
+.visit-submit-label.is-switching {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+/* Brochure: no date, and Name, Email, Phone sit in one row */
+.js-visit-fields.is-brochure .visit-field-date {
+  display: none;
+}
+.js-visit-fields.is-brochure .visit-field-name {
+  order: 1;
+}
+.js-visit-fields.is-brochure .visit-field-email {
+  order: 2;
+}
+.js-visit-fields.is-brochure .visit-field-phone {
+  order: 3;
+}
+@media (min-width: 640px) {
+  .js-visit-fields.is-brochure {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 /* Header nav links: yellow on hover */
 .js-header-nav ul a:hover {
   color: #ffc94e;

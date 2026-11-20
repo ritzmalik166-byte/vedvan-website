@@ -1427,20 +1427,10 @@
                   <input
                     type="radio"
                     name="request_type"
-                    value="private-presentation"
+                    value="site-visit"
+                    data-submit-label="SITE VISIT"
                     class="sr-only"
                     checked
-                  />
-                  PRIVATE PRESENTATION
-                </label>
-                <label
-                  class="flex h-[52px] cursor-pointer sm:flex-1 items-center rounded-full border border-white/20 bg-[rgba(20,36,27,0.85)] px-[21px] text-xs font-semibold leading-[normal] text-white transition-colors duration-300 hover:border-white/40 has-checked:border-[#c9a86a] has-checked:bg-[#c9a86a] has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-white"
-                >
-                  <input
-                    type="radio"
-                    name="request_type"
-                    value="site-visit"
-                    class="sr-only"
                   />
                   SITE VISIT
                 </label>
@@ -1450,7 +1440,20 @@
                   <input
                     type="radio"
                     name="request_type"
+                    value="private-presentation"
+                    data-submit-label="PRIVATE PRESENTATION"
+                    class="sr-only"
+                  />
+                  PRIVATE PRESENTATION
+                </label>
+                <label
+                  class="flex h-[52px] cursor-pointer sm:flex-1 items-center rounded-full border border-white/20 bg-[rgba(20,36,27,0.85)] px-[21px] text-xs font-semibold leading-[normal] text-white transition-colors duration-300 hover:border-white/40 has-checked:border-[#c9a86a] has-checked:bg-[#c9a86a] has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-white"
+                >
+                  <input
+                    type="radio"
+                    name="request_type"
                     value="brochure"
+                    data-submit-label="DOWNLOAD BROCHURE"
                     class="sr-only"
                   />
                   BROCHURE
@@ -1458,8 +1461,8 @@
               </div>
             </fieldset>
 
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div class="flex flex-col gap-2">
+            <div class="js-visit-fields grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="visit-field-name flex flex-col gap-2">
                 <label
                   for="visit-name"
                   class="text-sm font-medium leading-[normal] text-white"
@@ -1474,7 +1477,7 @@
                   class="h-[52px] w-full rounded-lg border border-white/20 bg-white px-4 text-sm text-ink placeholder:text-ink focus:outline-2 focus:outline-offset-2 focus:outline-gold"
                 />
               </div>
-              <div class="flex flex-col gap-2">
+              <div class="visit-field-phone flex flex-col gap-2">
                 <label
                   for="visit-phone"
                   class="text-sm font-medium leading-[normal] text-white"
@@ -1489,7 +1492,7 @@
                   class="h-[52px] w-full rounded-lg border border-white/20 bg-white px-4 text-sm text-ink placeholder:text-ink focus:outline-2 focus:outline-offset-2 focus:outline-gold"
                 />
               </div>
-              <div class="flex flex-col gap-2">
+              <div class="visit-field-email flex flex-col gap-2">
                 <label
                   for="visit-email"
                   class="text-sm font-medium leading-[normal] text-white"
@@ -1504,7 +1507,7 @@
                   class="h-[52px] w-full rounded-lg border border-white/20 bg-white px-4 text-sm text-ink placeholder:text-ink focus:outline-2 focus:outline-offset-2 focus:outline-gold"
                 />
               </div>
-              <div class="flex flex-col gap-2">
+              <div class="visit-field-date flex flex-col gap-2">
                 <label
                   for="visit-date"
                   class="text-sm font-medium leading-[normal] text-white"
@@ -1530,7 +1533,7 @@
             type="submit"
             class="js-cta w-full cursor-pointer bg-white px-7 py-[14.5px] text-base font-semibold leading-[normal] text-black transition-colors duration-300 ease-out hover:bg-forest hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
           >
-            PRIVATE VISIT
+            <span class="js-visit-submit-label visit-submit-label">SITE VISIT</span>
           </button>
         </form>
       </section>
