@@ -324,6 +324,11 @@
     function openPreview(id) {
       var d = byId[id];
       if (!d || !previewFrame || (previewOpen && previewId === id)) return;
+      // Destinations without a photo (e.g. the EPE until one is supplied) get no preview
+      if (!d.image) {
+        if (previewOpen) closePreview();
+        return;
+      }
       var swap = previewOpen;
       previewOpen = true;
       previewId = id;
@@ -438,6 +443,7 @@
       if (preloaded || !entries[0].isIntersecting) return;
       preloaded = true;
       destinations.forEach(function (d) {
+        if (!d.image) return;
         var img = new Image();
         img.src = d.image;
       });

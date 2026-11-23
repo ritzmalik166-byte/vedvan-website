@@ -43,6 +43,19 @@
         arrow: 'right'
       },
       {
+        // Marker sits where the EPE crosses the Delhi–Meerut Expressway (Duhai interchange).
+        // travelTime is unverified — replace 'TBC' with the confirmed drive time.
+        // No image yet: add one at assets/cities/ and set `image` to show the hover preview.
+        id: 'epe',
+        name: 'Eastern Peripheral Expressway',
+        travelTime: 'TBC',
+        description: 'Placeholder description — replace with verified details about access to the Eastern Peripheral Expressway (via the Duhai interchange).',
+        image: '',
+        imageAlt: 'Eastern Peripheral Expressway',
+        x: -5.3,
+        z: 2.9
+      },
+      {
         id: 'ghaziabad',
         name: 'Ghaziabad',
         travelTime: '15 mins',
@@ -95,6 +108,9 @@
       // illustrative.
       arterials: [
         { width: 0.42, tone: 'major', points: [[-19, 12.4], [-11, 7.1], [-4.5, 2.6], [0, 0.4], [5, -2.6], [10, -5.6], [19, -11.2]] },
+        // Eastern Peripheral Expressway: runs north (Baghpat) → south (Dasna / Greater Noida),
+        // crossing the expressway above at the Duhai interchange (the 'epe' marker)
+        { width: 0.32, tone: 'major', points: [[-8.6, -13], [-7, -5], [-5.3, 2.9], [-4, 8.5], [-3, 13]] },
         { width: 0.2, tone: 'major', points: [[-7.6, 4.2], [-7.2, 7.4], [-6.6, 10.4], [-6.2, 13]] },
         { width: 0.2, tone: 'major', points: [[-7.8, 4.6], [-11, 6.1], [-14.5, 6.9], [-19, 7.4]] },
         { width: 0.16, tone: 'major', points: [[3.5, 13], [4.6, 6.5], [3.6, 1.2], [1.6, -4.5], [1.2, -13]] },
