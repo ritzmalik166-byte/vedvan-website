@@ -45,12 +45,11 @@
       {
         // Marker sits where the EPE crosses the Delhi–Meerut Expressway (Duhai interchange).
         // travelTime is unverified — replace 'TBC' with the confirmed drive time.
-        // No image yet: add one at assets/cities/ and set `image` to show the hover preview.
         id: 'epe',
         name: 'Eastern Peripheral Expressway',
         travelTime: 'TBC',
         description: 'Placeholder description — replace with verified details about access to the Eastern Peripheral Expressway (via the Duhai interchange).',
-        image: '',
+        image: 'assets/updates/Vedvan-Eastern-Peripheral-Expressway-199-147px.jpg',
         imageAlt: 'Eastern Peripheral Expressway',
         x: -5.3,
         z: 2.9
