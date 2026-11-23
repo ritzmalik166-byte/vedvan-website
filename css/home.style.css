@@ -115,6 +115,11 @@ html.lenis body {
   background-color: #02391A;
 }
 
+/* Footer shares the navbar's forest green */
+#site-footer {
+  background-color: #02391A;
+}
+
 /* Bubble hover: the button's gold background is a layer with a round hole in it. On hover the hole grows from
    where the pointer enters until the gold is gone (transparent button, gold border); on leave it closes again
    towards where the pointer left. js/home.nav.js sets --bubble-x / --bubble-y; without JS it grows from the centre. */
@@ -271,14 +276,16 @@ label:has(> input[name="request_type"]:checked) {
   border-color: #ffc94e;
 }
 
-/* Pill variant: the gold pill fill drains away to reveal forest green underneath, text turns white */
+/* Pill variant: matches the header "PRIVATE VISIT" CTA colours (no border) — yellow fill with
+   forest text; on hover the fill drains away to reveal forest green (the scrolled header colour)
+   and the text turns white */
 .bubble-btn.bubble-btn--pill {
-  --bubble-fill: #b6a96e;
-  /* At rest the base matches the gold fill, so no dark green can bleed through the
+  --bubble-fill: #ffc94e;
+  /* At rest the base matches the yellow fill, so no dark green can bleed through the
      overlay's anti-aliased edges as a hairline border. It only turns green while hovered,
      and on leave it waits for the bubble to close (0.7s) before switching back. */
-  background-color: #b6a96e;
-  color: #000;
+  background-color: #ffc94e;
+  color: #02391a;
   transition:
     color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
     background-color 0s linear 0.7s;

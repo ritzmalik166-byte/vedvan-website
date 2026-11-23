@@ -43,16 +43,6 @@
         arrow: 'right'
       },
       {
-        id: 'modinagar',
-        name: 'Modinagar',
-        travelTime: '10 mins',
-        description: 'Placeholder description — replace with verified details about the connection to Modinagar.',
-        image: 'assets/cities/modinagar.jpg',
-        imageAlt: 'Modinagar',
-        x: -4.4,
-        z: 1.5
-      },
-      {
         id: 'ghaziabad',
         name: 'Ghaziabad',
         travelTime: '15 mins',
