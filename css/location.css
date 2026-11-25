@@ -339,7 +339,7 @@
     text-align: center;
     white-space: nowrap;
     text-shadow: 0 0 2px var(--loc-ivory), 0 0 6px var(--loc-ivory), 0 0 10px var(--loc-ivory);
-    transform: translateX(var(--nudge, 0));
+    transform: translate(var(--nudge, 0), var(--lift, 0));
     transition: color var(--vv-duration-base) var(--vv-ease-out);
   }
   
@@ -413,6 +413,18 @@
   
     .location__label {
       font-size: 0.6875rem;
+      /* Long names wrap so labels stay compact next to their pins */
+      max-width: 6.5rem;
+      white-space: normal;
+    }
+
+    /* Arrow labels read away from the pin: "← Akshardham" starts at it, "Meerut →" ends at it */
+    .location__marker--left .location__label {
+      text-align: left;
+    }
+
+    .location__marker--right .location__label {
+      text-align: right;
     }
   }
   

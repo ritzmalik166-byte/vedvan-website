@@ -58,6 +58,8 @@
 
     var wideQuery = window.matchMedia("(min-width: 1024px)");
     var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+    // Matches the mobile breakpoint in location.css
+    var mobileQuery = window.matchMedia("(max-width: 47.99rem)");
 
     var destinations = data.destinations;
     var byId = {};
@@ -102,7 +104,7 @@
       body.append(pin, label);
       marker.appendChild(body);
       markerLayer.appendChild(marker);
-      markers.push({ el: marker, label: label, d: d, pos: { x: 0, y: 0 }, labelHalf: 0 });
+      markers.push({ el: marker, label: label, pin: pin, d: d, pos: { x: 0, y: 0 }, labelHalf: 0, labelH: 0, pinH: 0, labelTop: 0 });
     });
 
     var geometry = G.build(data);
@@ -137,12 +139,102 @@
       markers.forEach(function (m) {
         m.pos = renderer.project(m.d.x, 0, m.d.z);
         setPos(m.el, m.pos);
-        var nudge = Math.max(0, 4 - (m.pos.x - m.labelHalf)) + Math.min(0, size.w - 4 - (m.pos.x + m.labelHalf));
-        m.label.style.setProperty("--nudge", nudge.toFixed(1) + "px");
       });
+      placeLabels();
       var s = data.project;
       if (siteEl) setPos(siteEl, renderer.project(s.x, s.height, s.z));
       placePreview();
+    }
+
+    // Keep marker labels from overlapping each other (and other pins).
+    // Each label tries, in order: below its pin, above its pin, then the
+    // below/above slots shifted sideways away from whatever it hits.
+    function placeLabels() {
+      var GAP = 4;
+      var placed = markers.map(function (m) {
+        // Pin footprint: the dot and stem above the map point
+        return { l: m.pos.x - 7, r: m.pos.x + 7, t: m.pos.y - m.pinH, b: m.pos.y };
+      });
+
+      function overlaps(a, b) {
+        return a.l < b.r + GAP && a.r + GAP > b.l && a.t < b.b + GAP && a.b + GAP > b.t;
+      }
+
+      function clampNudge(m, nudge) {
+        var left = m.pos.x + nudge - m.labelHalf;
+        var right = m.pos.x + nudge + m.labelHalf;
+        if (left < 4) nudge += 4 - left;
+        else if (right > size.w - 4) nudge -= right - (size.w - 4);
+        return nudge;
+      }
+
+      // Lay out top-to-bottom, left-to-right so results are stable
+      var order = markers.slice().sort(function (a, b) {
+        return a.pos.y - b.pos.y || a.pos.x - b.pos.x;
+      });
+
+      // Mobile: labels must stay over their own pin, and arrow labels start
+      // (←) or end (→) at the pin so the arrow points away from it.
+      var mobile = mobileQuery.matches;
+
+      order.forEach(function (m) {
+        var own = markers.indexOf(m);
+        var lifts = [0, -(m.labelTop + m.labelH + m.pinH + GAP)];
+        var best = null;
+
+        var anchor = 0;
+        if (mobile && m.d.arrow === "left") anchor = m.labelHalf - 8;
+        else if (mobile && m.d.arrow === "right") anchor = -(m.labelHalf - 8);
+        var baseNudge = clampNudge(m, anchor);
+
+        function box(nudge, lift) {
+          var cx = m.pos.x + nudge;
+          var top = m.pos.y + m.labelTop + lift;
+          return { l: cx - m.labelHalf, r: cx + m.labelHalf, t: top, b: top + m.labelH };
+        }
+
+        function collisions(b) {
+          return placed.filter(function (p, i) {
+            return i !== own && overlaps(b, p);
+          });
+        }
+
+        function staysOnPin(b) {
+          return !mobile || (b.l <= m.pos.x - 2 && b.r >= m.pos.x + 2);
+        }
+
+        // 1) below, 2) above (mobile weighs these against small sideways
+        // shifts instead, so a label stays beside its own pin when it can)
+        var options = [];
+        for (var i = 0; i < lifts.length && !best; i++) {
+          var b = box(baseNudge, lifts[i]);
+          if (collisions(b).length) continue;
+          if (mobile) options.push({ nudge: baseNudge, lift: lifts[i], box: b, cost: Math.abs(lifts[i]) * 0.5 });
+          else best = { nudge: baseNudge, lift: lifts[i], box: b };
+        }
+
+        // 3) shift sideways clear of the obstacles, keeping the label near its pin
+        if (!best) {
+          lifts.forEach(function (lift) {
+            var base = box(baseNudge, lift);
+            collisions(base).forEach(function (p) {
+              [p.r + GAP - base.l, p.l - GAP - base.r].forEach(function (shift) {
+                var n2 = clampNudge(m, baseNudge + shift);
+                var b2 = box(n2, lift);
+                if (!collisions(b2).length && staysOnPin(b2)) {
+                  options.push({ nudge: n2, lift: lift, box: b2, cost: Math.abs(n2 - baseNudge) + Math.abs(lift) * 0.5 });
+                }
+              });
+            });
+          });
+          options.sort(function (a, b) { return a.cost - b.cost; });
+          best = options[0] || { nudge: baseNudge, lift: 0, box: box(baseNudge, 0) };
+        }
+
+        m.label.style.setProperty("--nudge", best.nudge.toFixed(1) + "px");
+        m.label.style.setProperty("--lift", best.lift.toFixed(1) + "px");
+        placed.push(best.box);
+      });
     }
 
     function measure() {
@@ -150,6 +242,10 @@
       size.h = stage.clientHeight;
       markers.forEach(function (m) {
         m.labelHalf = m.label.offsetWidth / 2;
+        m.labelH = m.label.offsetHeight;
+        m.pinH = m.pin.offsetHeight;
+        // Label top relative to the map point when sitting below the pin
+        m.labelTop = m.label.offsetTop - m.pinH;
       });
       renderer.resize(size.w, size.h);
       draw();
@@ -241,7 +337,16 @@
       var w = m.el.offsetWidth;
       var h = m.el.offsetHeight;
       var pin = m.el.querySelector(".location__pin").offsetHeight;
-      return { l: m.pos.x - w / 2, r: m.pos.x + w / 2, t: m.pos.y - pin, b: m.pos.y - pin + h };
+      var nudge = parseFloat(m.label.style.getPropertyValue("--nudge")) || 0;
+      var lift = parseFloat(m.label.style.getPropertyValue("--lift")) || 0;
+      // Union of the button and its (possibly moved) label
+      var top = m.pos.y + m.labelTop + lift;
+      return {
+        l: Math.min(m.pos.x - w / 2, m.pos.x + nudge - m.labelHalf),
+        r: Math.max(m.pos.x + w / 2, m.pos.x + nudge + m.labelHalf),
+        t: Math.min(m.pos.y - pin, top),
+        b: Math.max(m.pos.y - pin + h, top + m.labelH)
+      };
     }
 
     function placePreview() {
